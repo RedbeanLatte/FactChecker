@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/home_dest">
+
+    <fragment
+        android:id="@+id/home_dest"
+        android:name="com.redbeanlatte11.factchecker.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/home_frag" >
+        <action
+            android:id="@+id/action_home_dest_to_login_dest"
+            app:destination="@id/google_account_dest" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/google_account_dest"
+        android:name="com.redbeanlatte11.factchecker.login.GoogleAccountFragment"
+        android:label="@string/title_google_account"
+        tools:layout="@layout/google_account_frag"/>
+
+    <fragment
+        android:id="@+id/dashboard_dest"
+        android:name="com.redbeanlatte11.factchecker.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/notifications_dest"
+        android:name="com.redbeanlatte11.factchecker.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+</navigation>
