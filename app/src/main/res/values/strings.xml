@@ -1,7 +1,17 @@
 <resources>
-    <string name="app_name">FactChecker</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_google_account">Google Account</string>
+    <string name="app_name">팩트체커</string>
+    <string name="title_home">홈</string>
+    <string name="title_channel">채널</string>
+    <string name="title_popular">인기</string>
+    <string name="title_more">더보기</string>
+    <string name="title_google_account">구글 계정</string>
+    <string name="title_report_all">모두 신고</string>
+    <string name="dialog_report_all">모두 신고 하시겠습니까?</string>
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
+
+    <string name="message_report_failed"></string>
+    <string name="saved_sign_in_result">saved_sign_in_result</string>
+    <string name="sign_in">로그인</string>
+    <string name="dialog_sign_in">부적절한 컨텐츠를 신고하려면 로그인하세요</string>
 </resources>

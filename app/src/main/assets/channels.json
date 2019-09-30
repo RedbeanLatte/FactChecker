@@ -1,0 +1,50 @@
+{
+ "kind": "youtube#channelListResponse",
+ "etag": "\"p4VTdlkQv3HQeTEaXgvLePAydmU/Uuqsakry6zFmCW7uLxhU3f-QBK0\"",
+ "pageInfo": {
+  "totalResults": 1,
+  "resultsPerPage": 1
+ },
+ "items": [
+  {
+   "kind": "youtube#channel",
+   "etag": "\"p4VTdlkQv3HQeTEaXgvLePAydmU/G_YRpbAa1nofFO6WOJE1aQS1LB0\"",
+   "id": "UCSJ4gkVC6NrvII8umztf0Ow",
+   "snippet": {
+    "title": "ChilledCow",
+    "description": "🐮 | The chillest cow in the world\n\n🎧 | New video every wednesday/sunday\n\n🎶 | Study girl's Spotify playlist\n→ https://open.spotify.com/playlist/6eHO8aX6lHu3e6bem8r2rq\n\n📻 | lofi hip hop radio - beats to relax/study to:\n→ www.youtube.com/watch?v=hHW1oY26kxQ",
+    "customUrl": "chilledcow",
+    "publishedAt": "2015-03-18T15:36:55.000Z",
+    "thumbnails": {
+     "default": {
+      "url": "https://yt3.ggpht.com/a/AGF-l78U9oRUvCJuuDhBZhaGo0-aQnu1RuP_dB_Jqg=s88-c-k-c0xffffffff-no-rj-mo",
+      "width": 88,
+      "height": 88
+     },
+     "medium": {
+      "url": "https://yt3.ggpht.com/a/AGF-l78U9oRUvCJuuDhBZhaGo0-aQnu1RuP_dB_Jqg=s240-c-k-c0xffffffff-no-rj-mo",
+      "width": 240,
+      "height": 240
+     },
+     "high": {
+      "url": "https://yt3.ggpht.com/a/AGF-l78U9oRUvCJuuDhBZhaGo0-aQnu1RuP_dB_Jqg=s800-c-k-c0xffffffff-no-rj-mo",
+      "width": 800,
+      "height": 800
+     }
+    },
+    "localized": {
+     "title": "ChilledCow",
+     "description": "🐮 | The chillest cow in the world\n\n🎧 | New video every wednesday/sunday\n\n🎶 | Study girl's Spotify playlist\n→ https://open.spotify.com/playlist/6eHO8aX6lHu3e6bem8r2rq\n\n📻 | lofi hip hop radio - beats to relax/study to:\n→ www.youtube.com/watch?v=hHW1oY26kxQ"
+    },
+    "country": "FR"
+   },
+   "statistics": {
+    "viewCount": "214648131",
+    "commentCount": "0",
+    "subscriberCount": "3710000",
+    "hiddenSubscriberCount": false,
+    "videoCount": "241"
+   }
+  }
+ ]
+}

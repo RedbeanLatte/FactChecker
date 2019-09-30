@@ -1,10 +1,10 @@
-package com.redbeanlatte11.factchecker.dashboard
+package com.redbeanlatte11.factchecker.channel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class ChannelViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"

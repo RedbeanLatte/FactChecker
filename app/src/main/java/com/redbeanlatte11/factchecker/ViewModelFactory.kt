@@ -2,7 +2,9 @@ package com.redbeanlatte11.factchecker
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.redbeanlatte11.factchecker.domain.SignInUseCase
 import com.redbeanlatte11.factchecker.domain.ReportVideoUseCase
+import com.redbeanlatte11.factchecker.home.GoogleAccountViewModel
 import com.redbeanlatte11.factchecker.home.HomeViewModel
 
 /**
@@ -21,6 +23,11 @@ class ViewModelFactory constructor(
                 isAssignableFrom(HomeViewModel::class.java) ->
                     HomeViewModel(
                         ReportVideoUseCase()
+                    )
+
+                isAssignableFrom(GoogleAccountViewModel::class.java) ->
+                    GoogleAccountViewModel(
+                        SignInUseCase()
                     )
 
                 else ->

@@ -11,25 +11,31 @@
         android:label="@string/title_home"
         tools:layout="@layout/home_frag" >
         <action
-            android:id="@+id/action_home_dest_to_login_dest"
+            android:id="@+id/action_home_dest_to_google_account_dest"
             app:destination="@id/google_account_dest" />
     </fragment>
 
     <fragment
         android:id="@+id/google_account_dest"
-        android:name="com.redbeanlatte11.factchecker.login.GoogleAccountFragment"
+        android:name="com.redbeanlatte11.factchecker.home.GoogleAccountFragment"
         android:label="@string/title_google_account"
         tools:layout="@layout/google_account_frag"/>
 
     <fragment
-        android:id="@+id/dashboard_dest"
-        android:name="com.redbeanlatte11.factchecker.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/channel_dest"
+        android:name="com.redbeanlatte11.factchecker.channel.ChannelFragment"
+        android:label="@string/title_channel"
+        tools:layout="@layout/channel_frag" />
 
     <fragment
-        android:id="@+id/notifications_dest"
-        android:name="com.redbeanlatte11.factchecker.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/popular_dest"
+        android:name="com.redbeanlatte11.factchecker.popular.PopularFragment"
+        android:label="@string/title_popular"
+        tools:layout="@layout/popular_frag" />
+
+    <fragment
+        android:id="@+id/more_dest"
+        android:name="com.redbeanlatte11.factchecker.more.MoreFragment"
+        android:label="@string/title_more"
+        tools:layout="@layout/more_frag" />
 </navigation>

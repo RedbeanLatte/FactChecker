@@ -1,27 +1,41 @@
 package com.redbeanlatte11.factchecker.domain
 
 import android.annotation.SuppressLint
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class ReportVideoUseCase {
 
     @SuppressLint("SetJavaScriptEnabled")
-    operator fun invoke(webView: WebView, url: String, reportMessage: String) {
-        webView.settings.javaScriptEnabled = true
-        webView.webViewClient = YoutubeWebViewClient(reportMessage)
-        webView.loadUrl(url)
-    }
+    suspend operator fun invoke(webView: WebView, url: String, reportMessage: String) =
+        suspendCoroutine<Unit> { continuation ->
+            with(webView) {
+                settings.javaScriptEnabled = true
+                webViewClient = YoutubeWebViewClient(continuation, reportMessage)
+                loadUrl(url)
+            }
+        }
 
-    private class YoutubeWebViewClient(val reportMessage: String) : WebViewClient() {
+    private class YoutubeWebViewClient(
+        val continuation: Continuation<Unit>,
+        val reportMessage: String
+    ) : WebViewClient() {
 
         private var stage = 0
+        private var resumed = AtomicBoolean(false)
 
-        override fun onPageFinished(view: WebView?, url: String?) {
+        override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
             Timber.d("onPageFinished, stage: $stage")
-            view?.let { reportVideo(it) }
+            reportVideo(view)
         }
 
         private fun reportVideo(view: WebView) {
@@ -53,7 +67,10 @@ class ReportVideoUseCase {
                         "javascript: " +
                                 """
                                 var dislikeButton = document.getElementsByClassName('c3-material-button-button')[1];
-                                dislikeButton.click();
+                                var pressed = dislikeButton.getAttribute('aria-pressed');
+                                if (pressed === "false") {
+                                    dislikeButton.click();
+                                }
                             """.trimIndent()
                     )
                     stage++
@@ -69,11 +86,18 @@ class ReportVideoUseCase {
                                 textarea.dispatchEvent(new Event('change', { 'bubbles': true }));
                                 textarea.dispatchEvent(new Event('input', { 'bubbles': true }));
                                 
-                                var reportButton = document.getElementsByClassName('c3-material-button-button')[7];
+                                var reportButton = document.getElementsByClassName('c3-material-button-button')[6];
                                 reportButton.click();
                             """.trimIndent()
                     )
                     stage++
+                }
+
+                4 -> {
+                    if (!resumed.get()) {
+                        resumed.set(true)
+                        continuation.resume(Unit)
+                    }
                 }
             }
         }

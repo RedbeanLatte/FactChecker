@@ -2,15 +2,13 @@ package com.redbeanlatte11.factchecker.home
 
 import android.os.Bundle
 import android.view.*
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.redbeanlatte11.factchecker.R
-import com.redbeanlatte11.garim.util.getViewModelFactory
+import com.redbeanlatte11.factchecker.util.PreferenceUtils
+import com.redbeanlatte11.factchecker.util.getViewModelFactory
 
 class HomeFragment : Fragment() {
 
@@ -24,9 +22,6 @@ class HomeFragment : Fragment() {
         val root = inflater.inflate(R.layout.home_frag, container, false)
 
         //TODO: test code
-        val webView: WebView = activity?.findViewById(R.id.web_view)!!
-//        viewModel.reportVideo(webView,"https://www.youtube.com/watch?v=E7s4R7T-N40")
-        viewModel.reportVideo(webView, "https://www.youtube.com/watch?v=KFWmvEPC3XI")
 
         setHasOptionsMenu(true)
         return root
@@ -42,6 +37,18 @@ class HomeFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
+            R.id.menu_report_all -> {
+                val savedSignInResult = PreferenceUtils.loadSignInResult(requireContext())
+                if (savedSignInResult) {
+                    val dialog = ReportAllDialogFragment(viewModel)
+                    dialog.show(activity?.supportFragmentManager!!, "ReportAllDialogFragment")
+                } else {
+                    val signInDialog = SignInDialogFragment()
+                    signInDialog.show(activity?.supportFragmentManager!!, "SignInDialogFragment")
+                }
+                true
+            }
+
             R.id.menu_google_account -> {
                 showAccountPopUpMenu()
                 true

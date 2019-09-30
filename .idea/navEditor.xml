@@ -63,13 +63,13 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="dashboard_dest">
+                  <entry key="channel_dest">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-14" />
-                            <option name="y" value="321" />
+                            <option name="x" value="-1750" />
+                            <option name="y" value="-563" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -80,8 +80,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-240" />
-                            <option name="y" value="26" />
+                            <option name="x" value="-1976" />
+                            <option name="y" value="-854" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -92,13 +92,13 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-14" />
-                            <option name="y" value="26" />
+                            <option name="x" value="-1750" />
+                            <option name="y" value="-854" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_home_dest_to_login_dest">
+                            <entry key="action_home_dest_to_google_account_dest">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -108,13 +108,25 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="notifications_dest">
+                  <entry key="more_dest">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-12" />
-                            <option name="y" value="636" />
+                            <option name="x" value="-1748" />
+                            <option name="y" value="27" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="popular_dest">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-1747" />
+                            <option name="y" value="-275" />
                           </Point>
                         </option>
                       </LayoutPositions>

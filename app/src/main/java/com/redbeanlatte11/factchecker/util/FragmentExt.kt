@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.redbeanlatte11.garim.util
+package com.redbeanlatte11.factchecker.util
 
 /**
  * Extension functions for Fragment.

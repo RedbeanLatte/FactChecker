@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.dashboard
+package com.redbeanlatte11.factchecker.more
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.redbeanlatte11.factchecker.R
 
-class DashboardFragment : Fragment() {
+class MoreFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var moreViewModel: MoreViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(this, Observer {
+        moreViewModel =
+            ViewModelProviders.of(this).get(MoreViewModel::class.java)
+        val root = inflater.inflate(R.layout.more_frag, container, false)
+        val textView: TextView = root.findViewById(R.id.text_notifications)
+        moreViewModel.text.observe(this, Observer {
             textView.text = it
         })
         return root
