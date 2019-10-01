@@ -2,37 +2,43 @@ package com.redbeanlatte11.factchecker
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import com.redbeanlatte11.factchecker.data.source.DefaultVideosRepository
+import com.redbeanlatte11.factchecker.data.source.VideosDataSource
+import com.redbeanlatte11.factchecker.data.source.VideosRepository
+import com.redbeanlatte11.factchecker.data.source.local.VideosLocalDataSource
+import com.redbeanlatte11.factchecker.data.source.remote.FakeVideosRemoteDataSource
+import com.redbeanlatte11.factchecker.data.source.remote.JsonParser
 
 object ServiceLocator {
 
     private val lock = Any()
 //    private var database: GarimDatabase? = null
     @Volatile
-    var productsRepository: VideosRepository? = null
+    var videosRepository: VideosRepository? = null
         @VisibleForTesting set
 
     fun provideProductsRepository(context: Context): VideosRepository {
-//        synchronized(this) {
-//            if (productsRepository == null) {
-//                productsRepository = createProductsRepository(context)
-//            }
-//            return productsRepository as ProductsRepository
-//        }
-        return VideosRepository()
+        synchronized(this) {
+            if (videosRepository == null) {
+                videosRepository = createVideosRepository(context)
+            }
+            return videosRepository as VideosRepository
+        }
     }
 
-//    private fun createProductsRepository(context: Context): ProductsRepository {
-//        return DefaultProductsRepository(
+    private fun createVideosRepository(context: Context): VideosRepository {
+        return DefaultVideosRepository(
 //            ProductsRemoteDataSource(GarimFirestore(context)),
-////            FakeProductsRemoteDataSource(ProductsJsonParser(context, "products.json")),
-//            createProductLocalDataSource(context)
-//        )
-//    }
+            FakeVideosRemoteDataSource(JsonParser.from(context, "popular_videos.json")),
+            createVideosLocalDataSource(context)
+        )
+    }
 //
-//    private fun createProductLocalDataSource(context: Context): ProductsDataSource {
+    private fun createVideosLocalDataSource(context: Context): VideosDataSource {
 //        val database = database ?: createDataBase(context)
 //        return ProductsLocalDataSource(database.productDao())
-//    }
+        return VideosLocalDataSource()
+    }
 //
 //    private fun createDataBase(context: Context): GarimDatabase {
 //        val result = Room.databaseBuilder(

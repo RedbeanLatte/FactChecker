@@ -1,14 +1,13 @@
 package com.redbeanlatte11.factchecker.data
 
-import androidx.room.Entity
-import androidx.room.Fts4
-
-//@Fts4
-//@Entity(tableName = "videos")
 data class Video(
     val kind: String,
     val etag: String,
     val id: String,
+    val snippet: VideoSnippet
+)
+
+data class VideoSnippet(
     val publishedAt: String,
     val channelId: String,
     val title: String,
@@ -21,4 +20,7 @@ data class Video(
     val defaultLanguage: String,
     val localized: Localized,
     val defaultAudioLanguage: String
-)
+) {
+    val thumbnailUrl: String?
+        get() = thumbnails["high"]?.url
+}

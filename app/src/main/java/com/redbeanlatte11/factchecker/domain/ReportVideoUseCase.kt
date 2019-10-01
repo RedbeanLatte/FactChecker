@@ -5,6 +5,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.redbeanlatte11.factchecker.data.source.VideosRepository
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.Continuation
@@ -12,7 +13,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class ReportVideoUseCase {
+class ReportVideoUseCase(
+    private val videosRepository: VideosRepository
+) {
 
     @SuppressLint("SetJavaScriptEnabled")
     suspend operator fun invoke(webView: WebView, url: String, reportMessage: String) =
@@ -87,6 +90,7 @@ class ReportVideoUseCase {
                                 textarea.dispatchEvent(new Event('input', { 'bubbles': true }));
                                 
                                 var reportButton = document.getElementsByClassName('c3-material-button-button')[6];
+//                                var reportButton = document.getElementsByClassName('c3-material-button-button')[7];
                                 reportButton.click();
                             """.trimIndent()
                     )

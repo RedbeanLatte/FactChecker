@@ -14,4 +14,6 @@
     <string name="saved_sign_in_result">saved_sign_in_result</string>
     <string name="sign_in">로그인</string>
     <string name="dialog_sign_in">부적절한 컨텐츠를 신고하려면 로그인하세요</string>
+    <string name="description_video_thumbnail">영상 썸네일</string>
+    <string name="loading_videos_error">Error while loading videos</string>
 </resources>

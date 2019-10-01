@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.widget.CompoundButton" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="video"
+            type="com.redbeanlatte11.factchecker.data.Video" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height"
+        android:layout_marginBottom="@dimen/list_item_padding" >
+
+        <ImageView
+            android:id="@+id/image_view_thumbnail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/list_item_padding"
+            android:contentDescription="@string/description_video_thumbnail"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{video.snippet.thumbnailUrl}"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/VideoItemNameFont"
+            android:id="@+id/text_view_title"
+            android:text="@{video.snippet.title}"
+            app:layout_constraintBottom_toTopOf="@+id/text_view_channel_title"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="title" />
+
+        <TextView
+            style="@style/VideoItemContentFont"
+            android:id="@+id/text_view_channel_title"
+            android:text="@{video.snippet.channelTitle}"
+            app:layout_constraintBottom_toTopOf="@+id/text_view_published_at"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_title"
+            tools:text="channelTitle"/>
+
+        <TextView
+            style="@style/VideoItemContentFont"
+            android:id="@+id/text_view_published_at"
+            android:text="@{video.snippet.publishedAt}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_channel_title"
+            tools:text="publishedAt" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="200dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
