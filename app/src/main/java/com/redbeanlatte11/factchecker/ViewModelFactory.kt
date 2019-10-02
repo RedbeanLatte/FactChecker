@@ -2,19 +2,22 @@ package com.redbeanlatte11.factchecker
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.redbeanlatte11.factchecker.channel.ChannelViewModel
+import com.redbeanlatte11.factchecker.data.source.ChannelsRepository
 import com.redbeanlatte11.factchecker.data.source.VideosRepository
-import com.redbeanlatte11.factchecker.domain.GetVideosUseCase
-import com.redbeanlatte11.factchecker.domain.SignInUseCase
-import com.redbeanlatte11.factchecker.domain.ReportVideoUseCase
+import com.redbeanlatte11.factchecker.domain.*
 import com.redbeanlatte11.factchecker.home.GoogleAccountViewModel
 import com.redbeanlatte11.factchecker.home.HomeViewModel
+import com.redbeanlatte11.factchecker.popular.PopularViewModel
 
 /**
  * Factory for all ViewModels.
  */
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory constructor(
-    private val videosRepository: VideosRepository
+    private val videosRepository: VideosRepository,
+    private val popularVideosRepository: VideosRepository,
+    private val channelsRepository: ChannelsRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
@@ -31,6 +34,17 @@ class ViewModelFactory constructor(
                 isAssignableFrom(GoogleAccountViewModel::class.java) ->
                     GoogleAccountViewModel(
                         SignInUseCase()
+                    )
+
+                isAssignableFrom(PopularViewModel::class.java) ->
+                    PopularViewModel(
+                        GetPopularVideosUseCase(popularVideosRepository),
+                        ShareVideoUseCase(popularVideosRepository)
+                    )
+
+                isAssignableFrom(ChannelViewModel::class.java) ->
+                    ChannelViewModel(
+                        GetChannelsUseCase(channelsRepository)
                     )
 
                 else ->

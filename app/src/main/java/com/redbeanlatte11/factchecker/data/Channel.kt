@@ -5,7 +5,7 @@ data class Channel(
     val etag: String,
     val id: String,
     val snippet: ChannelSnippet,
-    val statistics: Statistics
+    val statistics: ChannelStatistics
 )
 
 data class ChannelSnippet(
@@ -16,4 +16,7 @@ data class ChannelSnippet(
     val thumbnails: Map<String, Thumbnail>,
     val localized: Localized,
     val country: String
-)
+) {
+    val thumbnailUrl: String?
+        get() = thumbnails["high"]?.url
+}

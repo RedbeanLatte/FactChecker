@@ -22,7 +22,7 @@ class GoogleAccountFragment : Fragment() {
         val view = inflater.inflate(R.layout.google_account_frag, container, false)
 
         val viewDataBinding = GoogleAccountFragBinding.bind(view)
-        viewModel.login(viewDataBinding.webView)
+        viewModel.signIn(viewDataBinding.webView)
         return view
     }
 }

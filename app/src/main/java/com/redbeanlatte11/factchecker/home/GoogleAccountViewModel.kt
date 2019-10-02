@@ -8,7 +8,7 @@ class GoogleAccountViewModel(
     private val signInUseCase: SignInUseCase
 ) : ViewModel() {
 
-    fun login(webView: WebView) {
+    fun signIn(webView: WebView) {
         signInUseCase(webView)
     }
 }

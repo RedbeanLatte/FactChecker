@@ -4,21 +4,82 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.redbeanlatte11.factchecker.R
+import com.redbeanlatte11.factchecker.databinding.PopularFragBinding
+import com.redbeanlatte11.factchecker.home.VideoItemClickListener
+import com.redbeanlatte11.factchecker.home.VideosAdapter
 import com.redbeanlatte11.factchecker.util.getViewModelFactory
+import com.redbeanlatte11.factchecker.util.setupSnackbar
+import com.redbeanlatte11.factchecker.util.watchYoutubeVideo
+import timber.log.Timber
 
 class PopularFragment : Fragment() {
 
     private val viewModel by viewModels<PopularViewModel> { getViewModelFactory() }
+
+    private lateinit var viewDataBinding: PopularFragBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.popular_frag, container, false)
-        return root
+        viewDataBinding = PopularFragBinding.inflate(inflater, container, false).apply {
+            viewmodel = viewModel
+        }
+
+        setHasOptionsMenu(true)
+        return viewDataBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.loadVideos(false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
+        setupSnackbar()
+        setupListAdapter()
+    }
+
+    private fun setupSnackbar() {
+        view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
+        arguments?.let {
+            //            viewModel.showEditResultMessage(args.userMessage)
+        }
+    }
+
+    private fun setupListAdapter() {
+        val viewModel = viewDataBinding.viewmodel
+        if (viewModel != null) {
+            val itemClickListener = VideoItemClickListener.invoke {
+                requireContext().watchYoutubeVideo(it.id)
+            }
+            val moreClickListener = View.OnClickListener {
+                showPopupMenu(it)
+            }
+            viewDataBinding.popularVideosList.adapter = VideosAdapter(itemClickListener, moreClickListener)
+        } else {
+            Timber.w("ViewModel not initialized when attempting to set up adapter.")
+        }
+    }
+
+    private fun showPopupMenu(view: View) {
+        PopupMenu(requireContext(), view).run {
+            menuInflater.inflate(R.menu.popular_video_item_more_menu, menu)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.report_video -> Timber.d("reportVideo")
+                }
+                true
+            }
+            show()
+        }
     }
 }

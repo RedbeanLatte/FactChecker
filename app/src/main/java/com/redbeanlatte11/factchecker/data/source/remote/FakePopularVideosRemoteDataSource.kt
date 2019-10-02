@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class FakeVideosRemoteDataSource(
+class FakePopularVideosRemoteDataSource(
     private val jsonParser: JsonParser,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : VideosDataSource {

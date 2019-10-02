@@ -25,5 +25,7 @@ import com.redbeanlatte11.factchecker.ViewModelFactory
 
 fun Fragment.getViewModelFactory(): ViewModelFactory {
     val repository = (requireContext().applicationContext as FactCheckerApplication).videoRepository
-    return ViewModelFactory(repository)
+    val popularVideoRepository = (requireContext().applicationContext as FactCheckerApplication).poplarVideoRepository
+    val channelRepository = (requireContext().applicationContext as FactCheckerApplication).channelRepository
+    return ViewModelFactory(repository, popularVideoRepository, channelRepository)
 }

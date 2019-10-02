@@ -1,5 +1,8 @@
 package com.redbeanlatte11.factchecker.home
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
@@ -12,7 +15,9 @@ import com.redbeanlatte11.factchecker.databinding.HomeFragBinding
 import com.redbeanlatte11.factchecker.util.PreferenceUtils
 import com.redbeanlatte11.factchecker.util.getViewModelFactory
 import com.redbeanlatte11.factchecker.util.setupSnackbar
+import com.redbeanlatte11.factchecker.util.watchYoutubeVideo
 import timber.log.Timber
+
 
 class HomeFragment : Fragment() {
 
@@ -55,9 +60,29 @@ class HomeFragment : Fragment() {
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.viewmodel
         if (viewModel != null) {
-            viewDataBinding.productsList.adapter = VideosAdapter()
+            val itemClickListener = VideoItemClickListener.invoke {
+                requireContext().watchYoutubeVideo(it.id)
+            }
+            val moreClickListener = View.OnClickListener {
+                showPopupMenu(it)
+            }
+            viewDataBinding.videosList.adapter = VideosAdapter(itemClickListener, moreClickListener)
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
+        }
+    }
+
+    private fun showPopupMenu(view: View) {
+        PopupMenu(requireContext(), view).run {
+            menuInflater.inflate(R.menu.video_item_more_menu, menu)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.report_video -> Timber.d("reportVideo")
+                    R.id.remove_video_from_list -> Timber.d("remove video from list")
+                }
+                true
+            }
+            show()
         }
     }
 

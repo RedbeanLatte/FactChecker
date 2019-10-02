@@ -19,7 +19,9 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.redbeanlatte11.factchecker.channel.ChannelsAdapter
 import com.redbeanlatte11.factchecker.data.Video
+import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.home.VideosAdapter
 
 /**
@@ -28,6 +30,14 @@ import com.redbeanlatte11.factchecker.home.VideosAdapter
 @BindingAdapter("videoItems")
 fun setVideoItems(listView: RecyclerView, items: List<Video>) {
     (listView.adapter as VideosAdapter).submitList(items)
+}
+
+/**
+ * [BindingAdapter]s for the [Channel]s list.
+ */
+@BindingAdapter("channelItems")
+fun setChannelItems(listView: RecyclerView, items: List<Channel>) {
+    (listView.adapter as ChannelsAdapter).submitList(items)
 }
 
 @BindingAdapter("imageUrl")

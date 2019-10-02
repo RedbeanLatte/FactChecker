@@ -10,12 +10,12 @@
         <import type="android.view.View" />
 
         <variable
-            name="video"
-            type="com.redbeanlatte11.factchecker.data.Video" />
+            name="channel"
+            type="com.redbeanlatte11.factchecker.data.Channel" />
 
         <variable
             name="itemClickListener"
-            type="com.redbeanlatte11.factchecker.home.VideoItemClickListener" />
+            type="com.redbeanlatte11.factchecker.channel.ChannelItemClickListener" />
 
         <variable
             name="moreClickListener"
@@ -27,18 +27,18 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/list_item_height"
         android:layout_marginBottom="@dimen/list_item_padding"
-        android:onClick="@{() -> itemClickListener.onClick(video)}">
+        android:onClick="@{() -> itemClickListener.onClick(channel)}">
 
         <ImageView
             android:id="@+id/image_view_thumbnail"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:contentDescription="@string/description_video_thumbnail"
+            android:contentDescription="@string/description_channel_thumbnail"
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintDimensionRatio="16.5:9"
-            app:imageUrl="@{video.snippet.thumbnailUrl}" />
+            app:imageUrl="@{channel.snippet.thumbnailUrl}" />
 
         <LinearLayout
             android:id="@+id/linear_layout_content"
@@ -53,20 +53,14 @@
                 android:id="@+id/text_view_title"
                 style="@style/VideoItemTitleFont"
                 android:lineSpacingExtra="-2sp"
-                android:text="@{video.snippet.title}"
+                android:text="@{channel.snippet.title}"
                 tools:text="title1\ntitle2\ntitle3" />
 
             <TextView
                 style="@style/VideoItemContentFont"
-                android:id="@+id/text_view_channel_title"
-                android:text="@{video.snippet.channelTitle}"
-                tools:text="channelTitle"/>
-
-            <TextView
-                style="@style/VideoItemContentFont"
-                android:id="@+id/text_view_published_at_and_view_count"
-                android:text="@{video.snippet.publishedAtToShow + ` · ` + video.statistics.viewCountToShow}"
-                tools:text="publishedAt and viewCount" />
+                android:id="@+id/text_view_subscriber_count_and_video_count"
+                android:text="@{channel.statistics.subscriberCountToShow + ` · ` + channel.statistics.videoCountToShow}"
+                tools:text="subscriberCount and videoCount" />
         </LinearLayout>
 
         <ImageButton

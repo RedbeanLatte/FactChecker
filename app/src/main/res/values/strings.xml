@@ -10,10 +10,19 @@
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
 
-    <string name="message_report_failed"></string>
     <string name="saved_sign_in_result">saved_sign_in_result</string>
     <string name="sign_in">로그인</string>
     <string name="dialog_sign_in">부적절한 컨텐츠를 신고하려면 로그인하세요</string>
     <string name="description_video_thumbnail">영상 썸네일</string>
     <string name="loading_videos_error">Error while loading videos</string>
+
+    <string name="minutes_ago">분 전</string>
+    <string name="hours_ago">시간 전</string>
+    <string name="days_ago">일 전</string>
+    <string name="months_ago">개월 전</string>
+    <string name="years_ago">년 전</string>
+    <string name="description_more_button">more button</string>
+    <string name="report">신고</string>
+    <string name="remove_video_from_list">목록에서 삭제</string>
+    <string name="description_channel_thumbnail">채널 썸네일</string>
 </resources>
