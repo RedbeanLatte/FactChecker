@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:key="donation_category"
+        app:title="@string/donation"
+        app:iconSpaceReserved="false">
+        <Preference
+            app:key="donation"
+            app:title="@string/donate_to_developer"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="video_category"
+        app:title="@string/video"
+        app:iconSpaceReserved="false">
+        <Preference
+            app:key="reported_videos"
+            app:title="@string/reported_videos"
+            app:iconSpaceReserved="false"/>
+        <Preference
+            app:key="excluded_videos"
+            app:title="@string/excluded_videos"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="settings"
+        app:title="@string/title_settings"
+        app:iconSpaceReserved="false">
+        <EditTextPreference
+            app:key="@string/saved_report_message"
+            app:title="@string/report_message"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

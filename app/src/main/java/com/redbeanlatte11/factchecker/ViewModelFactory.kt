@@ -7,7 +7,8 @@ import com.redbeanlatte11.factchecker.data.source.ChannelsRepository
 import com.redbeanlatte11.factchecker.data.source.VideosRepository
 import com.redbeanlatte11.factchecker.domain.*
 import com.redbeanlatte11.factchecker.home.GoogleAccountViewModel
-import com.redbeanlatte11.factchecker.home.HomeViewModel
+import com.redbeanlatte11.factchecker.home.VideosViewModel
+import com.redbeanlatte11.factchecker.more.MoreViewModel
 import com.redbeanlatte11.factchecker.popular.PopularViewModel
 
 /**
@@ -22,13 +23,11 @@ class ViewModelFactory constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
-                isAssignableFrom(VideosViewModel::class.java) ->
-                    VideosViewModel()
 
-                isAssignableFrom(HomeViewModel::class.java) ->
-                    HomeViewModel(
+                isAssignableFrom(VideosViewModel::class.java) ->
+                    VideosViewModel(
                         GetVideosUseCase(videosRepository),
-                        ReportVideoUseCase(videosRepository)
+                        ReportVideoUseCase()
                     )
 
                 isAssignableFrom(GoogleAccountViewModel::class.java) ->
@@ -46,6 +45,9 @@ class ViewModelFactory constructor(
                     ChannelViewModel(
                         GetChannelsUseCase(channelsRepository)
                     )
+
+                isAssignableFrom(MoreViewModel::class.java) ->
+                    MoreViewModel()
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

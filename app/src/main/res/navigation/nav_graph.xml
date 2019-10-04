@@ -36,6 +36,5 @@
     <fragment
         android:id="@+id/more_dest"
         android:name="com.redbeanlatte11.factchecker.more.MoreFragment"
-        android:label="@string/title_more"
-        tools:layout="@layout/more_frag" />
+        android:label="@string/title_more" />
 </navigation>

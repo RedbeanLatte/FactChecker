@@ -15,12 +15,12 @@ class GetPopularVideosUseCase(
 
         val videosResult = videosRepository.getVideos(forceUpdate)
 
-        // Filter products
+        // Filter videos
         if (videosResult is Success) {
             val videos = videosResult.data
 
             val videosToShow = mutableListOf<Video>()
-            // We filter the products based on the requestType
+            // We filter the videos based on the requestType
             for (video in videos) {
                 if (video.snippet.categoryId == currentCategoryId) {
                     videosToShow.add(video)

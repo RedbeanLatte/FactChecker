@@ -19,14 +19,9 @@ fun Context.watchYoutubeVideo(id: String) {
 }
 
 fun Context.watchYoutubeChannel(id: String) {
-    val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://user/channel/$id"))
     val webIntent = Intent(
         Intent.ACTION_VIEW,
-        Uri.parse("http://m.youtube.com/channel/$id")
+        Uri.parse("http://www.youtube.com/channel/$id")
     )
-    try {
-        startActivity(appIntent)
-    } catch (ex: ActivityNotFoundException) {
-        startActivity(webIntent)
-    }
+    startActivity(webIntent)
 }

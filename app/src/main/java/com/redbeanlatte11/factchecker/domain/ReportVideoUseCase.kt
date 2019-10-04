@@ -1,21 +1,14 @@
 package com.redbeanlatte11.factchecker.domain
 
 import android.annotation.SuppressLint
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import com.redbeanlatte11.factchecker.data.source.VideosRepository
+import android.webkit.*
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class ReportVideoUseCase(
-    private val videosRepository: VideosRepository
-) {
+class ReportVideoUseCase {
 
     @SuppressLint("SetJavaScriptEnabled")
     suspend operator fun invoke(webView: WebView, url: String, reportMessage: String) =
@@ -85,12 +78,10 @@ class ReportVideoUseCase(
                                 """
                                 var textarea = document.getElementsByClassName('report-details-form-description-input')[0];
                                 textarea.value = '$reportMessage';
-                                textarea.select();
-                                textarea.dispatchEvent(new Event('change', { 'bubbles': true }));
                                 textarea.dispatchEvent(new Event('input', { 'bubbles': true }));
+                                textarea.dispatchEvent(new Event('change', { 'bubbles': true }));
                                 
                                 var reportButton = document.getElementsByClassName('c3-material-button-button')[6];
-//                                var reportButton = document.getElementsByClassName('c3-material-button-button')[7];
                                 reportButton.click();
                             """.trimIndent()
                     )

@@ -57,14 +57,14 @@ object ServiceLocator {
     private fun createVideosRepository(context: Context): VideosRepository {
         return DefaultVideosRepository(
 //            ProductsRemoteDataSource(GarimFirestore(context)),
-            FakePopularVideosRemoteDataSource(JsonParser.from(context, "popular_videos.json")),
+            FakePopularVideosRemoteDataSource(JsonParser.from(context, "test_popular_videos.json")),
             createVideosLocalDataSource(context)
         )
     }
 
     private fun createPopularVideosRepository(context: Context): VideosRepository {
         return DefaultVideosRepository(
-            FakePopularVideosRemoteDataSource(JsonParser.from(context, "popular_videos.json")),
+            FakePopularVideosRemoteDataSource(JsonParser.from(context, "test_popular_videos.json")),
             createVideosLocalDataSource(context)
         )
     }

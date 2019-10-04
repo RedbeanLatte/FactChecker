@@ -8,7 +8,7 @@
 
         <variable
             name="viewmodel"
-            type="com.redbeanlatte11.factchecker.home.HomeViewModel" />
+            type="com.redbeanlatte11.factchecker.home.VideosViewModel" />
 
     </data>
 

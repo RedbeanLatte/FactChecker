@@ -1,8 +1,5 @@
 package com.redbeanlatte11.factchecker.home
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
@@ -21,7 +18,7 @@ import timber.log.Timber
 
 class HomeFragment : Fragment() {
 
-    private val viewModel by viewModels<HomeViewModel> { getViewModelFactory() }
+    private val viewModel by viewModels<VideosViewModel> { getViewModelFactory() }
 
     private lateinit var viewDataBinding: HomeFragBinding
 
@@ -95,8 +92,8 @@ class HomeFragment : Fragment() {
             R.id.menu_report_all -> {
                 val savedSignInResult = PreferenceUtils.loadSignInResult(requireContext())
                 if (savedSignInResult) {
-                    val dialog = ReportAllDialogFragment(viewModel)
-                    dialog.show(activity?.supportFragmentManager!!, "ReportAllDialogFragment")
+                    val reportDialog = ReportAllDialogFragment(viewModel)
+                    reportDialog.show(activity?.supportFragmentManager!!, "ReportAllDialogFragment")
                 } else {
                     val signInDialog = SignInDialogFragment()
                     signInDialog.show(activity?.supportFragmentManager!!, "SignInDialogFragment")

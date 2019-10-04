@@ -12,10 +12,13 @@ import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.domain.GetVideosUseCase
 import com.redbeanlatte11.factchecker.domain.ReportVideoUseCase
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import timber.log.Timber
 
-class HomeViewModel(
+class VideosViewModel(
     private val getVideosUseCase: GetVideosUseCase,
     private val reportVideoUseCase: ReportVideoUseCase
 ) : ViewModel() {
@@ -31,10 +34,12 @@ class HomeViewModel(
 
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
+    private var reportAllJob: Job? = null
+
     /**
      * @param forceUpdate   Pass in true to refresh the data in the [VideosDataSource]
      */
-    private fun loadVideos(forceUpdate: Boolean, needsCheck: Boolean) {
+    fun loadVideos(forceUpdate: Boolean) {
         _dataLoading.value = true
 
         viewModelScope.launch {
@@ -53,21 +58,37 @@ class HomeViewModel(
         }
     }
 
-    fun loadVideos(forceUpdate: Boolean) {
-        loadVideos(forceUpdate, false)
-    }
-
     private fun showSnackbarMessage(message: Int) {
         _snackbarText.value = Event(message)
     }
 
-    fun reportAll(webView: WebView) {
-        viewModelScope.launch {
-            val reportMessage = "This channel makes misrepresentative contents"
-            items.value?.forEach {
-                reportVideoUseCase(webView, "https://m.youtube.com/watch?v=${it.id}", reportMessage)
+    fun reportAll(webView: WebView, reportMessage: String, onReportAllListener: OnReportAllListener) {
+        reportAllJob = viewModelScope.launch {
+            Timber.d("reportAll")
+            items.value?.forEach { video ->
+                yield()
+                Timber.d("report video: ${video.snippet.title}")
+                onReportAllListener.onNext(video)
+                reportVideoUseCase(webView, "https://m.youtube.com/watch?v=${video.id}", reportMessage)
+                //TODO: implement to add reported videos
             }
+            Timber.d("reportAll completed")
+            onReportAllListener.onCompleted()
             webView.loadUrl("https://m.youtube.com")
         }
+    }
+
+    fun cancelReportAll() {
+        reportAllJob?.run {
+            Timber.d("cancelReportAll")
+            cancel("cancelReportAll")
+        }
+    }
+
+    interface OnReportAllListener {
+
+        fun onNext(video: Video)
+
+        fun onCompleted()
     }
 }
