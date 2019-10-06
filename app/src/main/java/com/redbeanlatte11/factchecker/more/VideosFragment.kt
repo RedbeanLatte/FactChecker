@@ -77,7 +77,7 @@ class VideosFragment : Fragment() {
 
     private fun setupTitle() {
         activity?.title = when (args.filterType) {
-            VideosFilterType.REPORTED_VIDEOS -> getString(R.string.title_reported_vidoes)
+            VideosFilterType.REPORTED_VIDEOS -> getString(R.string.title_reported_videos)
             VideosFilterType.EXCLUDED_VIDEOS -> getString(R.string.title_excluded_videos)
             else -> throw NotImplementedError()
         }

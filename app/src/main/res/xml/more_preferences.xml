@@ -18,11 +18,11 @@
         app:iconSpaceReserved="false">
         <Preference
             app:key="reported_videos"
-            app:title="@string/reported_videos"
+            app:title="@string/title_reported_videos"
             app:iconSpaceReserved="false"/>
         <Preference
             app:key="excluded_videos"
-            app:title="@string/excluded_videos"
+            app:title="@string/title_excluded_videos"
             app:iconSpaceReserved="false"/>
     </PreferenceCategory>
 
