@@ -14,7 +14,8 @@ class SignInDialogFragment : DialogFragment() {
             val builder = AlertDialog.Builder(it)
             builder.setMessage(R.string.dialog_sign_in)
                 .setPositiveButton(R.string.sign_in) { _, _ ->
-                    findNavController().navigate(R.id.google_account_dest)
+                    val action = HomeFragmentDirections.actionHomeDestToGoogleAccountDest()
+                    findNavController().navigate(action)
                 }
                 .setNegativeButton(R.string.cancel) { _, _ ->
                 }

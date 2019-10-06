@@ -86,10 +86,6 @@ class DefaultChannelsRepository(
         }
     }
 
-    private suspend fun refreshLocalDataSource(channel: Channel) {
-        channelsLocalDataSource.saveChannel(channel)
-    }
-
     private fun cacheChannel(channel: Channel): Channel {
         val cachedChannel = channel.copy()
         // Create if it doesn't exist.

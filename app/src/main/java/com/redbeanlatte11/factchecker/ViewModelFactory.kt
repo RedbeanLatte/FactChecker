@@ -27,7 +27,9 @@ class ViewModelFactory constructor(
                 isAssignableFrom(VideosViewModel::class.java) ->
                     VideosViewModel(
                         GetVideosUseCase(videosRepository),
-                        ReportVideoUseCase()
+                        ReportVideoUseCase(videosRepository),
+                        ExcludeVideoUseCase(videosRepository),
+                        IncludeVideoUseCase(videosRepository)
                     )
 
                 isAssignableFrom(GoogleAccountViewModel::class.java) ->

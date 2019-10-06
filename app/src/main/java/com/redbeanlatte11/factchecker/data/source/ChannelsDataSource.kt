@@ -7,6 +7,8 @@ interface ChannelsDataSource {
 
     suspend fun getChannels(): Result<List<Channel>>
 
+    suspend fun getChannel(channelId: String): Result<Channel>
+
     suspend fun saveChannel(channel: Channel)
 
     suspend fun deleteAllChannels()

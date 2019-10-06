@@ -36,5 +36,18 @@
     <fragment
         android:id="@+id/more_dest"
         android:name="com.redbeanlatte11.factchecker.more.MoreFragment"
-        android:label="@string/title_more" />
+        android:label="@string/title_more" >
+        <action
+            android:id="@+id/action_more_dest_to_videos_dest"
+            app:destination="@id/videos_dest" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/videos_dest"
+        android:name="com.redbeanlatte11.factchecker.more.VideosFragment"
+        android:label="@string/title_videos" >
+        <argument
+            android:name="filterType"
+            app:argType="com.redbeanlatte11.factchecker.home.VideosFilterType" />
+    </fragment>
 </navigation>

@@ -4,10 +4,10 @@ import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Video
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import timber.log.Timber
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 class DefaultVideosRepository(
     private val videosRemoteDataSource: VideosDataSource,
@@ -15,7 +15,7 @@ class DefaultVideosRepository(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : VideosRepository {
 
-    private var cachedVideos: MutableList<Video>? = null
+    private var cachedVideos: ConcurrentMap<String, Video>? = null
 
     override suspend fun getVideos(
         forceUpdate: Boolean
@@ -25,7 +25,7 @@ class DefaultVideosRepository(
             // Respond immediately with cache if available and not dirty
             if (!forceUpdate) {
                 cachedVideos?.let { cachedVideos ->
-                    return@withContext Success(cachedVideos)
+                    return@withContext Success(cachedVideos.values.toList())
                 }
             }
 
@@ -35,7 +35,7 @@ class DefaultVideosRepository(
             (newVideos as? Success)?.let { refreshCache(it.data) }
 
             cachedVideos?.let { videos ->
-                return@withContext Success(videos.toList())
+                return@withContext Success(videos.values.toList())
             }
 
             (newVideos as? Success)?.let {
@@ -85,22 +85,45 @@ class DefaultVideosRepository(
         }
     }
 
-    private suspend fun refreshLocalDataSource(video: Video) {
-        videosLocalDataSource.saveVideo(video)
-    }
-
     private fun cacheVideo(video: Video): Video {
         val cachedVideo = video.copy()
         // Create if it doesn't exist.
         if (cachedVideos == null) {
-            cachedVideos = mutableListOf()
+            cachedVideos = ConcurrentHashMap()
         }
-        cachedVideos?.add(cachedVideo)
+        cachedVideos?.put(cachedVideo.id, cachedVideo)
         return cachedVideo
     }
 
     private inline fun cacheAndPerform(video: Video, perform: (Video) -> Unit) {
         val cachedVideo = cacheVideo(video)
         perform(cachedVideo)
+    }
+
+    override suspend fun reportVideo(video: Video) {
+        cacheAndPerform(video) {
+            it.reported = true
+            coroutineScope {
+                launch { videosLocalDataSource.reportVideo(it) }
+            }
+        }
+    }
+
+    override suspend fun excludeVideo(video: Video) {
+        cacheAndPerform(video) {
+            it.excluded = true
+            coroutineScope {
+                launch { videosLocalDataSource.excludeVideo(it) }
+            }
+        }
+    }
+
+    override suspend fun includeVideo(video: Video) {
+        cacheAndPerform(video) {
+            it.excluded = false
+            coroutineScope {
+                launch { videosLocalDataSource.includeVideo(it) }
+            }
+        }
     }
 }

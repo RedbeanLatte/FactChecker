@@ -36,4 +36,10 @@
     <string name="video">영상</string>
     <string name="title_progress_report_message">신고 중</string>
     <string name="dialog_report_complete">건 신고 완료</string>
+    <string name="video_marked_excluded">영상이 제외 되었습니다</string>
+    <string name="video_marked_added">영상이 추가 되었습니다</string>
+    <string name="title_videos">영상</string>
+    <string name="title_reported_vidoes">신고한 영상들</string>
+    <string name="title_excluded_videos">제외한 영상들</string>
+    <string name="add_video_to_list">목록에 추가</string>
 </resources>

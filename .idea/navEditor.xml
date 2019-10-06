@@ -117,6 +117,15 @@
                             <option name="y" value="27" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_more_dest_to_videos_dest">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -127,6 +136,18 @@
                           <Point>
                             <option name="x" value="-1747" />
                             <option name="y" value="-275" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="videos_dest">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-1485" />
+                            <option name="y" value="22" />
                           </Point>
                         </option>
                       </LayoutPositions>

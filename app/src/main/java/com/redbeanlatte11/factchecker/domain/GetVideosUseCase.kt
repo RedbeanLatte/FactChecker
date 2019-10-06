@@ -2,18 +2,17 @@ package com.redbeanlatte11.factchecker.domain
 
 import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Success
-import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.source.VideosRepository
 import com.redbeanlatte11.factchecker.home.VideosFilterType
-import com.redbeanlatte11.factchecker.home.VideosFilterType.ALL_VIDEOS
+import com.redbeanlatte11.factchecker.home.VideosFilterType.*
 
 class GetVideosUseCase(
     private val videosRepository: VideosRepository
 ) {
     suspend operator fun invoke(
         forceUpdate: Boolean = false,
-        currentFilter: VideosFilterType = ALL_VIDEOS // News & Politics
+        currentFilter: VideosFilterType = ALL_VIDEOS
     ): Result<List<Video>> {
 
         val videosResult = videosRepository.getVideos(forceUpdate)
@@ -25,9 +24,18 @@ class GetVideosUseCase(
             val videosToShow = mutableListOf<Video>()
             // We filter the products based on the requestType
             for (video in videos) {
-//                if (video.snippet.categoryId == currentCategoryId) {
-//                    videosToShow.add(video)
-//                }
+                when (currentFilter) {
+                    CANDIDATE_VIDEOS -> if (!video.reported && !video.excluded) {
+                        videosToShow.add(video)
+                    }
+                    REPORTED_VIDEOS -> if (video.reported) {
+                        videosToShow.add(video)
+                    }
+                    EXCLUDED_VIDEOS -> if (video.excluded) {
+                        videosToShow.add(video)
+                    }
+                    else -> NotImplementedError()
+                }
             }
             return Success(videosToShow)
         }

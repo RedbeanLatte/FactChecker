@@ -8,7 +8,7 @@ import com.redbeanlatte11.factchecker.Event
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.data.Result
-import com.redbeanlatte11.factchecker.data.Video
+import com.redbeanlatte11.factchecker.data.source.ChannelsDataSource
 import com.redbeanlatte11.factchecker.domain.GetChannelsUseCase
 import kotlinx.coroutines.launch
 import timber.log.Timber

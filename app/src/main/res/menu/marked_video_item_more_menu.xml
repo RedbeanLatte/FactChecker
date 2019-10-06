@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/report_video"
-        android:title="@string/report" />
-
-    <item
         android:id="@+id/add_video_to_list"
-        android:title="@string/remove_video_from_list" />
+        android:title="@string/add_video_to_list" />
 </menu>

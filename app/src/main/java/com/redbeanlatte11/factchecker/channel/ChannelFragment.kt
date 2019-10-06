@@ -57,7 +57,7 @@ class ChannelFragment : Fragment() {
         val viewModel = viewDataBinding.viewmodel
         if (viewModel != null) {
             val itemClickListener = ChannelItemClickListener.invoke {
-                requireContext().watchYoutubeChannel(it.id)
+                requireContext().watchYoutubeChannel(it)
             }
             val moreClickListener = View.OnClickListener {
                 showPopupMenu(it)

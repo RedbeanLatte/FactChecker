@@ -2,27 +2,36 @@ package com.redbeanlatte11.factchecker.domain
 
 import android.annotation.SuppressLint
 import android.webkit.*
+import com.redbeanlatte11.factchecker.ServiceLocator.videosRepository
+import com.redbeanlatte11.factchecker.data.Video
+import com.redbeanlatte11.factchecker.data.source.VideosRepository
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class ReportVideoUseCase {
+class ReportVideoUseCase(
+    private val videosRepository: VideosRepository
+) {
 
     @SuppressLint("SetJavaScriptEnabled")
-    suspend operator fun invoke(webView: WebView, url: String, reportMessage: String) =
+    suspend operator fun invoke(webView: WebView, video: Video, reportMessage: String) =
         suspendCoroutine<Unit> { continuation ->
             with(webView) {
                 settings.javaScriptEnabled = true
-                webViewClient = YoutubeWebViewClient(continuation, reportMessage)
-                loadUrl(url)
+                webViewClient = YoutubeWebViewClient(continuation, videosRepository, video, reportMessage)
+                loadUrl(video.youtubeUrl)
             }
         }
 
     private class YoutubeWebViewClient(
         val continuation: Continuation<Unit>,
-        val reportMessage: String
+        val videosRepository: VideosRepository,
+        val video: Video,
+        val reportMessage: String,
+        val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
     ) : WebViewClient() {
 
         private var stage = 0
@@ -91,6 +100,9 @@ class ReportVideoUseCase {
                 4 -> {
                     if (!resumed.get()) {
                         resumed.set(true)
+                        CoroutineScope(ioDispatcher).launch {
+                            videosRepository.reportVideo(video)
+                        }
                         continuation.resume(Unit)
                     }
                 }

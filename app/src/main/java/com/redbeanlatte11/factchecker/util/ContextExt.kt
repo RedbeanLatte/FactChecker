@@ -4,12 +4,14 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.redbeanlatte11.factchecker.data.Channel
+import com.redbeanlatte11.factchecker.data.Video
 
-fun Context.watchYoutubeVideo(id: String) {
-    val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+fun Context.watchYoutubeVideo(video: Video) {
+    val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:${video.id}"))
     val webIntent = Intent(
         Intent.ACTION_VIEW,
-        Uri.parse("http://m.youtube.com/watch?v=$id")
+        Uri.parse(video.youtubeUrl)
     )
     try {
         startActivity(appIntent)
@@ -18,10 +20,10 @@ fun Context.watchYoutubeVideo(id: String) {
     }
 }
 
-fun Context.watchYoutubeChannel(id: String) {
+fun Context.watchYoutubeChannel(channel: Channel) {
     val webIntent = Intent(
         Intent.ACTION_VIEW,
-        Uri.parse("http://www.youtube.com/channel/$id")
+        Uri.parse(channel.youtubeUrl)
     )
     startActivity(webIntent)
 }

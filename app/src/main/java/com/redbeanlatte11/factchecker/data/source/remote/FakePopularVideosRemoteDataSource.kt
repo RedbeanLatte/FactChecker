@@ -14,6 +14,9 @@ class FakePopularVideosRemoteDataSource(
     private val jsonParser: JsonParser,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : VideosDataSource {
+    override suspend fun getVideo(videoId: String): Result<Video> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override suspend fun getVideos(): Result<List<Video>> = withContext(ioDispatcher) {
         return@withContext try {
@@ -28,6 +31,18 @@ class FakePopularVideosRemoteDataSource(
     }
 
     override suspend fun deleteAllVideos() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun reportVideo(video: Video) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun excludeVideo(video: Video) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun includeVideo(video: Video) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

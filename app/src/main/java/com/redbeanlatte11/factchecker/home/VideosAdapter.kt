@@ -33,7 +33,7 @@ import timber.log.Timber
  */
 class VideosAdapter(
     private val itemClickListener: VideoItemClickListener,
-    private val moreClickListener: View.OnClickListener
+    private val moreClickListener: VideoItemClickListener
 ) : ListAdapter<Video, ViewHolder>(VideoDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -48,7 +48,7 @@ class VideosAdapter(
     class ViewHolder private constructor(private val binding: VideoItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Video, itemClickListener: VideoItemClickListener, moreClickListener: View.OnClickListener) {
+        fun bind(item: Video, itemClickListener: VideoItemClickListener, moreClickListener: VideoItemClickListener) {
             binding.video = item
             binding.itemClickListener = itemClickListener
             binding.moreClickListener = moreClickListener
@@ -82,12 +82,12 @@ class VideoDiffCallback : DiffUtil.ItemCallback<Video>() {
 }
 
 interface VideoItemClickListener {
-    fun onClick(video: Video)
+    fun onClick(view: View, video: Video)
 
     companion object {
-        inline operator fun invoke(crossinline op: (Video) -> Unit) =
+        inline operator fun invoke(crossinline op: (View, Video) -> Unit) =
             object : VideoItemClickListener {
-                override fun onClick(video: Video) = op(video)
+                override fun onClick(view: View, video: Video) = op(view, video)
             }
     }
 }

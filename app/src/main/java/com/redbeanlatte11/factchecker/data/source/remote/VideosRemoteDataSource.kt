@@ -6,6 +6,10 @@ import com.redbeanlatte11.factchecker.data.source.VideosDataSource
 
 class VideosRemoteDataSource : VideosDataSource {
 
+    override suspend fun getVideo(videoId: String): Result<Video> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override suspend fun getVideos(): Result<List<Video>> {
         return Result.Error(IllegalAccessException())
     }
@@ -15,6 +19,18 @@ class VideosRemoteDataSource : VideosDataSource {
     }
 
     override suspend fun deleteAllVideos() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun reportVideo(video: Video) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun excludeVideo(video: Video) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun includeVideo(video: Video) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
