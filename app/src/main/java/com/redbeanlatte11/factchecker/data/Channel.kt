@@ -38,9 +38,9 @@ data class ChannelStatistics(
     @ColumnInfo(name = "hiddenSubscriberCount") val hiddenSubscriberCount: Boolean,
     @ColumnInfo(name = "videoCount") val videoCount: Int
 ) {
-    val subscriberCountToShow
-        get() = viewCount.toSummuryCount()
+    val subscriberCountToShow: String?
+        get() = "구독자 ${subscriberCount.toSummuryCount()}명"
 
-    val videoCountToShow
-        get() = videoCount.toSummuryCount()
+    val videoCountToShow: String?
+        get() = "동영상 ${videoCount.toSummuryCount()}개"
 }

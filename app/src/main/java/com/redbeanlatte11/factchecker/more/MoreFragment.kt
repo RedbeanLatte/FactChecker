@@ -20,14 +20,20 @@ class MoreFragment : PreferenceFragmentCompat() {
     private fun setupPreferences() {
         val reportedVideosPreference: Preference? = findPreference("reported_videos")
         reportedVideosPreference?.setOnPreferenceClickListener {
-            val action = MoreFragmentDirections.actionMoreDestToVideosDest(VideosFilterType.REPORTED_VIDEOS)
+            val action = MoreFragmentDirections.actionMoreDestToVideosDest(
+                getString(R.string.title_reported_videos),
+                VideosFilterType.REPORTED_VIDEOS
+            )
             findNavController().navigate(action)
             true
         }
 
         val excludedVideosPreference: Preference? = findPreference("excluded_videos")
         excludedVideosPreference?.setOnPreferenceClickListener {
-            val action = MoreFragmentDirections.actionMoreDestToVideosDest(VideosFilterType.EXCLUDED_VIDEOS)
+            val action = MoreFragmentDirections.actionMoreDestToVideosDest(
+                getString(R.string.title_excluded_videos),
+                VideosFilterType.EXCLUDED_VIDEOS
+            )
             findNavController().navigate(action)
             true
         }

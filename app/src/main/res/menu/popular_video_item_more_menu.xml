@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/report_video"
-        android:title="@string/report" />
+        android:id="@+id/add_video_to_blacklist"
+        android:title="@string/title_add_video_blacklist" />
 
 </menu>

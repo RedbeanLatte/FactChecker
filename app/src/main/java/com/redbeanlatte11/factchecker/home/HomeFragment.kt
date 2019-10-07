@@ -2,6 +2,7 @@ package com.redbeanlatte11.factchecker.home
 
 import android.os.Bundle
 import android.view.*
+import android.webkit.WebView
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -9,11 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Video
-import com.redbeanlatte11.factchecker.databinding.HomeFragBinding
-import com.redbeanlatte11.factchecker.util.PreferenceUtils
-import com.redbeanlatte11.factchecker.util.getViewModelFactory
-import com.redbeanlatte11.factchecker.util.setupSnackbar
-import com.redbeanlatte11.factchecker.util.watchYoutubeVideo
+import com.redbeanlatte11.factchecker.databinding.VideosFragBinding
+import com.redbeanlatte11.factchecker.util.*
 import timber.log.Timber
 
 
@@ -21,14 +19,14 @@ class HomeFragment : Fragment() {
 
     private val viewModel by viewModels<VideosViewModel> { getViewModelFactory() }
 
-    private lateinit var viewDataBinding: HomeFragBinding
+    private lateinit var viewDataBinding: VideosFragBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewDataBinding = HomeFragBinding.inflate(inflater, container, false).apply {
+        viewDataBinding = VideosFragBinding.inflate(inflater, container, false).apply {
             viewmodel = viewModel
         }
 
@@ -37,7 +35,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.setFiltering(VideosFilterType.CANDIDATE_VIDEOS)
+        viewModel.setFiltering(VideosFilterType.BLACKLIST_VIDEOS)
         viewModel.loadVideos(false)
     }
 
@@ -56,10 +54,11 @@ class HomeFragment : Fragment() {
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.viewmodel
         if (viewModel != null) {
-            val itemClickListener = VideoItemClickListener.invoke { _, video ->
+            val itemClickListener = VideoItemClickListener { _, video ->
                 requireContext().watchYoutubeVideo(video)
             }
-            val moreClickListener = VideoItemClickListener.invoke { view, video ->
+
+            val moreClickListener = VideoItemClickListener { view, video ->
                 showPopupMenu(view, video)
             }
             viewDataBinding.videosList.adapter = VideosAdapter(itemClickListener, moreClickListener)
@@ -73,13 +72,27 @@ class HomeFragment : Fragment() {
             menuInflater.inflate(R.menu.video_item_more_menu, menu)
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.report_video -> Timber.d("reportVideo") //TODO: implement single report
-                    R.id.add_video_to_list -> viewModel.excludeVideo(video, true)
+                    R.id.report_video -> reportVideo(video)
+                    R.id.add_video_to_home_list -> viewModel.excludeVideo(video, true)
                 }
                 true
             }
             show()
         }
+    }
+
+    private fun reportVideo(video: Video) {
+        val webView: WebView = activity?.findViewById(R.id.web_view)!!
+        viewModel.reportVideo(
+            webView,
+            video,
+            PreferenceUtils.loadReportMessage(requireContext()),
+            OnReportCompleteListener {
+                val completeDialog = ReportCompleteDialogFragment(1)
+                completeDialog.show(activity?.supportFragmentManager!!, "ReportCompleteDialogFragment")
+                webView.loadYoutubeHome()
+            }
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -91,7 +104,7 @@ class HomeFragment : Fragment() {
             R.id.menu_report_all -> {
                 val savedSignInResult = PreferenceUtils.loadSignInResult(requireContext())
                 if (savedSignInResult) {
-                    val reportDialog = ReportAllDialogFragment(viewModel)
+                    val reportDialog = ReportAllDialogFragment { reportAll() }
                     reportDialog.show(activity?.supportFragmentManager!!, "ReportAllDialogFragment")
                 } else {
                     val signInDialog = SignInDialogFragment()
@@ -107,6 +120,50 @@ class HomeFragment : Fragment() {
 
             else -> false
         }
+
+    private fun reportAll() {
+        val itemCount = viewModel.items.value?.size ?: 0
+        if (itemCount == 0) {
+            val completeDialog = ReportCompleteDialogFragment(itemCount)
+            completeDialog.show(activity?.supportFragmentManager!!, "ReportCompleteDialogFragment")
+            return
+        }
+
+        val webView: WebView = activity?.findViewById(R.id.web_view)!!
+        val firstItemTitle = viewModel.items.value?.first()?.snippet?.title ?: ""
+        val progressDialog = ReportProgressDialogFragment(itemCount, firstItemTitle) {
+            viewModel.cancelReportAll()
+        }
+        progressDialog.isCancelable = false
+        progressDialog.show(activity?.supportFragmentManager!!, "ReportProgressDialogFragment")
+        requireContext().mute()
+
+        val listener = object : OnReportAllListener {
+
+            override fun onNext(video: Video) {
+                progressDialog.progress(video)
+            }
+
+            override fun onCompleted(itemCount: Int) {
+                progressDialog.dismiss()
+                val completeDialog = ReportCompleteDialogFragment(itemCount)
+                completeDialog.show(activity?.supportFragmentManager!!, "ReportCompleteDialogFragment")
+                webView.loadYoutubeHome()
+                requireContext().unmute()
+            }
+
+            override fun onCancelled() {
+                webView.loadYoutubeHome()
+                requireContext().unmute()
+            }
+        }
+
+        viewModel.reportAll(
+            webView,
+            PreferenceUtils.loadReportMessage(requireContext()),
+            listener
+        )
+    }
 
     private fun showAccountPopUpMenu() {
         val view = activity?.findViewById<View>(R.id.menu_google_account) ?: return

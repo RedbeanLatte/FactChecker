@@ -59,10 +59,10 @@ class PopularFragment : Fragment() {
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.viewmodel
         if (viewModel != null) {
-            val itemClickListener = VideoItemClickListener.invoke { _, video ->
+            val itemClickListener = VideoItemClickListener { _, video ->
                 requireContext().watchYoutubeVideo(video)
             }
-            val moreClickListener = VideoItemClickListener.invoke { view, video ->
+            val moreClickListener = VideoItemClickListener { view, video ->
                 showPopupMenu(view, video)
             }
             viewDataBinding.popularVideosList.adapter = VideosAdapter(itemClickListener, moreClickListener)
@@ -76,7 +76,8 @@ class PopularFragment : Fragment() {
             menuInflater.inflate(R.menu.popular_video_item_more_menu, menu)
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.report_video -> Timber.d("reportVideo")
+                    R.id.add_video_to_blacklist -> {
+                    }
                 }
                 true
             }

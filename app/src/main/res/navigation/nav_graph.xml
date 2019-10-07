@@ -9,10 +9,16 @@
         android:id="@+id/home_dest"
         android:name="com.redbeanlatte11.factchecker.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/home_frag" >
+        tools:layout="@layout/videos_frag" >
         <action
             android:id="@+id/action_home_dest_to_google_account_dest"
             app:destination="@id/google_account_dest" />
+        <action
+            android:id="@+id/action_home_dest_to_shareVideoFragment"
+            app:destination="@id/shareVideoFragment" />
+        <action
+            android:id="@+id/action_home_dest_to_addVideoBlacklistFragment"
+            app:destination="@id/addVideoBlacklistFragment" />
     </fragment>
 
     <fragment
@@ -45,9 +51,16 @@
     <fragment
         android:id="@+id/videos_dest"
         android:name="com.redbeanlatte11.factchecker.more.VideosFragment"
-        android:label="@string/title_videos" >
+        android:label="{title}" >
+        <argument
+            android:name="title"
+            app:argType="string" />
         <argument
             android:name="filterType"
             app:argType="com.redbeanlatte11.factchecker.home.VideosFilterType" />
     </fragment>
+    <fragment
+        android:id="@+id/add_video_blacklist_dest"
+        android:name="com.redbeanlatte11.factchecker.home.AddVideoBlacklistFragment"
+        android:label="@string/title_add_video_blacklist" />
 </navigation>

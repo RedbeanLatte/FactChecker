@@ -26,13 +26,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/list_item_height"
-        android:layout_marginBottom="@dimen/list_item_padding"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/list_item_padding"
+        android:paddingBottom="@dimen/list_item_padding"
         android:onClick="@{() -> itemClickListener.onClick(channel)}">
 
         <ImageView
             android:id="@+id/image_view_thumbnail"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
             android:contentDescription="@string/description_channel_thumbnail"
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="parent"
@@ -51,14 +56,14 @@
 
             <TextView
                 android:id="@+id/text_view_title"
-                style="@style/VideoItemTitleFont"
+                style="@style/ListItemTitleFont"
                 android:lineSpacingExtra="-2sp"
                 android:text="@{channel.snippet.title}"
                 tools:text="title1\ntitle2\ntitle3" />
 
             <TextView
-                style="@style/VideoItemContentFont"
-                android:id="@+id/text_view_subscriber_count_and_video_count"
+                style="@style/ListItemContentFont"
+                android:id="@+id/text_view_channel_statistics"
                 android:text="@{channel.statistics.subscriberCountToShow + ` · ` + channel.statistics.videoCountToShow}"
                 tools:text="subscriberCount and videoCount" />
         </LinearLayout>
@@ -67,6 +72,8 @@
             android:id="@+id/image_button_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:scaleX="1.25"
+            android:scaleY="1.25"
             android:background="#00FFFFFF"
             android:src="@drawable/ic_more_vert"
             android:tint="@color/colorGrey"

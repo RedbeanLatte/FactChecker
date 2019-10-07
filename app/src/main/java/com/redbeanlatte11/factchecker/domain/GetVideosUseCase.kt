@@ -25,7 +25,7 @@ class GetVideosUseCase(
             // We filter the products based on the requestType
             for (video in videos) {
                 when (currentFilter) {
-                    CANDIDATE_VIDEOS -> if (!video.reported && !video.excluded) {
+                    BLACKLIST_VIDEOS -> if (!video.reported && !video.excluded) {
                         videosToShow.add(video)
                     }
                     REPORTED_VIDEOS -> if (video.reported) {

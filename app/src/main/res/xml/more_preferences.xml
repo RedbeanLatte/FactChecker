@@ -14,7 +14,7 @@
 
     <PreferenceCategory
         app:key="video_category"
-        app:title="@string/video"
+        app:title="@string/title_video"
         app:iconSpaceReserved="false">
         <Preference
             app:key="reported_videos"

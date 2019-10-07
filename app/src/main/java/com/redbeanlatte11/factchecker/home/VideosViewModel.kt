@@ -1,10 +1,7 @@
 package com.redbeanlatte11.factchecker.home
 
 import android.webkit.WebView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.redbeanlatte11.factchecker.Event
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Result.Error
@@ -15,10 +12,7 @@ import com.redbeanlatte11.factchecker.domain.ExcludeVideoUseCase
 import com.redbeanlatte11.factchecker.domain.GetVideosUseCase
 import com.redbeanlatte11.factchecker.domain.IncludeVideoUseCase
 import com.redbeanlatte11.factchecker.domain.ReportVideoUseCase
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
+import kotlinx.coroutines.*
 import timber.log.Timber
 
 class VideosViewModel(
@@ -42,6 +36,11 @@ class VideosViewModel(
     private var reportAllJob: Job? = null
 
     private var _currentFiltering = VideosFilterType.ALL_VIDEOS
+
+    // This LiveData depends on another so we can use a transformation.
+    val empty: LiveData<Boolean> = Transformations.map(_items) {
+        it.isEmpty()
+    }
 
     fun setFiltering(requestType: VideosFilterType) {
         _currentFiltering = requestType
@@ -73,7 +72,11 @@ class VideosViewModel(
         _snackbarText.value = Event(message)
     }
 
-    fun reportAll(webView: WebView, reportMessage: String, onReportAllListener: OnReportAllListener) {
+    fun reportAll(
+        webView: WebView,
+        reportMessage: String,
+        onReportAllListener: OnReportAllListener
+    ) {
         reportAllJob = viewModelScope.launch {
             Timber.d("reportAll")
             items.value?.forEach { video ->
@@ -81,10 +84,13 @@ class VideosViewModel(
                 Timber.d("report video: ${video.snippet.title}")
                 onReportAllListener.onNext(video)
                 reportVideoUseCase(webView, video, reportMessage)
+                if (!isActive) {
+                    onReportAllListener.onCancelled()
+                    loadVideos(false)
+                }
             }
             Timber.d("reportAll completed")
-            onReportAllListener.onCompleted()
-            webView.loadUrl("https://m.youtube.com")
+            items.value?.let { onReportAllListener.onCompleted(it.count()) }
             loadVideos(false)
         }
     }
@@ -93,10 +99,26 @@ class VideosViewModel(
         reportAllJob?.run {
             Timber.d("cancelReportAll")
             cancel("cancelReportAll")
+            showSnackbarMessage(R.string.cancel_report_all)
         }
     }
 
-    fun excludeVideo(video: Video, excluded: Boolean)  = viewModelScope.launch {
+    fun reportVideo(
+        webView: WebView,
+        video: Video,
+        reportMessage: String,
+        onReportCompleteListener: OnReportCompleteListener
+    ) {
+        viewModelScope.launch {
+            Timber.d("reportVideo: ${video.snippet.title}")
+            reportVideoUseCase(webView, video, reportMessage)
+            onReportCompleteListener.onComplete(video)
+            loadVideos(false)
+        }
+        showSnackbarMessage(R.string.reporting_single_video)
+    }
+
+    fun excludeVideo(video: Video, excluded: Boolean) = viewModelScope.launch {
         if (excluded) {
             excludeVideoUseCase(video)
             showSnackbarMessage(R.string.video_marked_excluded)
@@ -105,12 +127,5 @@ class VideosViewModel(
             showSnackbarMessage(R.string.video_marked_added)
         }
         loadVideos(false)
-    }
-
-    interface OnReportAllListener {
-
-        fun onNext(video: Video)
-
-        fun onCompleted()
     }
 }

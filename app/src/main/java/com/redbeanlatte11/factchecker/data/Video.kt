@@ -49,5 +49,5 @@ data class VideoStatistics(
     @ColumnInfo(name = "commentCount") val commentCount: Int
 ) {
     val viewCountToShow
-        get() = viewCount.toSummuryCount()
+        get() = "조회수 ${viewCount.toSummuryCount()}"
 }

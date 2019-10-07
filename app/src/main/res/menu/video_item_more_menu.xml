@@ -5,6 +5,6 @@
         android:title="@string/report" />
 
     <item
-        android:id="@+id/add_video_to_list"
+        android:id="@+id/add_video_to_home_list"
         android:title="@string/remove_video_from_list" />
 </menu>

@@ -12,8 +12,8 @@
 
     <string name="saved_sign_in_result">saved_sign_in_result</string>
     <string name="sign_in">로그인</string>
-    <string name="dialog_sign_in">부적절한 컨텐츠를 신고하려면 로그인하세요</string>
-    <string name="description_video_thumbnail">영상 썸네일</string>
+    <string name="dialog_sign_in">부적절한 컨텐츠를 신고하려면 로그인하세요.</string>
+    <string name="description_video_thumbnail">동영상 썸네일</string>
     <string name="loading_videos_error">Error while loading videos</string>
 
     <string name="minutes_ago">분 전</string>
@@ -31,13 +31,17 @@
     <string name="report_message">신고 문구</string>
     <string name="donation">후원</string>
     <string name="donate_to_developer">개발자에게 후원하기</string>
-    <string name="video">영상</string>
+    <string name="title_video">동영상</string>
     <string name="title_progress_report_message">신고 중</string>
     <string name="dialog_report_complete">건 신고 완료</string>
-    <string name="video_marked_excluded">영상이 제외 되었습니다</string>
-    <string name="video_marked_added">영상이 추가 되었습니다</string>
-    <string name="title_videos">영상</string>
-    <string name="title_reported_videos">신고한 영상들</string>
-    <string name="title_excluded_videos">제외한 영상들</string>
-    <string name="add_video_to_list">목록에 추가</string>
+    <string name="video_marked_excluded">동영상이 제외 되었습니다.</string>
+    <string name="video_marked_added">동영상이 추가 되었습니다.</string>
+    <string name="title_reported_videos">신고한 동영상</string>
+    <string name="title_excluded_videos">제외한 동영상</string>
+    <string name="add_video_to_home_list">목록에 추가</string>
+    <string name="reporting_single_video">1 건 신고 중입니다.</string>
+    <string name="title_no_videos">목록에 동영상이 없습니다.</string>
+    <string name="cancel_report_all">모두 신고가 취소 되었습니다.</string>
+    <string name="title_share_video">동영상 공유하기</string>
+    <string name="title_add_video_blacklist">블랙리스트에 추가</string>
 </resources>
