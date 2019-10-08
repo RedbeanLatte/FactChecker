@@ -8,7 +8,7 @@ import com.redbeanlatte11.factchecker.data.source.VideosRepository
 import com.redbeanlatte11.factchecker.domain.*
 import com.redbeanlatte11.factchecker.home.GoogleAccountViewModel
 import com.redbeanlatte11.factchecker.home.VideosViewModel
-import com.redbeanlatte11.factchecker.more.MoreViewModel
+import com.redbeanlatte11.factchecker.more.DonationViewModel
 import com.redbeanlatte11.factchecker.popular.PopularViewModel
 
 /**
@@ -48,8 +48,10 @@ class ViewModelFactory constructor(
                         GetChannelsUseCase(channelsRepository)
                     )
 
-                isAssignableFrom(MoreViewModel::class.java) ->
-                    MoreViewModel()
+                isAssignableFrom(DonationViewModel::class.java) ->
+                    DonationViewModel(
+                        DonateUseCase()
+                    )
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

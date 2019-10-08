@@ -63,13 +63,13 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="addVideoBlacklistFragment">
+                  <entry key="add_video_blacklist_dest">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-1435" />
-                            <option name="y" value="-649" />
+                            <option name="x" value="-1437" />
+                            <option name="y" value="-673" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -82,6 +82,18 @@
                           <Point>
                             <option name="x" value="-1750" />
                             <option name="y" value="-563" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="donation_dest">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-1434" />
+                            <option name="y" value="212" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -110,12 +122,12 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_home_dest_to_google_account_dest">
+                            <entry key="action_home_dest_to_addVideoBlacklistFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_home_dest_to_shareVideoFragment">
+                            <entry key="action_home_dest_to_google_account_dest">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -130,12 +142,17 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-1748" />
-                            <option name="y" value="27" />
+                            <option name="x" value="-1743" />
+                            <option name="y" value="38" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_more_dest_to_donationFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_more_dest_to_videos_dest">
                               <value>
                                 <LayoutPositions />
@@ -163,8 +180,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-1485" />
-                            <option name="y" value="22" />
+                            <option name="x" value="-1432" />
+                            <option name="y" value="-99" />
                           </Point>
                         </option>
                       </LayoutPositions>

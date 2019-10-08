@@ -44,4 +44,7 @@
     <string name="cancel_report_all">모두 신고가 취소 되었습니다.</string>
     <string name="title_share_video">동영상 공유하기</string>
     <string name="title_add_video_blacklist">블랙리스트에 추가</string>
+    <string name="time_out_message">작업시간이 초과되었습니다.</string>
+    <string name="donation_image">use laptop computer</string>
+    <string name="title_donation_button">후원</string>
 </resources>

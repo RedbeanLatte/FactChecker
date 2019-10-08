@@ -14,11 +14,8 @@
             android:id="@+id/action_home_dest_to_google_account_dest"
             app:destination="@id/google_account_dest" />
         <action
-            android:id="@+id/action_home_dest_to_shareVideoFragment"
-            app:destination="@id/shareVideoFragment" />
-        <action
             android:id="@+id/action_home_dest_to_addVideoBlacklistFragment"
-            app:destination="@id/addVideoBlacklistFragment" />
+            app:destination="@id/add_video_blacklist_dest" />
     </fragment>
 
     <fragment
@@ -46,6 +43,9 @@
         <action
             android:id="@+id/action_more_dest_to_videos_dest"
             app:destination="@id/videos_dest" />
+        <action
+            android:id="@+id/action_more_dest_to_donation_dest"
+            app:destination="@id/donation_dest" />
     </fragment>
 
     <fragment
@@ -59,8 +59,14 @@
             android:name="filterType"
             app:argType="com.redbeanlatte11.factchecker.home.VideosFilterType" />
     </fragment>
+
     <fragment
         android:id="@+id/add_video_blacklist_dest"
         android:name="com.redbeanlatte11.factchecker.home.AddVideoBlacklistFragment"
         android:label="@string/title_add_video_blacklist" />
+
+    <fragment
+        android:id="@+id/donation_dest"
+        android:name="com.redbeanlatte11.factchecker.more.DonationFragment"
+        android:label="@string/donate_to_developer" />
 </navigation>

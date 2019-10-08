@@ -15,6 +15,7 @@
  */
 package com.redbeanlatte11.factchecker.util
 
+import android.widget.Button
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,14 @@ import com.redbeanlatte11.factchecker.channel.ChannelsAdapter
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.home.VideosAdapter
+
+
+@BindingAdapter("imageUrl")
+fun setImageUrl(view: ImageView, url: String?) {
+    url?.let {
+        Glide.with(view.context).load(it).into(view)
+    }
+}
 
 /**
  * [BindingAdapter]s for the [Video]s list.
@@ -40,9 +49,8 @@ fun setChannelItems(listView: RecyclerView, items: List<Channel>) {
     (listView.adapter as ChannelsAdapter).submitList(items)
 }
 
-@BindingAdapter("imageUrl")
-fun setImageUrl(view: ImageView, url: String?) {
-    url?.let {
-        Glide.with(view.context).load(it).into(view)
-    }
+@BindingAdapter("donationButtonText")
+fun setDonationButtonText(button: Button, donationAmount: Int) {
+    val text = "₩ $donationAmount    후원"
+    button.text = text
 }

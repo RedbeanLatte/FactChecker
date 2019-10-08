@@ -7,6 +7,7 @@ import android.media.AudioManager
 import android.net.Uri
 import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.data.Video
+import timber.log.Timber
 
 fun Context.watchYoutubeVideo(video: Video) {
     val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:${video.id}"))
@@ -30,11 +31,13 @@ fun Context.watchYoutubeChannel(channel: Channel) {
 }
 
 fun Context.mute() {
+    Timber.d("mute")
     val audioManager: AudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0)
 }
 
 fun Context.unmute() {
+    Timber.d("unmute")
     val audioManager: AudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0)
 }

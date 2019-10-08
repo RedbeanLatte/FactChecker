@@ -77,20 +77,27 @@ class VideosViewModel(
         reportMessage: String,
         onReportAllListener: OnReportAllListener
     ) {
+        var reportedVideoCount = 0
+
         reportAllJob = viewModelScope.launch {
             Timber.d("reportAll")
             items.value?.forEach { video ->
                 yield()
                 Timber.d("report video: ${video.snippet.title}")
                 onReportAllListener.onNext(video)
-                reportVideoUseCase(webView, video, reportMessage)
+                try {
+                    reportVideoUseCase(webView, video, reportMessage)
+                    reportedVideoCount++
+                } catch (e: TimeoutCancellationException) {
+                    Timber.w("report video timed out")
+                }
                 if (!isActive) {
                     onReportAllListener.onCancelled()
                     loadVideos(false)
                 }
             }
             Timber.d("reportAll completed")
-            items.value?.let { onReportAllListener.onCompleted(it.count()) }
+            items.value?.let { onReportAllListener.onCompleted(reportedVideoCount) }
             loadVideos(false)
         }
     }
@@ -111,9 +118,14 @@ class VideosViewModel(
     ) {
         viewModelScope.launch {
             Timber.d("reportVideo: ${video.snippet.title}")
-            reportVideoUseCase(webView, video, reportMessage)
-            onReportCompleteListener.onComplete(video)
-            loadVideos(false)
+            try {
+                reportVideoUseCase(webView, video, reportMessage)
+                onReportCompleteListener.onComplete(video)
+                loadVideos(false)
+            } catch (e: TimeoutCancellationException) {
+                Timber.d("reportVideo timed out")
+                showSnackbarMessage(R.string.time_out_message)
+            }
         }
         showSnackbarMessage(R.string.reporting_single_video)
     }

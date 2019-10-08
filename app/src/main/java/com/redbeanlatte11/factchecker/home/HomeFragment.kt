@@ -83,6 +83,7 @@ class HomeFragment : Fragment() {
 
     private fun reportVideo(video: Video) {
         val webView: WebView = activity?.findViewById(R.id.web_view)!!
+        requireContext().mute()
         viewModel.reportVideo(
             webView,
             video,
@@ -91,6 +92,7 @@ class HomeFragment : Fragment() {
                 val completeDialog = ReportCompleteDialogFragment(1)
                 completeDialog.show(activity?.supportFragmentManager!!, "ReportCompleteDialogFragment")
                 webView.loadYoutubeHome()
+                requireContext().unmute()
             }
         )
     }
@@ -136,7 +138,6 @@ class HomeFragment : Fragment() {
         }
         progressDialog.isCancelable = false
         progressDialog.show(activity?.supportFragmentManager!!, "ReportProgressDialogFragment")
-        requireContext().mute()
 
         val listener = object : OnReportAllListener {
 
@@ -149,12 +150,10 @@ class HomeFragment : Fragment() {
                 val completeDialog = ReportCompleteDialogFragment(itemCount)
                 completeDialog.show(activity?.supportFragmentManager!!, "ReportCompleteDialogFragment")
                 webView.loadYoutubeHome()
-                requireContext().unmute()
             }
 
             override fun onCancelled() {
                 webView.loadYoutubeHome()
-                requireContext().unmute()
             }
         }
 

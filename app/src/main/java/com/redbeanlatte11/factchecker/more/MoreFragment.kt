@@ -18,6 +18,13 @@ class MoreFragment : PreferenceFragmentCompat() {
     }
 
     private fun setupPreferences() {
+        val donationPreference: Preference? = findPreference("donation")
+        donationPreference?.setOnPreferenceClickListener {
+            val action = MoreFragmentDirections.actionMoreDestToDonationDest()
+            findNavController().navigate(action)
+            true
+        }
+
         val reportedVideosPreference: Preference? = findPreference("reported_videos")
         reportedVideosPreference?.setOnPreferenceClickListener {
             val action = MoreFragmentDirections.actionMoreDestToVideosDest(

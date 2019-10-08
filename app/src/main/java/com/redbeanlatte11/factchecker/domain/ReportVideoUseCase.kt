@@ -1,16 +1,15 @@
 package com.redbeanlatte11.factchecker.domain
 
 import android.annotation.SuppressLint
-import android.webkit.*
-import com.redbeanlatte11.factchecker.ServiceLocator.videosRepository
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.source.VideosRepository
+import com.redbeanlatte11.factchecker.util.suspendCoroutineWithTimeout
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class ReportVideoUseCase(
     private val videosRepository: VideosRepository
@@ -18,16 +17,17 @@ class ReportVideoUseCase(
 
     @SuppressLint("SetJavaScriptEnabled")
     suspend operator fun invoke(webView: WebView, video: Video, reportMessage: String) =
-        suspendCoroutine<Unit> { continuation ->
+        suspendCoroutineWithTimeout<Unit>(TIME_OUT) { continuation ->
             with(webView) {
                 settings.javaScriptEnabled = true
-                webViewClient = YoutubeWebViewClient(continuation, videosRepository, video, reportMessage)
+                webViewClient =
+                    YoutubeWebViewClient(continuation, videosRepository, video, reportMessage)
                 loadUrl(video.youtubeUrl)
             }
         }
 
     private class YoutubeWebViewClient(
-        val continuation: Continuation<Unit>,
+        val continuation: CancellableContinuation<Unit>,
         val videosRepository: VideosRepository,
         val video: Video,
         val reportMessage: String,
@@ -37,10 +37,10 @@ class ReportVideoUseCase(
         private var stage = 0
         private var resumed = AtomicBoolean(false)
 
-        override fun onPageFinished(view: WebView, url: String) {
-            super.onPageFinished(view, url)
+        override fun onPageFinished(webView: WebView, url: String) {
+            super.onPageFinished(webView, url)
             Timber.d("onPageFinished, stage: $stage")
-            reportVideo(view)
+            reportVideo(webView)
         }
 
         private fun reportVideo(view: WebView) {
@@ -108,5 +108,9 @@ class ReportVideoUseCase(
                 }
             }
         }
+    }
+
+    companion object {
+        const val TIME_OUT = 15000L
     }
 }
