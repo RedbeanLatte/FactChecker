@@ -90,11 +90,13 @@ class HomeFragment : Fragment() {
             PreferenceUtils.loadReportMessage(requireContext()),
             OnReportCompleteListener {
                 val completeDialog = ReportCompleteDialogFragment(1)
-                completeDialog.show(activity?.supportFragmentManager!!, "ReportCompleteDialogFragment")
+                completeDialog.show(
+                    activity?.supportFragmentManager!!,
+                    "ReportCompleteDialogFragment"
+                )
                 webView.loadYoutubeHome()
                 requireContext().unmute()
-            }
-        )
+            })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -135,7 +137,10 @@ class HomeFragment : Fragment() {
         val firstItemTitle = viewModel.items.value?.first()?.snippet?.title ?: ""
         val progressDialog = ReportProgressDialogFragment(itemCount, firstItemTitle) {
             viewModel.cancelReportAll()
+            requireContext().unmute()
+            webView.loadYoutubeHome()
         }
+
         progressDialog.isCancelable = false
         progressDialog.show(activity?.supportFragmentManager!!, "ReportProgressDialogFragment")
 
@@ -148,15 +153,16 @@ class HomeFragment : Fragment() {
             override fun onCompleted(itemCount: Int) {
                 progressDialog.dismiss()
                 val completeDialog = ReportCompleteDialogFragment(itemCount)
-                completeDialog.show(activity?.supportFragmentManager!!, "ReportCompleteDialogFragment")
-                webView.loadYoutubeHome()
-            }
-
-            override fun onCancelled() {
+                completeDialog.show(
+                    activity?.supportFragmentManager!!,
+                    "ReportCompleteDialogFragment"
+                )
+                requireContext().unmute()
                 webView.loadYoutubeHome()
             }
         }
 
+        requireContext().mute()
         viewModel.reportAll(
             webView,
             PreferenceUtils.loadReportMessage(requireContext()),

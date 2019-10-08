@@ -7,11 +7,10 @@ interface OnReportAllListener {
     fun onNext(video: Video)
 
     fun onCompleted(itemCount: Int)
-
-    fun onCancelled()
 }
 
 interface OnReportCompleteListener {
+
     fun onComplete(video: Video)
 
     companion object {

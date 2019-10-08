@@ -10,6 +10,7 @@ import com.redbeanlatte11.factchecker.data.Video
 import timber.log.Timber
 
 fun Context.watchYoutubeVideo(video: Video) {
+    Timber.d("watchYoutubeVideo: ${video.snippet.title}")
     val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:${video.id}"))
     val webIntent = Intent(
         Intent.ACTION_VIEW,
@@ -23,6 +24,7 @@ fun Context.watchYoutubeVideo(video: Video) {
 }
 
 fun Context.watchYoutubeChannel(channel: Channel) {
+    Timber.d("watchYoutubeChannel: ${channel.snippet.title}")
     val webIntent = Intent(
         Intent.ACTION_VIEW,
         Uri.parse(channel.youtubeUrl)

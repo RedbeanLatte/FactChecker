@@ -10,13 +10,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Video
-import com.redbeanlatte11.factchecker.util.mute
-import com.redbeanlatte11.factchecker.util.unmute
 
 class ReportProgressDialogFragment(
     private val itemCount: Int,
     private val firstItemTitle: String,
-    private val cancelPerform: () -> Unit
+    private val onCancelled: () -> Unit
 ) : DialogFragment() {
 
     private var currentVideoIndex = 1
@@ -37,7 +35,7 @@ class ReportProgressDialogFragment(
                 .setView(view)
                 .setTitle(R.string.title_progress_report_message)
                 .setNegativeButton(R.string.cancel) { _, _ ->
-                    cancelPerform()
+                    onCancelled()
                 }
 
             builder.create()
@@ -62,15 +60,5 @@ class ReportProgressDialogFragment(
         textViewCurrentItem?.text = video.snippet.title
 
         currentVideoIndex++
-    }
-
-    override fun onResume() {
-        super.onResume()
-        requireContext().mute()
-    }
-
-    override fun onPause() {
-        requireContext().unmute()
-        super.onPause()
     }
 }

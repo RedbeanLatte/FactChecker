@@ -35,8 +35,8 @@ class DonationFragment : Fragment() {
             minValue = 1
             maxValue = 5
             wrapSelectorWheel = false
-            setOnValueChangedListener { _, _, new ->
-                viewModel.setDonationAmount(new * DEFAULT_DONATION_AMOUNT)
+            setOnValueChangedListener { _, _, newValue ->
+                viewModel.setDonationAmount(newValue * DEFAULT_DONATION_AMOUNT)
             }
         }
     }
