@@ -28,13 +28,17 @@
         android:id="@+id/channel_dest"
         android:name="com.redbeanlatte11.factchecker.channel.ChannelFragment"
         android:label="@string/title_channel"
-        tools:layout="@layout/channel_frag" />
+        tools:layout="@layout/channels_frag" />
 
     <fragment
         android:id="@+id/popular_dest"
         android:name="com.redbeanlatte11.factchecker.popular.PopularFragment"
         android:label="@string/title_popular"
-        tools:layout="@layout/popular_frag" />
+        tools:layout="@layout/popular_frag" >
+        <action
+            android:id="@+id/action_popular_dest_to_add_video_blacklist_dest"
+            app:destination="@id/add_video_blacklist_dest" />
+    </fragment>
 
     <fragment
         android:id="@+id/more_dest"
@@ -63,7 +67,11 @@
     <fragment
         android:id="@+id/add_video_blacklist_dest"
         android:name="com.redbeanlatte11.factchecker.home.AddVideoBlacklistFragment"
-        android:label="@string/title_add_video_blacklist" />
+        android:label="@string/title_add_video_blacklist" >
+        <argument
+            android:name="videoId"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/donation_dest"

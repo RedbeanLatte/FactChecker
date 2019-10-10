@@ -45,6 +45,7 @@ class HomeFragment : Fragment() {
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
         setupSnackbar()
         setupListAdapter()
+        setupFab()
     }
 
     private fun setupSnackbar() {
@@ -67,13 +68,23 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun setupFab() {
+        viewDataBinding.addVideoBlacklistFab.run {
+            visibility = View.VISIBLE
+            setOnClickListener {
+                val action = HomeFragmentDirections.actionHomeDestToAddVideoBlacklistFragment("")
+                findNavController().navigate(action)
+            }
+        }
+    }
+
     private fun showPopupMenu(view: View, video: Video) {
         PopupMenu(requireContext(), view).run {
             menuInflater.inflate(R.menu.video_item_more_menu, menu)
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.report_video -> reportVideo(video)
-                    R.id.add_video_to_home_list -> viewModel.excludeVideo(video, true)
+                    R.id.remove_video_from_list -> viewModel.excludeVideo(video, true)
                 }
                 true
             }
@@ -83,19 +94,27 @@ class HomeFragment : Fragment() {
 
     private fun reportVideo(video: Video) {
         val webView: WebView = activity?.findViewById(R.id.web_view)!!
-        requireContext().mute()
+
+        val progressDialog = ReportProgressDialogFragment(1, video.snippet.title) {
+            viewModel.cancelReportVideo()
+            webView.loadYoutubeHome()
+        }
+
+        progressDialog.isCancelable = false
+        progressDialog.show(activity?.supportFragmentManager!!, "ReportProgressDialogFragment")
+
         viewModel.reportVideo(
             webView,
             video,
             PreferenceUtils.loadReportMessage(requireContext()),
             OnReportCompleteListener {
+                progressDialog.dismiss()
                 val completeDialog = ReportCompleteDialogFragment(1)
                 completeDialog.show(
                     activity?.supportFragmentManager!!,
                     "ReportCompleteDialogFragment"
                 )
                 webView.loadYoutubeHome()
-                requireContext().unmute()
             })
     }
 
@@ -137,7 +156,6 @@ class HomeFragment : Fragment() {
         val firstItemTitle = viewModel.items.value?.first()?.snippet?.title ?: ""
         val progressDialog = ReportProgressDialogFragment(itemCount, firstItemTitle) {
             viewModel.cancelReportAll()
-            requireContext().unmute()
             webView.loadYoutubeHome()
         }
 
@@ -157,12 +175,10 @@ class HomeFragment : Fragment() {
                     activity?.supportFragmentManager!!,
                     "ReportCompleteDialogFragment"
                 )
-                requireContext().unmute()
                 webView.loadYoutubeHome()
             }
         }
 
-        requireContext().mute()
         viewModel.reportAll(
             webView,
             PreferenceUtils.loadReportMessage(requireContext()),

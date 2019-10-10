@@ -1,5 +1,6 @@
 package com.redbeanlatte11.factchecker.more
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.redbeanlatte11.factchecker.databinding.DonationFragBinding
-import com.redbeanlatte11.factchecker.more.DonationViewModel.Companion.DEFAULT_DONATION_AMOUNT
+import com.redbeanlatte11.factchecker.domain.DonateUseCase.Companion.DEFAULT_DONATION_AMOUNT
+import com.redbeanlatte11.factchecker.util.BillingManager
 import com.redbeanlatte11.factchecker.util.getViewModelFactory
 
 class DonationFragment : Fragment() {
@@ -15,6 +17,8 @@ class DonationFragment : Fragment() {
     private val viewModel by viewModels<DonationViewModel> { getViewModelFactory() }
 
     private lateinit var viewDataBinding: DonationFragBinding
+
+    private lateinit var billingManager: BillingManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,8 +30,20 @@ class DonationFragment : Fragment() {
         }
 
         setHasOptionsMenu(true)
-        setupNumberPicker()
         return viewDataBinding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
+        setupNumberPicker()
+        setupBillingManager()
+    }
+
+    private fun setupBillingManager() {
+        billingManager = BillingManager(activity as Activity)
+        viewModel.billingManager = billingManager
     }
 
     private fun setupNumberPicker() {
@@ -39,11 +55,5 @@ class DonationFragment : Fragment() {
                 viewModel.setDonationAmount(newValue * DEFAULT_DONATION_AMOUNT)
             }
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
     }
 }

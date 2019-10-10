@@ -13,7 +13,7 @@ import com.redbeanlatte11.factchecker.domain.GetChannelsUseCase
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ChannelViewModel(
+class ChannelsViewModel(
     private val getChannelsUseCase: GetChannelsUseCase
 ) : ViewModel() {
 

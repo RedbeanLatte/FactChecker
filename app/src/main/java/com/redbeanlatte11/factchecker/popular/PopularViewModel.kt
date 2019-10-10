@@ -9,13 +9,11 @@ import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.domain.GetPopularVideosUseCase
-import com.redbeanlatte11.factchecker.domain.ShareVideoUseCase
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class PopularViewModel(
-    private val getPopularVideosUseCase: GetPopularVideosUseCase,
-    private val shareVideoUseCase: ShareVideoUseCase
+    private val getPopularVideosUseCase: GetPopularVideosUseCase
 ) : ViewModel() {
 
     private val _items = MutableLiveData<List<Video>>().apply { value = emptyList() }

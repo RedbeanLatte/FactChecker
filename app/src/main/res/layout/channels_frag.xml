@@ -8,7 +8,7 @@
 
         <variable
             name="viewmodel"
-            type="com.redbeanlatte11.factchecker.channel.ChannelViewModel" />
+            type="com.redbeanlatte11.factchecker.channel.ChannelsViewModel" />
 
     </data>
 

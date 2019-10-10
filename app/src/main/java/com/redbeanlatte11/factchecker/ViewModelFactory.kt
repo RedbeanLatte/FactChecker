@@ -2,10 +2,11 @@ package com.redbeanlatte11.factchecker
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.redbeanlatte11.factchecker.channel.ChannelViewModel
+import com.redbeanlatte11.factchecker.channel.ChannelsViewModel
 import com.redbeanlatte11.factchecker.data.source.ChannelsRepository
 import com.redbeanlatte11.factchecker.data.source.VideosRepository
 import com.redbeanlatte11.factchecker.domain.*
+import com.redbeanlatte11.factchecker.home.AddVideoBlacklistViewModel
 import com.redbeanlatte11.factchecker.home.GoogleAccountViewModel
 import com.redbeanlatte11.factchecker.home.VideosViewModel
 import com.redbeanlatte11.factchecker.more.DonationViewModel
@@ -39,18 +40,24 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(PopularViewModel::class.java) ->
                     PopularViewModel(
-                        GetPopularVideosUseCase(popularVideosRepository),
-                        ShareVideoUseCase(popularVideosRepository)
+                        GetPopularVideosUseCase(popularVideosRepository)
                     )
 
-                isAssignableFrom(ChannelViewModel::class.java) ->
-                    ChannelViewModel(
+                isAssignableFrom(ChannelsViewModel::class.java) ->
+                    ChannelsViewModel(
                         GetChannelsUseCase(channelsRepository)
                     )
 
                 isAssignableFrom(DonationViewModel::class.java) ->
                     DonationViewModel(
                         DonateUseCase()
+                    )
+
+                isAssignableFrom(AddVideoBlacklistViewModel::class.java) ->
+                    AddVideoBlacklistViewModel(
+                        AddVideoBlacklistUseCase(
+                            popularVideosRepository
+                        )
                     )
 
                 else ->

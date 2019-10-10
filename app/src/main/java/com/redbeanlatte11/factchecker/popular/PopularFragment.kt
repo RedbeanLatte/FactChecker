@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Video
@@ -51,9 +52,6 @@ class PopularFragment : Fragment() {
 
     private fun setupSnackbar() {
         view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
-        arguments?.let {
-            //            viewModel.showEditResultMessage(args.userMessage)
-        }
     }
 
     private fun setupListAdapter() {
@@ -77,6 +75,8 @@ class PopularFragment : Fragment() {
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.add_video_to_blacklist -> {
+                        val action = PopularFragmentDirections.actionPopularDestToAddVideoBlacklistDest(video.id)
+                        findNavController().navigate(action)
                     }
                 }
                 true

@@ -35,6 +35,8 @@ class VideosViewModel(
 
     private var reportAllJob: Job? = null
 
+    private var reportJob: Job? = null
+
     private var _currentFiltering = VideosFilterType.ALL_VIDEOS
 
     // This LiveData depends on another so we can use a transformation.
@@ -82,7 +84,6 @@ class VideosViewModel(
         reportAllJob = viewModelScope.launch {
             Timber.d("reportAll")
             items.value?.forEach { video ->
-                yield()
                 Timber.d("report video: ${video.snippet.title}")
                 onReportAllListener.onNext(video)
                 try {
@@ -113,18 +114,26 @@ class VideosViewModel(
         reportMessage: String,
         onReportCompleteListener: OnReportCompleteListener
     ) {
-        viewModelScope.launch {
-            Timber.d("reportVideoAndPerform: ${video.snippet.title}")
+        reportJob = viewModelScope.launch {
+            Timber.d("reportVideo: ${video.snippet.title}")
             try {
                 reportVideoUseCase(webView, video, reportMessage)
                 onReportCompleteListener.onComplete(video)
                 loadVideos(false)
             } catch (e: TimeoutCancellationException) {
-                Timber.d("reportVideoAndPerform timed out")
+                Timber.d("reportVideo timed out")
                 showSnackbarMessage(R.string.time_out_message)
             }
         }
-        showSnackbarMessage(R.string.reporting_single_video)
+    }
+
+    fun cancelReportVideo() {
+        reportJob?.run {
+            Timber.d("cancelReportVideo")
+            cancel("cancelReportVideo")
+            loadVideos(false)
+            showSnackbarMessage(R.string.cancel_report)
+        }
     }
 
     fun excludeVideo(video: Video, excluded: Boolean) = viewModelScope.launch {

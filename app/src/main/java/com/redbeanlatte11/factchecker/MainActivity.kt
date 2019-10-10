@@ -8,6 +8,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.redbeanlatte11.factchecker.util.mute
+import com.redbeanlatte11.factchecker.util.unmute
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,5 +37,17 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return findNavController(R.id.nav_host_fragment).navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        applicationContext.mute()
+    }
+
+    override fun onPause() {
+        applicationContext.unmute()
+
+        super.onPause()
     }
 }

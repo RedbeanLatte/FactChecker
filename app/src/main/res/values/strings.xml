@@ -39,7 +39,6 @@
     <string name="title_reported_videos">신고한 동영상</string>
     <string name="title_excluded_videos">제외한 동영상</string>
     <string name="add_video_to_home_list">목록에 추가</string>
-    <string name="reporting_single_video">1 건 신고 중입니다.</string>
     <string name="title_no_videos">목록에 동영상이 없습니다.</string>
     <string name="cancel_report_all">모두 신고가 취소 되었습니다.</string>
     <string name="title_share_video">동영상 공유하기</string>
@@ -47,4 +46,5 @@
     <string name="time_out_message">작업시간이 초과되었습니다.</string>
     <string name="donation_image">use laptop computer</string>
     <string name="title_donation_button">후원</string>
+    <string name="cancel_report">신고가 취소되었습니다.</string>
 </resources>

@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.redbeanlatte11.factchecker.domain.DonateUseCase
+import com.redbeanlatte11.factchecker.domain.DonateUseCase.Companion.DEFAULT_DONATION_AMOUNT
+import com.redbeanlatte11.factchecker.util.BillingManager
 import kotlinx.coroutines.launch
 
 class DonationViewModel(
@@ -14,17 +16,17 @@ class DonationViewModel(
     private val _donationAmount = MutableLiveData<Int>(DEFAULT_DONATION_AMOUNT)
     val donationAmount: LiveData<Int> = _donationAmount
 
-    fun setDonationAmount(donationAmount: Int) {
-        _donationAmount.value = donationAmount
-    }
+    var billingManager: BillingManager? = null
 
     fun donate() {
-        viewModelScope.launch {
-            donateUseCase(donationAmount.value ?: DEFAULT_DONATION_AMOUNT)
+        billingManager?.let {
+            viewModelScope.launch {
+                donateUseCase(it, donationAmount.value ?: DEFAULT_DONATION_AMOUNT)
+            }
         }
     }
 
-    companion object {
-        const val DEFAULT_DONATION_AMOUNT: Int = 2000
+    fun setDonationAmount(donationAmount: Int) {
+        _donationAmount.value = donationAmount
     }
 }

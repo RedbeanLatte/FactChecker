@@ -148,7 +148,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_more_dest_to_donationFragment">
+                            <entry key="action_more_dest_to_donation_dest">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -171,6 +171,15 @@
                             <option name="x" value="-1747" />
                             <option name="y" value="-275" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_popular_dest_to_add_video_blacklist_dest">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
