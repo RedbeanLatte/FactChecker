@@ -55,9 +55,8 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(AddVideoBlacklistViewModel::class.java) ->
                     AddVideoBlacklistViewModel(
-                        AddVideoBlacklistUseCase(
-                            popularVideosRepository
-                        )
+                        ConfirmVideoUrlUseCase(),
+                        AddVideoBlacklistUseCase(popularVideosRepository)
                     )
 
                 else ->

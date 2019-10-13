@@ -85,6 +85,10 @@ class DefaultVideosRepository(
         }
     }
 
+    private suspend fun refreshLocalDataSource(video: Video) {
+        videosLocalDataSource.saveVideo(video)
+    }
+
     private fun cacheVideo(video: Video): Video {
         val cachedVideo = video.copy()
         // Create if it doesn't exist.
@@ -125,5 +129,52 @@ class DefaultVideosRepository(
                 launch { videosLocalDataSource.includeVideo(it) }
             }
         }
+    }
+
+    override suspend fun getVideo(videoId: String, forceUpdate: Boolean): Result<Video> {
+
+        return withContext(ioDispatcher) {
+            // Respond immediately with cache if available
+            if (!forceUpdate) {
+                getVideoWithId(videoId)?.let {
+                    return@withContext Success(it)
+                }
+            }
+
+            val newVideo = fetchVideoFromRemoteOrLocal(videoId, forceUpdate)
+
+            // Refresh the cache with the new videos
+            (newVideo as? Success)?.let { cacheVideo(it.data) }
+
+            return@withContext newVideo
+        }
+    }
+
+    private fun getVideoWithId(id: String) = cachedVideos?.get(id)
+
+    private suspend fun fetchVideoFromRemoteOrLocal(
+        videoId: String,
+        forceUpdate: Boolean
+    ): Result<Video> {
+        // Remote first
+        val remoteVideo = videosRemoteDataSource.getVideo(videoId)
+        when (remoteVideo) {
+            is Error -> Timber.w("Remote data source fetch failed")
+            is Success -> {
+                refreshLocalDataSource(remoteVideo.data)
+                return remoteVideo
+            }
+            else -> throw IllegalStateException()
+        }
+
+        // Don't read from local if it's forced
+        if (forceUpdate) {
+            return Error(Exception("Refresh failed"))
+        }
+
+        // Local if remote fails
+        val localVideos = videosLocalDataSource.getVideo(videoId)
+        if (localVideos is Success) return localVideos
+        return Error(Exception("Error fetching from remote and local"))
     }
 }

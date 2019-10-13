@@ -75,7 +75,7 @@ class PopularFragment : Fragment() {
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.add_video_to_blacklist -> {
-                        val action = PopularFragmentDirections.actionPopularDestToAddVideoBlacklistDest(video.id)
+                        val action = PopularFragmentDirections.actionPopularDestToAddVideoBlacklistDest(video.youtubeUrl!!)
                         findNavController().navigate(action)
                     }
                 }

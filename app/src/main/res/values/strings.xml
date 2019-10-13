@@ -47,4 +47,8 @@
     <string name="donation_image">use laptop computer</string>
     <string name="title_donation_button">후원</string>
     <string name="cancel_report">신고가 취소되었습니다.</string>
+    <string name="url">URL</string>
+    <string name="confirm_url">URL 확인</string>
+    <string name="description">Description</string>
+    <string name="add_video_blacklist">추가하기</string>
 </resources>

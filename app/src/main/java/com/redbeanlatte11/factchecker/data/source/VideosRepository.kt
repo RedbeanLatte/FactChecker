@@ -7,6 +7,8 @@ interface VideosRepository {
 
     suspend fun getVideos(forceUpdate: Boolean = false): Result<List<Video>>
 
+    suspend fun getVideo(videoId: String, forceUpdate: Boolean = false): Result<Video>
+
     suspend fun reportVideo(video: Video)
 
     suspend fun excludeVideo(video: Video)

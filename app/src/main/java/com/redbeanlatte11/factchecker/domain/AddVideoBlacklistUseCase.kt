@@ -7,7 +7,7 @@ class AddVideoBlacklistUseCase(
     private val popluarVideosRepository: VideosRepository
 ) {
 
-    operator fun invoke(video: Video) {
+    operator fun invoke(url: String, description: String) {
 
     }
 }

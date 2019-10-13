@@ -15,7 +15,7 @@ import com.redbeanlatte11.factchecker.util.setupSnackbar
 import com.redbeanlatte11.factchecker.util.watchYoutubeChannel
 import timber.log.Timber
 
-class ChannelFragment : Fragment() {
+class ChannelsFragment : Fragment() {
 
     private val viewModel by viewModels<ChannelsViewModel> { getViewModelFactory() }
 

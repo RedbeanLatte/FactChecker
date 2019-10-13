@@ -15,11 +15,14 @@
  */
 package com.redbeanlatte11.factchecker.util
 
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.textfield.TextInputEditText
 import com.redbeanlatte11.factchecker.channel.ChannelsAdapter
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.Channel
@@ -53,4 +56,9 @@ fun setChannelItems(listView: RecyclerView, items: List<Channel>) {
 fun setDonationButtonText(button: Button, donationAmount: Int) {
     val text = "₩ $donationAmount    후원"
     button.text = text
+}
+
+@BindingAdapter("textWatcher")
+fun setTextWatcher(textInputEditText: TextInputEditText, textWatcher: TextWatcher) {
+    textInputEditText.addTextChangedListener(textWatcher)
 }

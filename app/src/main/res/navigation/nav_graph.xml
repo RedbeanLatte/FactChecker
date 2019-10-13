@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/channel_dest"
-        android:name="com.redbeanlatte11.factchecker.channel.ChannelFragment"
+        android:name="com.redbeanlatte11.factchecker.channel.ChannelsFragment"
         android:label="@string/title_channel"
         tools:layout="@layout/channels_frag" />
 
@@ -69,7 +69,7 @@
         android:name="com.redbeanlatte11.factchecker.home.AddVideoBlacklistFragment"
         android:label="@string/title_add_video_blacklist" >
         <argument
-            android:name="videoId"
+            android:name="videoUrl"
             app:argType="string" />
     </fragment>
 
