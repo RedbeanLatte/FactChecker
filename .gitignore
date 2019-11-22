@@ -74,3 +74,6 @@ fastlane/readme.md
 
 # Samsung
 .galaxy/
+
+# Mac OS
+.DS_Store
