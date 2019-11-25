@@ -1,11 +1,8 @@
 package com.redbeanlatte11.factchecker.data
 
 import androidx.room.*
-import com.redbeanlatte11.factchecker.data.source.local.LocalizedConverter
-import com.redbeanlatte11.factchecker.data.source.local.StringListConverter
-import com.redbeanlatte11.factchecker.data.source.local.ThumbnailsConverter
 import com.redbeanlatte11.factchecker.util.toAgoTime
-import com.redbeanlatte11.factchecker.util.toSummuryCount
+import com.redbeanlatte11.factchecker.util.toSummaryCount
 import org.joda.time.DateTime
 
 @Entity(tableName = "videos")
@@ -49,5 +46,5 @@ data class VideoStatistics(
     @ColumnInfo(name = "commentCount") val commentCount: Int
 ) {
     val viewCountToShow
-        get() = "조회수 ${viewCount.toSummuryCount()}"
+        get() = "조회수 ${viewCount.toSummaryCount()}"
 }

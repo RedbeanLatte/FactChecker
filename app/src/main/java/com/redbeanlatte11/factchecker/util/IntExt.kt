@@ -4,7 +4,7 @@ import java.text.DecimalFormat
 import kotlin.math.pow
 
 
-fun Int.toSummuryCount(): String {
+fun Int.toSummaryCount(): String {
     if (this < 1000) return this.toString()
 
     val div = if (this < 10000) 3 else 4

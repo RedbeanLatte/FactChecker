@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.redbeanlatte11.factchecker.util.toSummuryCount
+import com.redbeanlatte11.factchecker.util.toSummaryCount
 
 @Entity(tableName = "channels")
 data class Channel(
@@ -39,8 +39,8 @@ data class ChannelStatistics(
     @ColumnInfo(name = "videoCount") val videoCount: Int
 ) {
     val subscriberCountToShow: String?
-        get() = "구독자 ${subscriberCount.toSummuryCount()}명"
+        get() = "구독자 ${subscriberCount.toSummaryCount()}명"
 
     val videoCountToShow: String?
-        get() = "동영상 ${videoCount.toSummuryCount()}개"
+        get() = "동영상 ${videoCount.toSummaryCount()}개"
 }

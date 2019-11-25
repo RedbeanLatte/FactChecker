@@ -1,23 +1,15 @@
 package com.redbeanlatte11.factchecker
 
 import android.app.Application
-import com.redbeanlatte11.factchecker.data.source.ChannelsRepository
-import com.redbeanlatte11.factchecker.data.source.VideosRepository
+import com.redbeanlatte11.factchecker.di.dataModule
+import com.redbeanlatte11.factchecker.di.viewModelModule
 import net.danlew.android.joda.JodaTimeAndroid
-import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import org.koin.core.qualifier.named
 import timber.log.Timber
 
 class FactCheckerApplication : Application() {
-
-    val videoRepository: VideosRepository by inject(named("blacklist"))
-
-    val poplarVideoRepository: VideosRepository by inject(named("popular"))
-
-    val channelRepository: ChannelsRepository by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -26,7 +18,10 @@ class FactCheckerApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@FactCheckerApplication)
-            modules(listOf(appModule))
+            modules(listOf(
+                dataModule,
+                viewModelModule
+            ))
         }
     }
 }

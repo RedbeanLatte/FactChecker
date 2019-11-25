@@ -5,19 +5,19 @@ import android.view.*
 import android.webkit.WebView
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.databinding.VideosFragBinding
 import com.redbeanlatte11.factchecker.util.*
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 
 class HomeFragment : Fragment() {
 
-    private val viewModel by viewModels<VideosViewModel> { getViewModelFactory() }
+    private val viewModel: VideosViewModel by viewModel()
 
     private lateinit var viewDataBinding: VideosFragBinding
 

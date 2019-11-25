@@ -6,15 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.redbeanlatte11.factchecker.databinding.DonationFragBinding
 import com.redbeanlatte11.factchecker.domain.DonateUseCase.Companion.DEFAULT_DONATION_AMOUNT
 import com.redbeanlatte11.factchecker.util.BillingManager
-import com.redbeanlatte11.factchecker.util.getViewModelFactory
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class DonationFragment : Fragment() {
 
-    private val viewModel by viewModels<DonationViewModel> { getViewModelFactory() }
+    private val viewModel: DonationViewModel by viewModel()
 
     private lateinit var viewDataBinding: DonationFragBinding
 

@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.databinding.GoogleAccountFragBinding
-import com.redbeanlatte11.factchecker.util.getViewModelFactory
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class GoogleAccountFragment : Fragment() {
 
-    private val viewModel by viewModels<GoogleAccountViewModel> { getViewModelFactory() }
+    private val viewModel: GoogleAccountViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

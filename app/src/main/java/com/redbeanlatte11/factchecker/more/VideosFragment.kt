@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.redbeanlatte11.factchecker.R
@@ -15,9 +14,9 @@ import com.redbeanlatte11.factchecker.databinding.VideosFragBinding
 import com.redbeanlatte11.factchecker.home.VideoItemClickListener
 import com.redbeanlatte11.factchecker.home.VideosAdapter
 import com.redbeanlatte11.factchecker.home.VideosViewModel
-import com.redbeanlatte11.factchecker.util.getViewModelFactory
 import com.redbeanlatte11.factchecker.util.setupSnackbar
 import com.redbeanlatte11.factchecker.util.watchYoutubeVideo
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class VideosFragment : Fragment() {
@@ -26,7 +25,7 @@ class VideosFragment : Fragment() {
 
     private val args: VideosFragmentArgs by navArgs()
 
-    private val viewModel by viewModels<VideosViewModel> { getViewModelFactory() }
+    private val viewModel: VideosViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

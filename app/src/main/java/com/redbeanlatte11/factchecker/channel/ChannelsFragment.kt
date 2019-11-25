@@ -6,18 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.databinding.ChannelsFragBinding
-import com.redbeanlatte11.factchecker.util.getViewModelFactory
 import com.redbeanlatte11.factchecker.util.setupSnackbar
 import com.redbeanlatte11.factchecker.util.watchYoutubeChannel
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class ChannelsFragment : Fragment() {
 
-    private val viewModel by viewModels<ChannelsViewModel> { getViewModelFactory() }
+    private val viewModel: ChannelsViewModel by viewModel()
 
     private lateinit var viewDataBinding: ChannelsFragBinding
 
