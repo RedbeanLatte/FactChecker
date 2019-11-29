@@ -4,8 +4,8 @@ import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.source.VideosRepository
-import com.redbeanlatte11.factchecker.home.VideosFilterType
-import com.redbeanlatte11.factchecker.home.VideosFilterType.*
+import com.redbeanlatte11.factchecker.ui.home.VideosFilterType
+import com.redbeanlatte11.factchecker.ui.home.VideosFilterType.*
 
 class GetVideosUseCase(
     private val videosRepository: VideosRepository
@@ -17,12 +17,12 @@ class GetVideosUseCase(
 
         val videosResult = videosRepository.getVideos(forceUpdate)
 
-        // Filter products
+        // Filter videos
         if (videosResult is Success && currentFilter != ALL_VIDEOS) {
             val videos = videosResult.data
 
             val videosToShow = mutableListOf<Video>()
-            // We filter the products based on the requestType
+            // We filter the videos based on the requestType
             for (video in videos) {
                 when (currentFilter) {
                     BLACKLIST_VIDEOS -> if (!video.reported && !video.excluded) {

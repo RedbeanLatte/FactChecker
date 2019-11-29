@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.channel
+package com.redbeanlatte11.factchecker.ui.channel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

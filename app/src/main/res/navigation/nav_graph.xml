@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/home_dest"
-        android:name="com.redbeanlatte11.factchecker.home.HomeFragment"
+        android:name="com.redbeanlatte11.factchecker.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/videos_frag" >
         <action
@@ -15,34 +15,34 @@
             app:destination="@id/google_account_dest" />
         <action
             android:id="@+id/action_home_dest_to_addVideoBlacklistFragment"
-            app:destination="@id/add_video_blacklist_dest" />
+            app:destination="@id/add_blacklist_video_dest" />
     </fragment>
 
     <fragment
         android:id="@+id/google_account_dest"
-        android:name="com.redbeanlatte11.factchecker.home.GoogleAccountFragment"
+        android:name="com.redbeanlatte11.factchecker.ui.home.GoogleAccountFragment"
         android:label="@string/title_google_account"
         tools:layout="@layout/google_account_frag"/>
 
     <fragment
         android:id="@+id/channel_dest"
-        android:name="com.redbeanlatte11.factchecker.channel.ChannelsFragment"
+        android:name="com.redbeanlatte11.factchecker.ui.channel.ChannelsFragment"
         android:label="@string/title_channel"
         tools:layout="@layout/channels_frag" />
 
     <fragment
         android:id="@+id/popular_dest"
-        android:name="com.redbeanlatte11.factchecker.popular.PopularFragment"
+        android:name="com.redbeanlatte11.factchecker.ui.popular.PopularFragment"
         android:label="@string/title_popular"
         tools:layout="@layout/popular_frag" >
         <action
             android:id="@+id/action_popular_dest_to_add_video_blacklist_dest"
-            app:destination="@id/add_video_blacklist_dest" />
+            app:destination="@id/add_blacklist_video_dest" />
     </fragment>
 
     <fragment
         android:id="@+id/more_dest"
-        android:name="com.redbeanlatte11.factchecker.more.MoreFragment"
+        android:name="com.redbeanlatte11.factchecker.ui.more.MoreFragment"
         android:label="@string/title_more" >
         <action
             android:id="@+id/action_more_dest_to_videos_dest"
@@ -54,19 +54,19 @@
 
     <fragment
         android:id="@+id/videos_dest"
-        android:name="com.redbeanlatte11.factchecker.more.VideosFragment"
+        android:name="com.redbeanlatte11.factchecker.ui.more.VideosFragment"
         android:label="{title}" >
         <argument
             android:name="title"
             app:argType="string" />
         <argument
             android:name="filterType"
-            app:argType="com.redbeanlatte11.factchecker.home.VideosFilterType" />
+            app:argType="com.redbeanlatte11.factchecker.ui.home.VideosFilterType" />
     </fragment>
 
     <fragment
-        android:id="@+id/add_video_blacklist_dest"
-        android:name="com.redbeanlatte11.factchecker.home.AddVideoBlacklistFragment"
+        android:id="@+id/add_blacklist_video_dest"
+        android:name="com.redbeanlatte11.factchecker.ui.home.AddBlacklistVideoFragment"
         android:label="@string/title_add_video_blacklist" >
         <argument
             android:name="videoUrl"
@@ -75,6 +75,6 @@
 
     <fragment
         android:id="@+id/donation_dest"
-        android:name="com.redbeanlatte11.factchecker.more.DonationFragment"
+        android:name="com.redbeanlatte11.factchecker.ui.more.DonationFragment"
         android:label="@string/donate_to_developer" />
 </navigation>

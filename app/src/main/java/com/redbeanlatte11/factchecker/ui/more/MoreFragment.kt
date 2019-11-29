@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.more
+package com.redbeanlatte11.factchecker.ui.more
 
 import android.os.Bundle
 import android.text.TextUtils
@@ -7,7 +7,7 @@ import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.redbeanlatte11.factchecker.R
-import com.redbeanlatte11.factchecker.home.VideosFilterType
+import com.redbeanlatte11.factchecker.ui.home.VideosFilterType
 
 class MoreFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

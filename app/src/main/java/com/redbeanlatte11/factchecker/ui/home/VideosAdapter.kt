@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.redbeanlatte11.factchecker.channel
+package com.redbeanlatte11.factchecker.ui.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -21,17 +21,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.redbeanlatte11.factchecker.data.Channel
-import com.redbeanlatte11.factchecker.databinding.ChannelItemBinding
-import com.redbeanlatte11.factchecker.channel.ChannelsAdapter.ViewHolder
+import com.redbeanlatte11.factchecker.data.Video
+import com.redbeanlatte11.factchecker.databinding.VideoItemBinding
+import com.redbeanlatte11.factchecker.ui.home.VideosAdapter.ViewHolder
 
 /**
  * Adapter for the product list.
  */
-class ChannelsAdapter(
-    private val itemClickListener: ChannelItemClickListener,
-    private val moreClickListener: View.OnClickListener
-) : ListAdapter<Channel, ViewHolder>(ChannelDiffCallback()) {
+class VideosAdapter(
+    private val itemClickListener: VideoItemClickListener,
+    private val moreClickListener: VideoItemClickListener
+) : ListAdapter<Video, ViewHolder>(VideoDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
@@ -42,11 +42,11 @@ class ChannelsAdapter(
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(private val binding: ChannelItemBinding) :
+    class ViewHolder private constructor(private val binding: VideoItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Channel, itemClickListener: ChannelItemClickListener, moreClickListener: View.OnClickListener) {
-            binding.channel = item
+        fun bind(item: Video, itemClickListener: VideoItemClickListener, moreClickListener: VideoItemClickListener) {
+            binding.video = item
             binding.itemClickListener = itemClickListener
             binding.moreClickListener = moreClickListener
             binding.executePendingBindings()
@@ -55,7 +55,7 @@ class ChannelsAdapter(
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ChannelItemBinding.inflate(layoutInflater, parent, false)
+                val binding = VideoItemBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
@@ -68,23 +68,23 @@ class ChannelsAdapter(
  * Used by ListAdapter to calculate the minimum number of changes between and old list and a new
  * list that's been passed to `submitList`.
  */
-class ChannelDiffCallback : DiffUtil.ItemCallback<Channel>() {
-    override fun areItemsTheSame(oldItem: Channel, newItem: Channel): Boolean {
+class VideoDiffCallback : DiffUtil.ItemCallback<Video>() {
+    override fun areItemsTheSame(oldItem: Video, newItem: Video): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Channel, newItem: Channel): Boolean {
+    override fun areContentsTheSame(oldItem: Video, newItem: Video): Boolean {
         return oldItem == newItem
     }
 }
 
-interface ChannelItemClickListener {
-    fun onClick(channel: Channel)
+interface VideoItemClickListener {
+    fun onClick(view: View, video: Video)
 
     companion object {
-        inline operator fun invoke(crossinline op: (Channel) -> Unit) =
-            object : ChannelItemClickListener {
-                override fun onClick(channel: Channel) = op(channel)
+        inline operator fun invoke(crossinline op: (View, Video) -> Unit) =
+            object : VideoItemClickListener {
+                override fun onClick(view: View, video: Video) = op(view, video)
             }
     }
 }

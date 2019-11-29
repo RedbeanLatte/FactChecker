@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.more
+package com.redbeanlatte11.factchecker.ui.channel
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,33 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.redbeanlatte11.factchecker.R
-import com.redbeanlatte11.factchecker.data.Video
-import com.redbeanlatte11.factchecker.databinding.VideosFragBinding
-import com.redbeanlatte11.factchecker.home.VideoItemClickListener
-import com.redbeanlatte11.factchecker.home.VideosAdapter
-import com.redbeanlatte11.factchecker.home.VideosViewModel
+import com.redbeanlatte11.factchecker.databinding.ChannelsFragBinding
 import com.redbeanlatte11.factchecker.util.setupSnackbar
-import com.redbeanlatte11.factchecker.util.watchYoutubeVideo
+import com.redbeanlatte11.factchecker.util.watchYoutubeChannel
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class VideosFragment : Fragment() {
+class ChannelsFragment : Fragment() {
 
-    private lateinit var viewDataBinding: VideosFragBinding
+    private val viewModel: ChannelsViewModel by viewModel()
 
-    private val args: VideosFragmentArgs by navArgs()
-
-    private val viewModel: VideosViewModel by viewModel()
+    private lateinit var viewDataBinding: ChannelsFragBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewDataBinding = VideosFragBinding.inflate(inflater, container, false).apply {
+        viewDataBinding = ChannelsFragBinding.inflate(inflater, container, false).apply {
             viewmodel = viewModel
         }
 
@@ -41,8 +34,7 @@ class VideosFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.setFiltering(args.filterType)
-        viewModel.loadVideos(false)
+        viewModel.loadChannels(false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -55,29 +47,32 @@ class VideosFragment : Fragment() {
 
     private fun setupSnackbar() {
         view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
+        arguments?.let {
+            //            viewModel.showEditResultMessage(args.userMessage)
+        }
     }
 
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.viewmodel
         if (viewModel != null) {
-            val itemClickListener = VideoItemClickListener { _, video ->
-                requireContext().watchYoutubeVideo(video)
+            val itemClickListener = ChannelItemClickListener.invoke {
+                requireContext().watchYoutubeChannel(it)
             }
-            val moreClickListener = VideoItemClickListener { view, video ->
-                showPopupMenu(view, video)
+            val moreClickListener = View.OnClickListener {
+                showPopupMenu(it)
             }
-            viewDataBinding.videosList.adapter = VideosAdapter(itemClickListener, moreClickListener)
+            viewDataBinding.channelsList.adapter = ChannelsAdapter(itemClickListener, moreClickListener)
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
         }
     }
 
-    private fun showPopupMenu(view: View, video: Video) {
+    private fun showPopupMenu(view: View) {
         PopupMenu(requireContext(), view).run {
-            menuInflater.inflate(R.menu.marked_video_item_more_menu, menu)
+            menuInflater.inflate(R.menu.channel_item_more_menu, menu)
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.add_video_to_home_list -> viewModel.excludeVideo(video, false)
+                    R.id.report_channel -> Timber.d("reportChannel")
                 }
                 true
             }

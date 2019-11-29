@@ -8,7 +8,7 @@
 
         <variable
             name="viewmodel"
-            type="com.redbeanlatte11.factchecker.popular.PopularViewModel" />
+            type="com.redbeanlatte11.factchecker.ui.popular.PopularViewModel" />
 
     </data>
 

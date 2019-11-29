@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.popular
+package com.redbeanlatte11.factchecker.ui.popular
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

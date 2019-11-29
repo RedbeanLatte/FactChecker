@@ -3,6 +3,7 @@ package com.redbeanlatte11.factchecker.data.source.local
 import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Error
+import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.source.ChannelsDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +16,7 @@ class ChannelsLocalDataSource(
 
     override suspend fun getChannels(): Result<List<Channel>> = withContext(ioDispatcher) {
         return@withContext try {
-            Result.Success(channelsDao.getChannels())
+            Success(channelsDao.getChannels())
         } catch (e: Exception) {
             Error(e)
         }
@@ -25,7 +26,7 @@ class ChannelsLocalDataSource(
         try {
             val channel = channelsDao.getChannelById(channelId)
             if (channel != null) {
-                return@withContext Result.Success(channel)
+                return@withContext Success(channel)
             } else {
                 return@withContext Error(Exception("Channel not found!"))
             }

@@ -1,12 +1,12 @@
 package com.redbeanlatte11.factchecker.di
 
-import com.redbeanlatte11.factchecker.channel.ChannelsViewModel
+import com.redbeanlatte11.factchecker.ui.channel.ChannelsViewModel
 import com.redbeanlatte11.factchecker.domain.*
-import com.redbeanlatte11.factchecker.home.AddVideoBlacklistViewModel
-import com.redbeanlatte11.factchecker.home.GoogleAccountViewModel
-import com.redbeanlatte11.factchecker.home.VideosViewModel
-import com.redbeanlatte11.factchecker.more.DonationViewModel
-import com.redbeanlatte11.factchecker.popular.PopularViewModel
+import com.redbeanlatte11.factchecker.ui.home.AddBlacklistVideoViewModel
+import com.redbeanlatte11.factchecker.ui.home.GoogleAccountViewModel
+import com.redbeanlatte11.factchecker.ui.home.VideosViewModel
+import com.redbeanlatte11.factchecker.ui.more.DonationViewModel
+import com.redbeanlatte11.factchecker.ui.popular.PopularViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -39,9 +39,9 @@ val viewModelModule = module {
     }
 
     viewModel {
-        AddVideoBlacklistViewModel(
+        AddBlacklistVideoViewModel(
             ConfirmVideoUrlUseCase(),
-            AddVideoBlacklistUseCase(get(named("popular_videos_repository")))
+            AddBlacklistVideoUseCase(get(named("popular_videos_repository")))
         )
     }
 }

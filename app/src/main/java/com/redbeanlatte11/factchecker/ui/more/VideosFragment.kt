@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.popular
+package com.redbeanlatte11.factchecker.ui.more
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,30 +6,33 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Video
-import com.redbeanlatte11.factchecker.databinding.PopularFragBinding
-import com.redbeanlatte11.factchecker.home.VideoItemClickListener
-import com.redbeanlatte11.factchecker.home.VideosAdapter
+import com.redbeanlatte11.factchecker.databinding.VideosFragBinding
+import com.redbeanlatte11.factchecker.ui.home.VideoItemClickListener
+import com.redbeanlatte11.factchecker.ui.home.VideosAdapter
+import com.redbeanlatte11.factchecker.ui.home.VideosViewModel
 import com.redbeanlatte11.factchecker.util.setupSnackbar
 import com.redbeanlatte11.factchecker.util.watchYoutubeVideo
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class PopularFragment : Fragment() {
+class VideosFragment : Fragment() {
 
-    private val viewModel: PopularViewModel by viewModel()
+    private lateinit var viewDataBinding: VideosFragBinding
 
-    private lateinit var viewDataBinding: PopularFragBinding
+    private val args: VideosFragmentArgs by navArgs()
+
+    private val viewModel: VideosViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewDataBinding = PopularFragBinding.inflate(inflater, container, false).apply {
+        viewDataBinding = VideosFragBinding.inflate(inflater, container, false).apply {
             viewmodel = viewModel
         }
 
@@ -38,6 +41,7 @@ class PopularFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.setFiltering(args.filterType)
         viewModel.loadVideos(false)
     }
 
@@ -62,7 +66,7 @@ class PopularFragment : Fragment() {
             val moreClickListener = VideoItemClickListener { view, video ->
                 showPopupMenu(view, video)
             }
-            viewDataBinding.popularVideosList.adapter = VideosAdapter(itemClickListener, moreClickListener)
+            viewDataBinding.videosList.adapter = VideosAdapter(itemClickListener, moreClickListener)
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
         }
@@ -70,13 +74,10 @@ class PopularFragment : Fragment() {
 
     private fun showPopupMenu(view: View, video: Video) {
         PopupMenu(requireContext(), view).run {
-            menuInflater.inflate(R.menu.popular_video_item_more_menu, menu)
+            menuInflater.inflate(R.menu.marked_video_item_more_menu, menu)
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.add_video_to_blacklist -> {
-                        val action = PopularFragmentDirections.actionPopularDestToAddVideoBlacklistDest(video.youtubeUrl!!)
-                        findNavController().navigate(action)
-                    }
+                    R.id.add_video_to_home_list -> viewModel.excludeVideo(video, false)
                 }
                 true
             }

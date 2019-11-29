@@ -14,7 +14,7 @@
 
         <variable
             name="viewmodel"
-            type="com.redbeanlatte11.factchecker.home.AddVideoBlacklistViewModel" />
+            type="com.redbeanlatte11.factchecker.ui.home.AddBlacklistVideoViewModel" />
 
     </data>
 

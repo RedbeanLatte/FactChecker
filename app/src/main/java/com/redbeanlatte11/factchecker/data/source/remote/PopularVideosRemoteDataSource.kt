@@ -10,9 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class VideosRemoteDataSource(
+class PopularVideosRemoteDataSource(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-    ) : VideosDataSource {
+) : VideosDataSource {
 
     private val factCheckerService by lazy {
         FactCheckerService.create()
@@ -20,7 +20,7 @@ class VideosRemoteDataSource(
 
     override suspend fun getVideos(): Result<List<Video>> = withContext(ioDispatcher) {
         return@withContext try {
-            Success(factCheckerService.getVideos())
+            Success(factCheckerService.getPopularVideos())
         } catch (e: Exception) {
             Error(e)
         }
@@ -38,8 +38,8 @@ class VideosRemoteDataSource(
         throw IllegalAccessException()
     }
 
-    override suspend fun reportVideo(video: Video) = withContext(ioDispatcher) {
-        factCheckerService.reportVideo(video)
+    override suspend fun reportVideo(video: Video) {
+        throw IllegalAccessException()
     }
 
     override suspend fun excludeVideo(video: Video) {

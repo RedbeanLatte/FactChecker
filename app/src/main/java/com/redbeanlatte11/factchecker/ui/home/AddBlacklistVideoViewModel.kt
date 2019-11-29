@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.home
+package com.redbeanlatte11.factchecker.ui.home
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -6,15 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.redbeanlatte11.factchecker.data.Result.Error
-import com.redbeanlatte11.factchecker.data.Result.Success
-import com.redbeanlatte11.factchecker.domain.AddVideoBlacklistUseCase
+import com.redbeanlatte11.factchecker.Event
+import com.redbeanlatte11.factchecker.R
+import com.redbeanlatte11.factchecker.domain.AddBlacklistVideoUseCase
 import com.redbeanlatte11.factchecker.domain.ConfirmVideoUrlUseCase
 import kotlinx.coroutines.launch
 
-class AddVideoBlacklistViewModel(
+class AddBlacklistVideoViewModel(
     private val confirmVideoUrlUseCase: ConfirmVideoUrlUseCase,
-    private val addVideoBlacklistUseCase: AddVideoBlacklistUseCase
+    private val addBlacklistVideoUseCase: AddBlacklistVideoUseCase
 ) : ViewModel() {
 
     private val _canAdd = MutableLiveData<Boolean>()
@@ -22,6 +22,9 @@ class AddVideoBlacklistViewModel(
 
     private val _videoUrl = MutableLiveData<String>()
     val videoUrl: LiveData<String> = _videoUrl
+
+    private val _snackbarText = MutableLiveData<Event<Int>>()
+    val snackbarText: LiveData<Event<Int>> = _snackbarText
 
     val urlTextWatcher = object : TextWatcher {
 
@@ -40,21 +43,27 @@ class AddVideoBlacklistViewModel(
         }
     }
 
+    //TODO: add to check reduplication
     fun confirmVideoUrl(url: String) {
         viewModelScope.launch {
-            val resultVideo = confirmVideoUrlUseCase(url)
-
-            if (resultVideo is Success) {
+            val videoId = confirmVideoUrlUseCase(url)
+            if (videoId != null) {
                 _canAdd.value = true
-            }
-
-            if (resultVideo is Error) {
-                _canAdd.value = true
+                showSnackbarMessage(R.string.confirm_url_pass)
+            } else {
+                _canAdd.value = false
+                showSnackbarMessage(R.string.confirm_url_fail)
             }
         }
     }
 
-    fun addVideoBlacklist(url: String, description: String) {
-        addVideoBlacklistUseCase(url, description)
+    fun addBlacklistVideo(url: String, description: String) {
+        viewModelScope.launch {
+            addBlacklistVideoUseCase(url, description)
+        }
+    }
+
+    private fun showSnackbarMessage(message: Int) {
+        _snackbarText.value = Event(message)
     }
 }

@@ -51,4 +51,6 @@
     <string name="confirm_url">URL 확인</string>
     <string name="description">Description</string>
     <string name="add_video_blacklist">추가하기</string>
+    <string name="confirm_url_pass">올바른 URL 입니다.</string>
+    <string name="confirm_url_fail">잘못된 URL 입니다.</string>
 </resources>

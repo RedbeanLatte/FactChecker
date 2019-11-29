@@ -19,14 +19,13 @@ import android.text.TextWatcher
 import android.widget.Button
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
-import com.redbeanlatte11.factchecker.channel.ChannelsAdapter
+import com.redbeanlatte11.factchecker.ui.channel.ChannelsAdapter
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.Channel
-import com.redbeanlatte11.factchecker.home.VideosAdapter
+import com.redbeanlatte11.factchecker.ui.home.VideosAdapter
 
 
 @BindingAdapter("imageUrl")

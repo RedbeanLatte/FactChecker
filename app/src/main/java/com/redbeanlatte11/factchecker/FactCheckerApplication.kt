@@ -18,10 +18,7 @@ class FactCheckerApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@FactCheckerApplication)
-            modules(listOf(
-                dataModule,
-                viewModelModule
-            ))
+            modules(listOf(dataModule, viewModelModule))
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.more
+package com.redbeanlatte11.factchecker.ui.more
 
 import android.app.Activity
 import android.os.Bundle

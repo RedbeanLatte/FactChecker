@@ -1,12 +1,14 @@
 package com.redbeanlatte11.factchecker.domain
 
-import com.redbeanlatte11.factchecker.data.Result
-import com.redbeanlatte11.factchecker.data.Result.Error
-import com.redbeanlatte11.factchecker.data.Video
-
 class ConfirmVideoUrlUseCase {
 
-    operator fun invoke(url: String): Result<Video> {
-        return Error(IllegalStateException())
+    operator fun invoke(url: String): String? {
+        return REGEX_YOUTUBE_URL.find(url)?.groupValues?.get(1)
+            ?: REGEX_YOUTUBE_URL_LINK.find(url)?.groupValues?.get(1)
+    }
+
+    companion object {
+        val REGEX_YOUTUBE_URL = Regex("^\\S+youtube.com/watch\\?v=([a-zA-Z0-9]+)$")
+        val REGEX_YOUTUBE_URL_LINK = Regex("^\\S+youtu.be/([a-zA-Z0-9]+)$")
     }
 }

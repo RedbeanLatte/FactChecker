@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.home
+package com.redbeanlatte11.factchecker.ui.home
 
 enum class VideosFilterType {
     ALL_VIDEOS,

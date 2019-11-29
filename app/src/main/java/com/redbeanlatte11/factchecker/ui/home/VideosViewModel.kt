@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.home
+package com.redbeanlatte11.factchecker.ui.home
 
 import android.webkit.WebView
 import androidx.lifecycle.*

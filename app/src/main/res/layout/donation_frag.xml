@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="com.redbeanlatte11.factchecker.more.DonationViewModel" />
+            type="com.redbeanlatte11.factchecker.ui.more.DonationViewModel" />
 
     </data>
 

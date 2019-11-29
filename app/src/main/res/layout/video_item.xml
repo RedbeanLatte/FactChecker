@@ -19,11 +19,11 @@
 
         <variable
             name="itemClickListener"
-            type="com.redbeanlatte11.factchecker.home.VideoItemClickListener" />
+            type="com.redbeanlatte11.factchecker.ui.home.VideoItemClickListener" />
 
         <variable
             name="moreClickListener"
-            type="com.redbeanlatte11.factchecker.home.VideoItemClickListener" />
+            type="com.redbeanlatte11.factchecker.ui.home.VideoItemClickListener" />
 
     </data>
 
