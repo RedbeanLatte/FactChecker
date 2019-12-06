@@ -37,26 +37,27 @@
         android:onClick="@{view -> itemClickListener.onClick(view, video)}">
 
         <ImageView
+            app:layout_constraintHorizontal_weight="4.5"
             android:id="@+id/image_view_thumbnail"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
             android:contentDescription="@string/description_video_thumbnail"
             android:scaleType="centerCrop"
             app:imageUrl="@{video.snippet.thumbnailUrl}"
-            app:layout_constraintDimensionRatio="16.5:9"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/linear_layout_content"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            app:layout_constraintHorizontal_weight="5"
             android:id="@+id/linear_layout_content"
-            android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/image_view_thumbnail">
+            app:layout_constraintStart_toEndOf="@id/image_view_thumbnail"
+            app:layout_constraintEnd_toStartOf="@id/image_button_more">
 
             <TextView
                 android:id="@+id/text_view_title"
@@ -79,18 +80,18 @@
         </LinearLayout>
 
         <ImageButton
+            app:layout_constraintHorizontal_weight="0.5"
             android:id="@+id/image_button_more"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:scaleX="1.25"
-            android:scaleY="1.25"
             android:background="#00FFFFFF"
             android:contentDescription="@string/description_more_button"
             android:onClick="@{view -> moreClickListener.onClick(view, video)}"
             android:src="@drawable/ic_more_vert"
             android:tint="@color/colorGrey"
             android:visibility="@{video.reported ? View.GONE : View.VISIBLE}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/linear_layout_content"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
