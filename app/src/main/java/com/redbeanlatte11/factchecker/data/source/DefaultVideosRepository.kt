@@ -4,14 +4,16 @@ import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Video
+import com.redbeanlatte11.factchecker.data.source.local.VideosLocalDataSource
+import com.redbeanlatte11.factchecker.data.source.remote.VideosRemoteDataSource
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
 class DefaultVideosRepository(
-    private val videosRemoteDataSource: VideosDataSource,
-    private val videosLocalDataSource: VideosDataSource,
+    private val videosRemoteDataSource: VideosRemoteDataSource,
+    private val videosLocalDataSource: VideosLocalDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : VideosRepository {
 
@@ -176,5 +178,9 @@ class DefaultVideosRepository(
         val localVideos = videosLocalDataSource.getVideo(videoId)
         if (localVideos is Success) return localVideos
         return Error(Exception("Error fetching from remote and local"))
+    }
+
+    override suspend fun addVideoBlacklist(url: String, description: String) {
+        videosRemoteDataSource.addBlacklistVideo(url, description)
     }
 }

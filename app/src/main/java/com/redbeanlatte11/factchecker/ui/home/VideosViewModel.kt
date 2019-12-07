@@ -115,13 +115,13 @@ class VideosViewModel(
         onReportCompleteListener: OnReportCompleteListener
     ) {
         reportJob = viewModelScope.launch {
-            Timber.d("reportVideo: ${video.snippet.title}")
+            Timber.d("addBlacklistVideo: ${video.snippet.title}")
             try {
                 reportVideoUseCase(webView, video, reportMessage)
                 onReportCompleteListener.onComplete(video)
                 loadVideos(false)
             } catch (e: TimeoutCancellationException) {
-                Timber.d("reportVideo timed out")
+                Timber.d("addBlacklistVideo timed out")
                 showSnackbarMessage(R.string.time_out_message)
             }
         }

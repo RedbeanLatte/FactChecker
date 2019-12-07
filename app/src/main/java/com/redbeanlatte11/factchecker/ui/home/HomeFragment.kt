@@ -83,7 +83,15 @@ class HomeFragment : Fragment() {
             menuInflater.inflate(R.menu.video_item_more_menu, menu)
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.report_video -> reportVideo(video)
+                    R.id.report_video -> {
+                        val savedSignInResult = PreferenceUtils.loadSignInResult(requireContext())
+                        if (savedSignInResult) {
+                            reportVideo(video)
+                        } else {
+                            SignInDialogFragment()
+                                .show(activity?.supportFragmentManager!!, "SignInDialogFragment")
+                        }
+                    }
                     R.id.remove_video_from_list -> viewModel.excludeVideo(video, true)
                 }
                 true
@@ -99,7 +107,6 @@ class HomeFragment : Fragment() {
             viewModel.cancelReportVideo()
             webView.loadYoutubeHome()
         }
-
         progressDialog.isCancelable = false
         progressDialog.show(activity?.supportFragmentManager!!, "ReportProgressDialogFragment")
 
@@ -109,8 +116,7 @@ class HomeFragment : Fragment() {
             PreferenceUtils.loadReportMessage(requireContext()),
             OnReportCompleteListener {
                 progressDialog.dismiss()
-                val completeDialog = ReportCompleteDialogFragment(1)
-                completeDialog.show(
+                ReportCompleteDialogFragment(1).show(
                     activity?.supportFragmentManager!!,
                     "ReportCompleteDialogFragment"
                 )
@@ -130,8 +136,10 @@ class HomeFragment : Fragment() {
                     val reportDialog = ReportAllDialogFragment { reportAll() }
                     reportDialog.show(activity?.supportFragmentManager!!, "ReportAllDialogFragment")
                 } else {
-                    val signInDialog = SignInDialogFragment()
-                    signInDialog.show(activity?.supportFragmentManager!!, "SignInDialogFragment")
+                    SignInDialogFragment().show(
+                        activity?.supportFragmentManager!!,
+                        "SignInDialogFragment"
+                    )
                 }
                 true
             }
@@ -147,8 +155,10 @@ class HomeFragment : Fragment() {
     private fun reportAll() {
         val itemCount = viewModel.items.value?.size ?: 0
         if (itemCount == 0) {
-            val completeDialog = ReportCompleteDialogFragment(itemCount)
-            completeDialog.show(activity?.supportFragmentManager!!, "ReportCompleteDialogFragment")
+                ReportCompleteDialogFragment(itemCount).show(
+                    activity?.supportFragmentManager!!,
+                    "ReportCompleteDialogFragment"
+                )
             return
         }
 
@@ -158,7 +168,6 @@ class HomeFragment : Fragment() {
             viewModel.cancelReportAll()
             webView.loadYoutubeHome()
         }
-
         progressDialog.isCancelable = false
         progressDialog.show(activity?.supportFragmentManager!!, "ReportProgressDialogFragment")
 
@@ -170,8 +179,7 @@ class HomeFragment : Fragment() {
 
             override fun onCompleted(itemCount: Int) {
                 progressDialog.dismiss()
-                val completeDialog = ReportCompleteDialogFragment(itemCount)
-                completeDialog.show(
+                ReportCompleteDialogFragment(itemCount).show(
                     activity?.supportFragmentManager!!,
                     "ReportCompleteDialogFragment"
                 )

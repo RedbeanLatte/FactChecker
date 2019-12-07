@@ -13,7 +13,7 @@ class SignInUseCase {
         with(webView) {
             settings.javaScriptEnabled = true
             webViewClient = GoogleAccountWebViewClient()
-            loadUrl("https://accounts.google.com/ServiceLogin?service=youtube&uilel=3&passive=true")
+            loadUrl("https://accounts.google.com")
         }
 
     private class GoogleAccountWebViewClient : WebViewClient() {

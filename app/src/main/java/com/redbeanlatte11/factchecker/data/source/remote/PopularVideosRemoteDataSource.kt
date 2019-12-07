@@ -26,27 +26,15 @@ class PopularVideosRemoteDataSource(
         }
     }
 
-    override suspend fun getVideo(videoId: String): Result<Video> {
-        return Error(IllegalAccessException())
+    override suspend fun getVideo(videoId: String): Result<Video> = withContext(ioDispatcher) {
+        return@withContext try {
+            Success(factCheckerService.getVideo(videoId))
+        } catch (e: Exception) {
+            Error(e)
+        }
     }
 
-    override suspend fun saveVideo(video: Video) {
-        throw IllegalAccessException()
-    }
-
-    override suspend fun deleteAllVideos() {
-        throw IllegalAccessException()
-    }
-
-    override suspend fun reportVideo(video: Video) {
-        throw IllegalAccessException()
-    }
-
-    override suspend fun excludeVideo(video: Video) {
-        throw IllegalAccessException()
-    }
-
-    override suspend fun includeVideo(video: Video) {
-        throw IllegalAccessException()
+    suspend fun addBlacklistVideo(url: String, description: String) = withContext(ioDispatcher) {
+        factCheckerService.addBlacklistVideo(url, description)
     }
 }

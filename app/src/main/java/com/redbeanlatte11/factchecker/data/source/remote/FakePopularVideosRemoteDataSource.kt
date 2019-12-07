@@ -13,7 +13,8 @@ import java.lang.Exception
 class FakePopularVideosRemoteDataSource(
     private val jsonParser: JsonParser,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : VideosDataSource {
+) : VideosRemoteDataSource() {
+
     override suspend fun getVideo(videoId: String): Result<Video> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -24,25 +25,5 @@ class FakePopularVideosRemoteDataSource(
         } catch (e: Exception) {
             Error(e)
         }
-    }
-
-    override suspend fun saveVideo(video: Video) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override suspend fun deleteAllVideos() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override suspend fun reportVideo(video: Video) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override suspend fun excludeVideo(video: Video) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override suspend fun includeVideo(video: Video) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

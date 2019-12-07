@@ -23,16 +23,16 @@ interface FactCheckerService {
     @GET("videos")
     suspend fun getVideo(@Query("id") id: String): Video
 
-    @POST("reportvideo")
-    suspend fun reportVideo(@Body video: Video)
+    @POST("addblacklistvideo")
+    suspend fun addBlacklistVideo(url: String, description: String)
 
     //TODO: not implemented
     @GET("channels")
     suspend fun getChannels(): List<Channel>
 
     //TODO: not implemented
-    @GET("reportchannel")
-    suspend fun reportChannel(@Body channel: Channel)
+    @GET("addblacklistchannel")
+    suspend fun addBlacklistChannel(@Body channel: Channel)
 
     companion object {
 

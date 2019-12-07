@@ -35,23 +35,23 @@ class VideosLocalDataSource(
         }
     }
 
-    override suspend fun saveVideo(video: Video) = withContext(ioDispatcher) {
+    suspend fun saveVideo(video: Video) = withContext(ioDispatcher) {
         videosDao.insertVideo(video)
     }
 
-    override suspend fun deleteAllVideos() {
+    suspend fun deleteAllVideos() {
         videosDao.deleteVideos()
     }
 
-    override suspend fun reportVideo(video: Video) {
+    suspend fun reportVideo(video: Video) {
         videosDao.updateReported(video.id, true)
     }
 
-    override suspend fun excludeVideo(video: Video) {
+    suspend fun excludeVideo(video: Video) {
         videosDao.updateExcluded(video.id, true)
     }
 
-    override suspend fun includeVideo(video: Video) {
+    suspend fun includeVideo(video: Video) {
         videosDao.updateExcluded(video.id, false)
     }
 }

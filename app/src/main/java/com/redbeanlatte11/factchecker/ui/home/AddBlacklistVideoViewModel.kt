@@ -23,6 +23,9 @@ class AddBlacklistVideoViewModel(
     private val _videoUrl = MutableLiveData<String>()
     val videoUrl: LiveData<String> = _videoUrl
 
+    private val _description = MutableLiveData<String>()
+    val description: LiveData<String> = _description
+
     private val _snackbarText = MutableLiveData<Event<Int>>()
     val snackbarText: LiveData<Event<Int>> = _snackbarText
 
@@ -34,6 +37,17 @@ class AddBlacklistVideoViewModel(
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             _canAdd.value = false
+        }
+    }
+
+    val descriptionTextWatcher = object : TextWatcher {
+
+        override fun afterTextChanged(p0: Editable?) {}
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            _description.value = p0.toString()
         }
     }
 
