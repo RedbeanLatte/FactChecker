@@ -15,6 +15,7 @@
     <string name="dialog_sign_in">부적절한 컨텐츠를 신고하려면 로그인하세요.</string>
     <string name="description_video_thumbnail">동영상 썸네일</string>
     <string name="loading_videos_error">Error while loading videos</string>
+    <string name="loading_channels_error">Error while loading channels</string>
 
     <string name="minutes_ago">분 전</string>
     <string name="hours_ago">시간 전</string>

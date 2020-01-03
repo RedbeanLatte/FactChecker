@@ -1,6 +1,5 @@
 package com.redbeanlatte11.factchecker
 
-import com.redbeanlatte11.factchecker.domain.ConfirmVideoUrlUseCase
 import org.junit.Test
 
 class ConfirmUrlTest {

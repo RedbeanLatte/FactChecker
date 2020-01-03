@@ -9,7 +9,7 @@ import org.joda.time.DateTime
 data class Video(
     @ColumnInfo(name = "kind") val kind: String,
     @ColumnInfo(name = "etag") val etag: String,
-    @PrimaryKey @ColumnInfo(name = "entryid") val id: String,
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
     @Embedded val snippet: VideoSnippet,
     @Embedded val statistics: VideoStatistics,
     @ColumnInfo(name = "reported") var reported: Boolean = false,

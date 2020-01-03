@@ -43,7 +43,7 @@ class ChannelsViewModel(
                 Timber.e((channelsResult as Result.Error).exception)
                 isDataLoadingError.value = false
                 _items.value = emptyList()
-                showSnackbarMessage(R.string.loading_videos_error)
+                showSnackbarMessage(R.string.loading_channels_error)
             }
 
             _dataLoading.value = false

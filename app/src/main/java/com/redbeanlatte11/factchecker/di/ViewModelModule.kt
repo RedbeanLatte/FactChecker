@@ -40,7 +40,6 @@ val viewModelModule = module {
 
     viewModel {
         AddBlacklistVideoViewModel(
-            ConfirmVideoUrlUseCase(),
             AddBlacklistVideoUseCase(get(named("popular_videos_repository")))
         )
     }

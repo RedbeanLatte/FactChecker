@@ -8,6 +8,7 @@ import com.redbeanlatte11.factchecker.data.source.VideosDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.lang.Exception
 
 open class VideosRemoteDataSource(
@@ -34,7 +35,11 @@ open class VideosRemoteDataSource(
         }
     }
 
-    suspend fun addBlacklistVideo(url: String, description: String) = withContext(ioDispatcher) {
-        factCheckerService.addBlacklistVideo(url, description)
+    suspend fun addBlacklistVideo(videoId: String, description: String) = withContext(ioDispatcher) {
+        try {
+            factCheckerService.addBlacklistVideo(videoId, description)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
     }
 }

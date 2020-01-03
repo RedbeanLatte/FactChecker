@@ -9,11 +9,10 @@ import androidx.lifecycle.viewModelScope
 import com.redbeanlatte11.factchecker.Event
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.domain.AddBlacklistVideoUseCase
-import com.redbeanlatte11.factchecker.domain.ConfirmVideoUrlUseCase
+import com.redbeanlatte11.factchecker.util.YoutubeUrlUtils
 import kotlinx.coroutines.launch
 
 class AddBlacklistVideoViewModel(
-    private val confirmVideoUrlUseCase: ConfirmVideoUrlUseCase,
     private val addBlacklistVideoUseCase: AddBlacklistVideoUseCase
 ) : ViewModel() {
 
@@ -23,7 +22,7 @@ class AddBlacklistVideoViewModel(
     private val _videoUrl = MutableLiveData<String>()
     val videoUrl: LiveData<String> = _videoUrl
 
-    private val _description = MutableLiveData<String>()
+    private val _description = MutableLiveData<String>("")
     val description: LiveData<String> = _description
 
     private val _snackbarText = MutableLiveData<Event<Int>>()
@@ -60,8 +59,7 @@ class AddBlacklistVideoViewModel(
     //TODO: add to check reduplication
     fun confirmVideoUrl(url: String) {
         viewModelScope.launch {
-            val videoId = confirmVideoUrlUseCase(url)
-            if (videoId != null) {
+            if (YoutubeUrlUtils.validateUrl(url)) {
                 _canAdd.value = true
                 showSnackbarMessage(R.string.confirm_url_pass)
             } else {
@@ -73,7 +71,7 @@ class AddBlacklistVideoViewModel(
 
     fun addBlacklistVideo(url: String, description: String) {
         viewModelScope.launch {
-            addBlacklistVideoUseCase(url, description)
+            addBlacklistVideoUseCase(YoutubeUrlUtils.extractIdFromUrl(url)!!, description)
         }
     }
 

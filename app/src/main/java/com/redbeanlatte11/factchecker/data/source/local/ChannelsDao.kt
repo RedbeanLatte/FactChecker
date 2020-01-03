@@ -8,10 +8,10 @@ import com.redbeanlatte11.factchecker.data.Channel
 
 @Dao
 interface ChannelsDao {
-    @Query("SELECT *, `entryid` FROM Channels")
+    @Query("SELECT *, `id` FROM Channels")
     suspend fun getChannels(): List<Channel>
 
-    @Query("SELECT *, `entryid` FROM Channels WHERE entryid = :channelId")
+    @Query("SELECT *, `id` FROM Channels WHERE id = :channelId")
     suspend fun getChannelById(channelId: String): Channel?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -21,7 +21,7 @@ interface ChannelsDao {
     suspend fun deleteChannels()
 
     @Query("""
-        SELECT *, `entryid` 
+        SELECT *, `id` 
         FROM Channels 
         WHERE title LIKE '%' || :query || '%'
         OR description LIKE '%' || :query || '%'

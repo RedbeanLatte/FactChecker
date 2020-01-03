@@ -17,16 +17,16 @@ val dataModule = module {
 
     single(named("blacklist_videos_repository")) {
         DefaultVideosRepository(
-//            ProductsRemoteDataSource(GarimFirestore(context)),
-            FakePopularVideosRemoteDataSource(JsonParser.from(androidContext(), "test_popular_videos.json")),
+            VideosRemoteDataSource(),
+//            FakePopularVideosRemoteDataSource(JsonParser.from(androidContext(), "test_popular_videos.json")),
             get(named("blacklist_videos_local_data_source"))
         )
     }
 
     single(named("popular_videos_repository")) {
         DefaultVideosRepository(
-//            PopularVideosRemoteDataSource(),
-            FakePopularVideosRemoteDataSource(JsonParser.from(androidContext(), "test_popular_videos.json")),
+            PopularVideosRemoteDataSource(),
+//            FakePopularVideosRemoteDataSource(JsonParser.from(androidContext(), "test_popular_videos.json")),
             get(named("popular_videos_local_data_source"))
         )
     }

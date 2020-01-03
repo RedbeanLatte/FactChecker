@@ -10,7 +10,7 @@ import com.redbeanlatte11.factchecker.util.toSummaryCount
 data class Channel(
     @ColumnInfo(name = "kind") val kind: String,
     @ColumnInfo(name = "etag") val etag: String,
-    @PrimaryKey @ColumnInfo(name = "entryid") val id: String,
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
     @Embedded val snippet: ChannelSnippet,
     @Embedded val statistics: ChannelStatistics
 ) {

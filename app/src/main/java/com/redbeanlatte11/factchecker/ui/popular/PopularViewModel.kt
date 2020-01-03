@@ -30,7 +30,7 @@ class PopularViewModel(
     /**
      * @param forceUpdate   Pass in true to refresh the data in the [VideosDataSource]
      */
-    private fun loadVideos(forceUpdate: Boolean, needsCheck: Boolean) {
+    fun loadVideos(forceUpdate: Boolean) {
         _dataLoading.value = true
 
         viewModelScope.launch {
@@ -47,10 +47,6 @@ class PopularViewModel(
 
             _dataLoading.value = false
         }
-    }
-
-    fun loadVideos(forceUpdate: Boolean) {
-        loadVideos(forceUpdate, false)
     }
 
     private fun showSnackbarMessage(message: Int) {

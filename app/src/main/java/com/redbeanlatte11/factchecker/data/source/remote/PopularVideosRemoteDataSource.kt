@@ -8,17 +8,20 @@ import com.redbeanlatte11.factchecker.data.source.VideosDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.lang.Exception
 
 class PopularVideosRemoteDataSource(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : VideosDataSource {
+) : VideosRemoteDataSource() {
 
     private val factCheckerService by lazy {
         FactCheckerService.create()
     }
 
     override suspend fun getVideos(): Result<List<Video>> = withContext(ioDispatcher) {
+        Timber.d("getVideos popularvideos");
+
         return@withContext try {
             Success(factCheckerService.getPopularVideos())
         } catch (e: Exception) {
@@ -32,9 +35,5 @@ class PopularVideosRemoteDataSource(
         } catch (e: Exception) {
             Error(e)
         }
-    }
-
-    suspend fun addBlacklistVideo(url: String, description: String) = withContext(ioDispatcher) {
-        factCheckerService.addBlacklistVideo(url, description)
     }
 }

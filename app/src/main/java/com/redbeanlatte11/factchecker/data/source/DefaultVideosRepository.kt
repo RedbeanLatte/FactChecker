@@ -46,7 +46,7 @@ class DefaultVideosRepository(
                 }
             }
 
-            return@withContext Error(IllegalStateException("Illegal stete"))
+            return@withContext Error(IllegalStateException("Illegal state"))
         }
     }
 
