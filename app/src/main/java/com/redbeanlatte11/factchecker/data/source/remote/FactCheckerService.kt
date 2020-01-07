@@ -23,15 +23,17 @@ interface FactCheckerService {
     suspend fun addBlacklistVideo(
         @Query("video_id") videoId: String,
         @Query("description") description: String
-    )
+    ): Video
 
-    //TODO: not implemented
     @GET("channels")
     suspend fun getChannels(): List<Channel>
 
-    //TODO: not implemented
     @POST("candidatechannels")
-    suspend fun addBlacklistChannel(@Body channel: Channel)
+    suspend fun addBlacklistChannel(
+        @Query("channel_id") channelId: String?,
+        @Query("user_name") userName: String?,
+        @Query("description") description: String
+    ): Channel
 
     companion object {
 

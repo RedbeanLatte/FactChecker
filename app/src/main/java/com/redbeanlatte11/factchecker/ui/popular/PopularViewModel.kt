@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.redbeanlatte11.factchecker.Event
 import com.redbeanlatte11.factchecker.R
-import com.redbeanlatte11.factchecker.data.Result
+import com.redbeanlatte11.factchecker.data.Result.Success
+import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.domain.GetPopularVideosUseCase
 import kotlinx.coroutines.launch
@@ -35,11 +36,11 @@ class PopularViewModel(
 
         viewModelScope.launch {
             val videosResult = getPopularVideosUseCase(forceUpdate)
-            if (videosResult is Result.Success) {
+            if (videosResult is Success) {
                 isDataLoadingError.value = false
                 _items.value = videosResult.data
             } else {
-                Timber.e((videosResult as Result.Error).exception)
+                Timber.e((videosResult as Error).exception)
                 isDataLoadingError.value = false
                 _items.value = emptyList()
                 showSnackbarMessage(R.string.loading_videos_error)
@@ -49,9 +50,11 @@ class PopularViewModel(
         }
     }
 
+    fun refresh() {
+        loadVideos(true)
+    }
+
     private fun showSnackbarMessage(message: Int) {
         _snackbarText.value = Event(message)
     }
-
-    //TODO: implement shareVideoUseCase
 }

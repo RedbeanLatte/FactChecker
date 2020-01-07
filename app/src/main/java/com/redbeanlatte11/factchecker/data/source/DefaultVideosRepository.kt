@@ -6,6 +6,7 @@ import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.source.local.VideosLocalDataSource
 import com.redbeanlatte11.factchecker.data.source.remote.VideosRemoteDataSource
+import com.redbeanlatte11.factchecker.util.YoutubeUrlUtils
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
@@ -27,7 +28,7 @@ class DefaultVideosRepository(
             // Respond immediately with cache if available and not dirty
             if (!forceUpdate) {
                 cachedVideos?.let { cachedVideos ->
-                    return@withContext Success(cachedVideos.values.toList())
+                    return@withContext Success(cachedVideos.values.sortedWith(Video.CreatedAtComparator))
                 }
             }
 
@@ -37,7 +38,7 @@ class DefaultVideosRepository(
             (newVideos as? Success)?.let { refreshCache(it.data) }
 
             cachedVideos?.let { videos ->
-                return@withContext Success(videos.values.toList())
+                return@withContext Success(videos.values.sortedWith(Video.CreatedAtComparator))
             }
 
             (newVideos as? Success)?.let {
@@ -52,11 +53,11 @@ class DefaultVideosRepository(
 
     private suspend fun fetchVideosFromRemoteOrLocal(forceUpdate: Boolean): Result<List<Video>> {
         // Remote first
-        val remoteVideos = videosRemoteDataSource.getVideos()
-        when (remoteVideos) {
+        when (val remoteVideos = videosRemoteDataSource.getVideos()) {
             is Error -> Timber.w("Remote data source fetch failed")
             is Success -> {
-                refreshLocalDataSource(remoteVideos.data)
+                val newVideos = combineLocalDataWithRemoteData(remoteVideos.data)
+                refreshLocalDataSource(newVideos)
                 return remoteVideos
             }
             else -> throw IllegalStateException()
@@ -71,6 +72,25 @@ class DefaultVideosRepository(
         val localVideos = videosLocalDataSource.getVideos()
         if (localVideos is Success) return localVideos
         return Error(Exception("Error fetching from remote and local"))
+    }
+
+    private suspend fun combineLocalDataWithRemoteData(remoteVideos: List<Video>): List<Video> {
+        val localVideos = videosLocalDataSource.getVideos()
+        if (localVideos is Success) {
+            val localVideosMap = localVideos.data.map { it.id to it }.toMap()
+            val newVideosMap = remoteVideos.map { it.id to it }.toMap()
+
+            localVideosMap.values.forEach { localVideo ->
+                val remoteVideo = newVideosMap[localVideo.id]
+                if (remoteVideo != null) {
+                    remoteVideo.reported = localVideo.reported
+                    remoteVideo.excluded = localVideo.excluded
+                }
+            }
+            return newVideosMap.values.toList()
+        }
+
+        return remoteVideos
     }
 
     private fun refreshCache(videos: List<Video>) {
@@ -159,8 +179,7 @@ class DefaultVideosRepository(
         forceUpdate: Boolean
     ): Result<Video> {
         // Remote first
-        val remoteVideo = videosRemoteDataSource.getVideo(videoId)
-        when (remoteVideo) {
+        when (val remoteVideo = videosRemoteDataSource.getVideo(videoId)) {
             is Error -> Timber.w("Remote data source fetch failed")
             is Success -> {
                 refreshLocalDataSource(remoteVideo.data)
@@ -180,7 +199,7 @@ class DefaultVideosRepository(
         return Error(Exception("Error fetching from remote and local"))
     }
 
-    override suspend fun addVideoBlacklist(url: String, description: String) {
-        videosRemoteDataSource.addBlacklistVideo(url, description)
+    override suspend fun addBlacklistVideo(url: String, description: String): Result<Video> {
+        return videosRemoteDataSource.addBlacklistVideo(YoutubeUrlUtils.extractVideoIdFromUrl(url)!!, description)
     }
 }

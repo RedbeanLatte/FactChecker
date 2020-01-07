@@ -35,11 +35,11 @@ open class VideosRemoteDataSource(
         }
     }
 
-    suspend fun addBlacklistVideo(videoId: String, description: String) = withContext(ioDispatcher) {
-        try {
-            factCheckerService.addBlacklistVideo(videoId, description)
+    suspend fun addBlacklistVideo(videoId: String, description: String): Result<Video> = withContext(ioDispatcher) {
+        return@withContext try {
+            Success(factCheckerService.addBlacklistVideo(videoId, description))
         } catch (e: Exception) {
-            Timber.e(e)
+            Error(e)
         }
     }
 }

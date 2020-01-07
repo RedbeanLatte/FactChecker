@@ -63,6 +63,27 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="add_blacklist_channel_dest">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-1178" />
+                            <option name="y" value="-381" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_add_blacklist_channel_dest_to_channel_dest">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="add_blacklist_video_dest">
                     <value>
                       <LayoutPositions>
@@ -81,8 +102,17 @@
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="-1750" />
-                            <option name="y" value="-563" />
+                            <option name="y" value="-575" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_channel_dest_to_add_blacklist_channel_dest">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -122,7 +152,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_home_dest_to_addVideoBlacklistFragment">
+                            <entry key="action_home_dest_to_add_video_blacklist_dest">
                               <value>
                                 <LayoutPositions />
                               </value>

@@ -15,5 +15,5 @@ interface VideosRepository {
 
     suspend fun includeVideo(video: Video)
 
-    suspend fun addVideoBlacklist(url: String, description: String)
+    suspend fun addBlacklistVideo(url: String, description: String): Result<Video>
 }

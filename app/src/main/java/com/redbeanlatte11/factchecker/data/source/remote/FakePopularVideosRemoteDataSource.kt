@@ -15,10 +15,6 @@ class FakePopularVideosRemoteDataSource(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : VideosRemoteDataSource() {
 
-    override suspend fun getVideo(videoId: String): Result<Video> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override suspend fun getVideos(): Result<List<Video>> = withContext(ioDispatcher) {
         return@withContext try {
             Success(jsonParser.getPopularVideos())

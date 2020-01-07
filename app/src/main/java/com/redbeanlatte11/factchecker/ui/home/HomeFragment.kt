@@ -45,6 +45,7 @@ class HomeFragment : Fragment() {
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
         setupSnackbar()
         setupListAdapter()
+        setupRefreshLayout(viewDataBinding.refreshLayout, viewDataBinding.videosList)
         setupFab()
     }
 
@@ -69,10 +70,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupFab() {
-        viewDataBinding.addVideoBlacklistFab.run {
+        viewDataBinding.addBlacklistVideoFab.run {
             visibility = View.VISIBLE
             setOnClickListener {
-                val action = HomeFragmentDirections.actionHomeDestToAddVideoBlacklistFragment("")
+                val action = HomeFragmentDirections.actionHomeDestToAddVideoBlacklistDest("")
                 findNavController().navigate(action)
             }
         }

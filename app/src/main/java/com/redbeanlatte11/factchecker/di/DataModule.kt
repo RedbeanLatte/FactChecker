@@ -33,7 +33,8 @@ val dataModule = module {
 
     single {
         DefaultChannelsRepository(
-            FakeChannelsRemoteDataSource(JsonParser.from(androidContext(), "channels.json")),
+            ChannelsRemoteDataSource(),
+//            FakeChannelsRemoteDataSource(JsonParser.from(androidContext(), "channels.json")),
             get(named("channels_local_data_source"))
         ) as ChannelsRepository
     }

@@ -2,6 +2,7 @@ package com.redbeanlatte11.factchecker.di
 
 import com.redbeanlatte11.factchecker.ui.channel.ChannelsViewModel
 import com.redbeanlatte11.factchecker.domain.*
+import com.redbeanlatte11.factchecker.ui.channel.AddBlacklistChannelViewModel
 import com.redbeanlatte11.factchecker.ui.home.AddBlacklistVideoViewModel
 import com.redbeanlatte11.factchecker.ui.home.GoogleAccountViewModel
 import com.redbeanlatte11.factchecker.ui.home.VideosViewModel
@@ -41,6 +42,12 @@ val viewModelModule = module {
     viewModel {
         AddBlacklistVideoViewModel(
             AddBlacklistVideoUseCase(get(named("popular_videos_repository")))
+        )
+    }
+
+    viewModel {
+        AddBlacklistChannelViewModel(
+            AddBlacklistChannelUseCase(get())
         )
     }
 }

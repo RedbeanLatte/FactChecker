@@ -22,7 +22,7 @@ class ChannelsLocalDataSource(
         }
     }
 
-    override suspend fun getChannel(channelId: String): Result<Channel> = withContext(ioDispatcher) {
+    suspend fun getChannel(channelId: String): Result<Channel> = withContext(ioDispatcher) {
         try {
             val channel = channelsDao.getChannelById(channelId)
             if (channel != null) {
@@ -35,11 +35,11 @@ class ChannelsLocalDataSource(
         }
     }
 
-    override suspend fun saveChannel(channel: Channel) = withContext(ioDispatcher) {
+    suspend fun saveChannel(channel: Channel) = withContext(ioDispatcher) {
         channelsDao.insertChannel(channel)
     }
 
-    override suspend fun deleteAllChannels() {
+    suspend fun deleteAllChannels() {
         channelsDao.deleteChannels()
     }
 }

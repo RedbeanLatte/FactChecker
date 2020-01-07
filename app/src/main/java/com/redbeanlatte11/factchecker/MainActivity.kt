@@ -1,5 +1,6 @@
 package com.redbeanlatte11.factchecker
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -51,3 +52,6 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
     }
 }
+
+// Keys for navigation
+const val ADD_BLACKLIST_RESULT_OK = Activity.RESULT_FIRST_USER + 1

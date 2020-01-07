@@ -10,10 +10,7 @@ import kotlinx.coroutines.withContext
 class FakeChannelsRemoteDataSource(
     private val jsonParser: JsonParser,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : ChannelsDataSource {
-    override suspend fun getChannel(channelId: String): Result<Channel> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+) : ChannelsRemoteDataSource() {
 
     override suspend fun getChannels(): Result<List<Channel>> = withContext(ioDispatcher) {
         return@withContext try {
@@ -22,13 +19,4 @@ class FakeChannelsRemoteDataSource(
             Result.Error(e)
         }
     }
-
-    override suspend fun saveChannel(channel: Channel) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override suspend fun deleteAllChannels() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
 }

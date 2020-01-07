@@ -1,10 +1,8 @@
 package com.redbeanlatte11.factchecker.data
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.redbeanlatte11.factchecker.util.toSummaryCount
+import org.joda.time.DateTime
 
 @Entity(tableName = "channels")
 data class Channel(
@@ -12,16 +10,33 @@ data class Channel(
     @ColumnInfo(name = "etag") val etag: String,
     @PrimaryKey @ColumnInfo(name = "id") val id: String,
     @Embedded val snippet: ChannelSnippet,
-    @Embedded val statistics: ChannelStatistics
+    @Embedded val statistics: ChannelStatistics,
+    @ColumnInfo(name = "createdAt") val createdAt: String = DateTime.now().toString()
 ) {
     val youtubeUrl: String?
         get() = "http://m.youtube.com/channel/$id"
+
+    @Ignore
+    private var _createdAtDateTime: DateTime? = null
+    val createdAtDateTime: DateTime
+        get() {
+            if (_createdAtDateTime == null) {
+                _createdAtDateTime = DateTime.parse(createdAt)
+            }
+            return _createdAtDateTime!!
+        }
+
+    object CreatedAtComparator : Comparator<Channel> {
+
+        override fun compare(c1: Channel, c2: Channel): Int {
+            return c2.createdAtDateTime.compareTo(c1.createdAtDateTime)
+        }
+    }
 }
 
 data class ChannelSnippet(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "customUrl") val customUrl: String,
     @ColumnInfo(name = "publishedAt") val publishedAt: String,
     @ColumnInfo(name = "thumbnails") val thumbnails: Map<String, Thumbnail>,
     @ColumnInfo(name = "localized") val localized: Map<String, String>,

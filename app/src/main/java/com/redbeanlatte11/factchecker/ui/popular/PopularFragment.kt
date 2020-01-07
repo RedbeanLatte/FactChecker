@@ -13,6 +13,7 @@ import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.databinding.PopularFragBinding
 import com.redbeanlatte11.factchecker.ui.home.VideoItemClickListener
 import com.redbeanlatte11.factchecker.ui.home.VideosAdapter
+import com.redbeanlatte11.factchecker.util.setupRefreshLayout
 import com.redbeanlatte11.factchecker.util.setupSnackbar
 import com.redbeanlatte11.factchecker.util.watchYoutubeVideo
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -47,6 +48,7 @@ class PopularFragment : Fragment() {
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
         setupSnackbar()
         setupListAdapter()
+        setupRefreshLayout(viewDataBinding.refreshLayout, viewDataBinding.popularVideosList)
     }
 
     private fun setupSnackbar() {

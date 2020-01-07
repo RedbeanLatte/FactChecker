@@ -14,8 +14,12 @@
             android:id="@+id/action_home_dest_to_google_account_dest"
             app:destination="@id/google_account_dest" />
         <action
-            android:id="@+id/action_home_dest_to_addVideoBlacklistFragment"
+            android:id="@+id/action_home_dest_to_add_video_blacklist_dest"
             app:destination="@id/add_blacklist_video_dest" />
+        <argument
+            android:name="userMessage"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 
     <fragment
@@ -28,7 +32,15 @@
         android:id="@+id/channel_dest"
         android:name="com.redbeanlatte11.factchecker.ui.channel.ChannelsFragment"
         android:label="@string/title_channel"
-        tools:layout="@layout/channels_frag" />
+        tools:layout="@layout/channels_frag" >
+        <action
+            android:id="@+id/action_channel_dest_to_add_blacklist_channel_dest"
+            app:destination="@id/add_blacklist_channel_dest" />
+        <argument
+            android:name="userMessage"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 
     <fragment
         android:id="@+id/popular_dest"
@@ -67,7 +79,7 @@
     <fragment
         android:id="@+id/add_blacklist_video_dest"
         android:name="com.redbeanlatte11.factchecker.ui.home.AddBlacklistVideoFragment"
-        android:label="@string/title_add_video_blacklist" >
+        android:label="@string/title_add_blacklist_video" >
         <argument
             android:name="videoUrl"
             app:argType="string" />
@@ -77,4 +89,13 @@
         android:id="@+id/donation_dest"
         android:name="com.redbeanlatte11.factchecker.ui.more.DonationFragment"
         android:label="@string/donate_to_developer" />
+
+    <fragment
+        android:id="@+id/add_blacklist_channel_dest"
+        android:name="com.redbeanlatte11.factchecker.ui.channel.AddBlacklistChannelFragment"
+        android:label="@string/title_add_blacklist_channel" >
+        <action
+            android:id="@+id/action_add_blacklist_channel_dest_to_channel_dest"
+            app:destination="@id/channel_dest" />
+    </fragment>
 </navigation>

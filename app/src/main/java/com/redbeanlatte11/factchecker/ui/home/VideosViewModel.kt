@@ -146,4 +146,8 @@ class VideosViewModel(
         }
         loadVideos(false)
     }
+
+    fun refresh() {
+        loadVideos(true)
+    }
 }

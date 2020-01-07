@@ -3,6 +3,6 @@
 
     <item
         android:id="@+id/add_video_to_blacklist"
-        android:title="@string/title_add_video_blacklist" />
+        android:title="@string/title_add_blacklist_video" />
 
 </menu>

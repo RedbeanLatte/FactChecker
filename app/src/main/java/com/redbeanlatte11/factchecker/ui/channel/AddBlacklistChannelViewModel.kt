@@ -1,4 +1,4 @@
-package com.redbeanlatte11.factchecker.ui.home
+package com.redbeanlatte11.factchecker.ui.channel
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,20 +10,20 @@ import com.redbeanlatte11.factchecker.Event
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Result.Error
-import com.redbeanlatte11.factchecker.domain.AddBlacklistVideoUseCase
+import com.redbeanlatte11.factchecker.domain.AddBlacklistChannelUseCase
 import com.redbeanlatte11.factchecker.util.YoutubeUrlUtils
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class AddBlacklistVideoViewModel(
-    private val addBlacklistVideoUseCase: AddBlacklistVideoUseCase
+class AddBlacklistChannelViewModel(
+    private val addBlacklistChannelUseCase: AddBlacklistChannelUseCase
 ) : ViewModel() {
 
     private val _canAdd = MutableLiveData<Boolean>()
     val canAdd: LiveData<Boolean> = _canAdd
 
-    private val _videoUrl = MutableLiveData<String>()
-    val videoUrl: LiveData<String> = _videoUrl
+    private val _channelUrl = MutableLiveData<String>()
+    val channelUrl: LiveData<String> = _channelUrl
 
     private val _description = MutableLiveData<String>("")
     val description: LiveData<String> = _description
@@ -41,8 +41,8 @@ class AddBlacklistVideoViewModel(
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            _videoUrl.value = p0.toString()
             _canAdd.value = false
+            _channelUrl.value = p0.toString()
         }
     }
 
@@ -57,15 +57,9 @@ class AddBlacklistVideoViewModel(
         }
     }
 
-    fun setVideoUrl(videoUrl: String) {
+    fun confirmChannelUrl(url: String) {
         viewModelScope.launch {
-            _videoUrl.value = videoUrl
-        }
-    }
-
-    fun confirmVideoUrl(url: String) {
-        viewModelScope.launch {
-            if (YoutubeUrlUtils.validateVideoUrl(url)) {
+            if (YoutubeUrlUtils.validateChannelUrl(url)) {
                 _canAdd.value = true
                 showSnackbarMessage(R.string.confirm_url_pass)
             } else {
@@ -75,9 +69,9 @@ class AddBlacklistVideoViewModel(
         }
     }
 
-    fun addBlacklistVideo(url: String, description: String) {
+    fun addBlacklistChannel(url: String, description: String) {
         viewModelScope.launch {
-            val result = addBlacklistVideoUseCase(url, description)
+            val result = addBlacklistChannelUseCase(url, description)
             if (result is Success) {
                 showSnackbarMessage(R.string.adding_blacklist_success)
                 _blacklistAddedEvent.value = Event(Unit)

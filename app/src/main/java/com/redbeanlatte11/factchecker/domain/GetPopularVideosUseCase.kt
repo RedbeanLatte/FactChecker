@@ -26,6 +26,7 @@ class GetPopularVideosUseCase(
                     videosToShow.add(video)
                 }
             }
+            videosToShow.reverse()
             return Success(videosToShow)
         }
         return videosResult

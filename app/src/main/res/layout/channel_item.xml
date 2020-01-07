@@ -79,6 +79,7 @@
             android:tint="@color/colorGrey"
             android:contentDescription="@string/description_more_button"
             android:onClick="@{moreClickListener}"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/linear_layout_content"
             app:layout_constraintEnd_toEndOf="parent" />

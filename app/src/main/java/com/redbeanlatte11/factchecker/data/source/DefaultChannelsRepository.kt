@@ -3,6 +3,9 @@ package com.redbeanlatte11.factchecker.data.source
 import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Success
+import com.redbeanlatte11.factchecker.data.source.local.ChannelsLocalDataSource
+import com.redbeanlatte11.factchecker.data.source.remote.ChannelsRemoteDataSource
+import com.redbeanlatte11.factchecker.util.YoutubeUrlUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -11,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
 class DefaultChannelsRepository(
-    private val channelsRemoteDataSource: ChannelsDataSource,
-    private val channelsLocalDataSource: ChannelsDataSource,
+    private val channelsRemoteDataSource: ChannelsRemoteDataSource,
+    private val channelsLocalDataSource: ChannelsLocalDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ChannelsRepository {
 
@@ -26,7 +29,7 @@ class DefaultChannelsRepository(
             // Respond immediately with cache if available and not dirty
             if (!forceUpdate) {
                 cachedChannels?.let { cachedChannels ->
-                    return@withContext Success(cachedChannels.values.toList())
+                    return@withContext Success(cachedChannels.values.sortedWith(Channel.CreatedAtComparator))
                 }
             }
 
@@ -36,7 +39,7 @@ class DefaultChannelsRepository(
             (newChannels as? Success)?.let { refreshCache(it.data) }
 
             cachedChannels?.values?.let { channels ->
-                return@withContext Success(channels.toList())
+                return@withContext Success(channels.sortedWith(Channel.CreatedAtComparator))
             }
 
             (newChannels as? Success)?.let {
@@ -49,10 +52,17 @@ class DefaultChannelsRepository(
         }
     }
 
+    override suspend fun addBlacklistChannel(url: String, description: String): Result<Channel> {
+        return channelsRemoteDataSource.addBlacklistChannel(
+            YoutubeUrlUtils.extractChannelIdFromUrl(url),
+            YoutubeUrlUtils.extractUserNameFromUrl(url),
+            description
+        )
+    }
+
     private suspend fun fetchChannelsFromRemoteOrLocal(forceUpdate: Boolean): Result<List<Channel>> {
         // Remote first
-        val remoteChannels = channelsRemoteDataSource.getChannels()
-        when (remoteChannels) {
+        when (val remoteChannels = channelsRemoteDataSource.getChannels()) {
             is Result.Error -> Timber.w("Remote data source fetch failed")
             is Success -> {
                 refreshLocalDataSource(remoteChannels.data)

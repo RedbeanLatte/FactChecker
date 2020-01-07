@@ -14,8 +14,8 @@
     <string name="sign_in">로그인</string>
     <string name="dialog_sign_in">부적절한 컨텐츠를 신고하려면 로그인하세요.</string>
     <string name="description_video_thumbnail">동영상 썸네일</string>
-    <string name="loading_videos_error">Error while loading videos</string>
-    <string name="loading_channels_error">Error while loading channels</string>
+    <string name="loading_videos_error">동영상 로딩 중 에러가 발생했습니다.</string>
+    <string name="loading_channels_error">채널 로딩 중 에러가 발생했습니다.</string>
 
     <string name="minutes_ago">분 전</string>
     <string name="hours_ago">시간 전</string>
@@ -43,7 +43,8 @@
     <string name="title_no_videos">목록에 동영상이 없습니다.</string>
     <string name="cancel_report_all">모두 신고가 취소 되었습니다.</string>
     <string name="title_share_video">동영상 공유하기</string>
-    <string name="title_add_video_blacklist">블랙리스트에 추가</string>
+    <string name="title_add_blacklist_video">블랙리스트에 동영상 추가</string>
+    <string name="title_add_blacklist_channel">블랙리스트에 채널 추가</string>
     <string name="time_out_message">작업시간이 초과되었습니다.</string>
     <string name="donation_image">use laptop computer</string>
     <string name="title_donation_button">후원</string>
@@ -51,7 +52,10 @@
     <string name="url">URL</string>
     <string name="confirm_url">URL\n확인</string>
     <string name="description">Description</string>
-    <string name="add_video_blacklist">추가하기</string>
+    <string name="add_blacklist">추가하기</string>
     <string name="confirm_url_pass">올바른 URL 입니다.</string>
     <string name="confirm_url_fail">잘못된 URL 입니다.</string>
+    <string name="adding_blacklist_success">블랙리스트 추가 접수가 완료 되었습니다.</string>
+    <string name="adding_blacklist_error">블랙리스트 추가 중 에러가 발생 했습니다.</string>
+    <string name="title_no_channels">목록에 채널이 없습니다.</string>
 </resources>
