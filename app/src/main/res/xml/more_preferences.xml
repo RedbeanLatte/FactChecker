@@ -4,11 +4,21 @@
 
     <PreferenceCategory
         app:key="donation_category"
-        app:title="@string/donation"
+        app:title="@string/title_donation"
         app:iconSpaceReserved="false">
         <Preference
             app:key="donation"
             app:title="@string/donate_to_developer"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="account_category"
+        app:title="@string/title_account"
+        app:iconSpaceReserved="false">
+        <Preference
+            app:key="google_account"
+            app:title="@string/title_google_account"
             app:iconSpaceReserved="false"/>
     </PreferenceCategory>
 

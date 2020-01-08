@@ -131,6 +131,11 @@ class HomeFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
+            R.id.menu_search_period -> {
+                showSearchPeriodPopUpMenu()
+                true
+            }
+
             R.id.menu_report_all -> {
                 val savedSignInResult = PreferenceUtils.loadSignInResult(requireContext())
                 if (savedSignInResult) {
@@ -142,11 +147,6 @@ class HomeFragment : Fragment() {
                         "SignInDialogFragment"
                     )
                 }
-                true
-            }
-
-            R.id.menu_google_account -> {
-                showAccountPopUpMenu()
                 true
             }
 
@@ -195,13 +195,11 @@ class HomeFragment : Fragment() {
         )
     }
 
-    private fun showAccountPopUpMenu() {
-        val view = activity?.findViewById<View>(R.id.menu_google_account) ?: return
+    private fun showSearchPeriodPopUpMenu() {
+        val view = activity?.findViewById<View>(R.id.menu_search_period) ?: return
         PopupMenu(requireContext(), view).run {
-            menuInflater.inflate(R.menu.google_account_menu, menu)
+            menuInflater.inflate(R.menu.search_period_menu, menu)
             setOnMenuItemClickListener {
-                val action = HomeFragmentDirections.actionHomeDestToGoogleAccountDest()
-                findNavController().navigate(action)
                 true
             }
             show()

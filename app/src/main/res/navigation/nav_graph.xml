@@ -11,15 +11,15 @@
         android:label="@string/title_home"
         tools:layout="@layout/videos_frag" >
         <action
-            android:id="@+id/action_home_dest_to_google_account_dest"
-            app:destination="@id/google_account_dest" />
-        <action
             android:id="@+id/action_home_dest_to_add_video_blacklist_dest"
             app:destination="@id/add_blacklist_video_dest" />
         <argument
             android:name="userMessage"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_home_dest_to_google_account_dest"
+            app:destination="@id/google_account_dest" />
     </fragment>
 
     <fragment
@@ -62,6 +62,9 @@
         <action
             android:id="@+id/action_more_dest_to_donation_dest"
             app:destination="@id/donation_dest" />
+        <action
+            android:id="@+id/action_more_dest_to_google_account_dest"
+            app:destination="@id/google_account_dest" />
     </fragment>
 
     <fragment
