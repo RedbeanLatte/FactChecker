@@ -4,10 +4,10 @@ class YoutubeUrlUtils {
 
     companion object {
 
-        private val REGEX_YOUTUBE_VIDEO_URL = Regex("^\\S+youtube.com/watch\\?v=([\\S]+)$")
-        private val REGEX_YOUTUBE_VIDEO_URL_LINK = Regex("^\\S+youtu.be/([\\S]+)$")
-        private val REGEX_YOUTUBE_CHANNEL_URL = Regex("^\\S+youtube.com/channel/([\\S]+)$")
-        private val REGEX_YOUTUBE_USER_URL = Regex("^\\S+youtube.com/user/([\\S]+)$")
+        private val REGEX_YOUTUBE_VIDEO_URL = Regex("^\\S+youtube.com/watch\\?v=([^&]+)($|&\\S+$)")
+        private val REGEX_YOUTUBE_VIDEO_URL_LINK = Regex("^\\S+youtu.be/([^&]+)$")
+        private val REGEX_YOUTUBE_CHANNEL_URL = Regex("^\\S+youtube.com/channel/([^&]+)($|&\\S+$)")
+        private val REGEX_YOUTUBE_USER_URL = Regex("^\\S+youtube.com/user/([^&]+)($|&\\S+$)")
 
         fun validateVideoUrl(url: String): Boolean {
             return extractVideoIdFromUrl(url) != null

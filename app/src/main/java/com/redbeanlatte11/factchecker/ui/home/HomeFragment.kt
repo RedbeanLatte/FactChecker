@@ -200,6 +200,15 @@ class HomeFragment : Fragment() {
         PopupMenu(requireContext(), view).run {
             menuInflater.inflate(R.menu.search_period_menu, menu)
             setOnMenuItemClickListener {
+                viewModel.setSearchPeriod(
+                    when(it.itemId) {
+                        R.id.search_period_week -> SearchPeriod.ONE_WEEK
+                        R.id.search_period_month -> SearchPeriod.ONE_MONTH
+                        R.id.search_period_year -> SearchPeriod.ONE_YEAR
+                        else -> SearchPeriod.ALL
+                    }
+                )
+                viewModel.loadVideos(false)
                 true
             }
             show()

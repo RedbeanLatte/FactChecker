@@ -77,14 +77,13 @@ class DefaultVideosRepository(
     private suspend fun combineLocalDataWithRemoteData(remoteVideos: List<Video>): List<Video> {
         val localVideos = videosLocalDataSource.getVideos()
         if (localVideos is Success) {
-            val localVideosMap = localVideos.data.map { it.id to it }.toMap()
-            val newVideosMap = remoteVideos.map { it.id to it }.toMap()
+            val newVideosMap = remoteVideos.associateBy { it.id }
 
-            localVideosMap.values.forEach { localVideo ->
-                val remoteVideo = newVideosMap[localVideo.id]
-                if (remoteVideo != null) {
-                    remoteVideo.reported = localVideo.reported
-                    remoteVideo.excluded = localVideo.excluded
+            localVideos.data.forEach { localVideo ->
+                val newVideo = newVideosMap[localVideo.id]
+                if (newVideo != null) {
+                    newVideo.reported = localVideo.reported
+                    newVideo.excluded = localVideo.excluded
                 }
             }
             return newVideosMap.values.toList()

@@ -4,40 +4,49 @@ import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.source.VideosRepository
+import com.redbeanlatte11.factchecker.ui.home.SearchPeriod
 import com.redbeanlatte11.factchecker.ui.home.VideosFilterType
-import com.redbeanlatte11.factchecker.ui.home.VideosFilterType.*
+import org.joda.time.DateTime
+import org.joda.time.Duration
 
 class GetVideosUseCase(
     private val videosRepository: VideosRepository
 ) {
     suspend operator fun invoke(
         forceUpdate: Boolean = false,
-        currentFilter: VideosFilterType = ALL_VIDEOS
+        currentFilter: VideosFilterType = VideosFilterType.ALL_VIDEOS,
+        currentSearchPeriod: SearchPeriod = SearchPeriod.ALL
     ): Result<List<Video>> {
 
         val videosResult = videosRepository.getVideos(forceUpdate)
 
         // Filter videos
-        if (videosResult is Success && currentFilter != ALL_VIDEOS) {
+        if (videosResult is Success && currentFilter != VideosFilterType.ALL_VIDEOS) {
             val videos = videosResult.data
 
-            val videosToShow = mutableListOf<Video>()
+            var videosToShow = mutableListOf<Video>()
             // We filter the videos based on the requestType
             for (video in videos) {
                 when (currentFilter) {
-                    BLACKLIST_VIDEOS -> if (!video.reported && !video.excluded) {
+                    VideosFilterType.BLACKLIST_VIDEOS -> if (!video.reported && !video.excluded) {
                         videosToShow.add(video)
                     }
-                    REPORTED_VIDEOS -> if (video.reported) {
+                    VideosFilterType.REPORTED_VIDEOS -> if (video.reported) {
                         videosToShow.add(video)
                     }
-                    EXCLUDED_VIDEOS -> if (video.excluded) {
+                    VideosFilterType.EXCLUDED_VIDEOS -> if (video.excluded) {
                         videosToShow.add(video)
                     }
                     else -> NotImplementedError()
                 }
             }
-            return Success(videosToShow)
+
+            return Success(
+                videosToShow.filter {
+                    val diffDuration = Duration(it.createdAtDateTime, DateTime.now())
+                    diffDuration.isShorterThan(currentSearchPeriod.duration)
+                }
+            )
         }
         return videosResult
     }

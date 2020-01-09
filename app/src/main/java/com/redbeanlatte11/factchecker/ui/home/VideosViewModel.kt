@@ -39,6 +39,8 @@ class VideosViewModel(
 
     private var _currentFiltering = VideosFilterType.ALL_VIDEOS
 
+    private var _currentSearchPeriod = SearchPeriod.ALL
+
     // This LiveData depends on another so we can use a transformation.
     val empty: LiveData<Boolean> = Transformations.map(_items) {
         it.isEmpty()
@@ -48,6 +50,10 @@ class VideosViewModel(
         _currentFiltering = requestType
     }
 
+    fun setSearchPeriod(searchPeriod: SearchPeriod) {
+        _currentSearchPeriod = searchPeriod
+    }
+
     /**
      * @param forceUpdate   Pass in true to refresh the data in the [VideosDataSource]
      */
@@ -55,7 +61,7 @@ class VideosViewModel(
         _dataLoading.value = true
 
         viewModelScope.launch {
-            val videosResult = getVideosUseCase(forceUpdate, _currentFiltering)
+            val videosResult = getVideosUseCase(forceUpdate, _currentFiltering, _currentSearchPeriod)
             if (videosResult is Success) {
                 isDataLoadingError.value = false
                 _items.value = videosResult.data
