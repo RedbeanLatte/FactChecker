@@ -20,8 +20,6 @@ class PopularVideosRemoteDataSource(
     }
 
     override suspend fun getVideos(): Result<List<Video>> = withContext(ioDispatcher) {
-        Timber.d("getVideos popularvideos");
-
         return@withContext try {
             Success(factCheckerService.getPopularVideos())
         } catch (e: Exception) {

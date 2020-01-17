@@ -24,7 +24,7 @@ class GetVideosUseCase(
         if (videosResult is Success && currentFilter != VideosFilterType.ALL_VIDEOS) {
             val videos = videosResult.data
 
-            var videosToShow = mutableListOf<Video>()
+            val videosToShow = mutableListOf<Video>()
             // We filter the videos based on the requestType
             for (video in videos) {
                 when (currentFilter) {

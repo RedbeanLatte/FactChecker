@@ -21,7 +21,7 @@ interface FactCheckerService {
 
     @POST("candidatevideos")
     suspend fun addBlacklistVideo(
-        @Query("video_id") videoId: String,
+        @Query("videoId") videoId: String,
         @Query("description") description: String
     ): Video
 
@@ -30,14 +30,14 @@ interface FactCheckerService {
 
     @POST("candidatechannels")
     suspend fun addBlacklistChannel(
-        @Query("channel_id") channelId: String?,
-        @Query("user_name") userName: String?,
+        @Query("channelId") channelId: String?,
+        @Query("userName") userName: String?,
         @Query("description") description: String
     ): Channel
 
     companion object {
 
-        private const val BASE_URL = "http://10.253.57.208:4500/"
+        private const val BASE_URL = "http://10.253.57.209:4500/"
 
         fun create(): FactCheckerService {
             val gson = GsonBuilder()
