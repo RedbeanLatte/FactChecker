@@ -16,28 +16,31 @@ interface FactCheckerService {
     @GET("popularvideos")
     suspend fun getPopularVideos(): List<Video>
 
-    @GET("videos")
-    suspend fun getVideo(@Query("id") id: String): Video
+    @GET("videos/{id}")
+    suspend fun getVideo(@Path("id") id: String): Video
 
     @POST("candidatevideos")
     suspend fun addBlacklistVideo(
-        @Query("video_id") videoId: String,
+        @Query("videoId") videoId: String,
         @Query("description") description: String
     ): Video
 
     @GET("channels")
     suspend fun getChannels(): List<Channel>
 
+    @GET("channels/{id}")
+    suspend fun getChannel(@Path("id") id: String): Channel
+
     @POST("candidatechannels")
     suspend fun addBlacklistChannel(
-        @Query("channel_id") channelId: String?,
-        @Query("user_name") userName: String?,
+        @Query("channelId") channelId: String?,
+        @Query("userName") userName: String?,
         @Query("description") description: String
     ): Channel
 
     companion object {
 
-        private const val BASE_URL = "http://10.253.57.208:4500/"
+        private const val BASE_URL = "http://13.124.99.48:4500/"
 
         fun create(): FactCheckerService {
             val gson = GsonBuilder()

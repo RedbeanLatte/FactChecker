@@ -43,6 +43,7 @@
     <string name="title_no_videos">목록에 동영상이 없습니다.</string>
     <string name="cancel_report_all">모두 신고가 취소 되었습니다.</string>
     <string name="title_share_video">동영상 공유하기</string>
+
     <string name="title_add_blacklist_video">블랙리스트에 동영상 추가</string>
     <string name="title_add_blacklist_channel">블랙리스트에 채널 추가</string>
     <string name="time_out_message">작업시간이 초과되었습니다.</string>
@@ -55,13 +56,15 @@
     <string name="add_blacklist">추가하기</string>
     <string name="confirm_url_pass">올바른 URL 입니다.</string>
     <string name="confirm_url_fail">잘못된 URL 입니다.</string>
+    <string name="confirm_url_already_registered">이미 등록된 URL 입니다.</string>
     <string name="adding_blacklist_success">블랙리스트 추가 접수가 완료 되었습니다.</string>
     <string name="adding_blacklist_error">블랙리스트 추가 중 에러가 발생 했습니다.</string>
     <string name="title_no_channels">목록에 채널이 없습니다.</string>
+
     <string name="title_search_period">기간 설정</string>
     <string name="title_search_period_week">지난 1주</string>
     <string name="title_search_period_month">지난 1개월</string>
     <string name="title_search_period_year">지난 1년</string>
     <string name="title_account">계정</string>
-    <string name="title_search_period_all">모든 날짜</string>
+    <string name="title_search_period_all">모든 등록 날짜</string>
 </resources>

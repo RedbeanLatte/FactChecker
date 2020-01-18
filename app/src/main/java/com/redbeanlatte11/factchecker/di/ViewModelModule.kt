@@ -41,13 +41,15 @@ val viewModelModule = module {
 
     viewModel {
         AddBlacklistVideoViewModel(
-            AddBlacklistVideoUseCase(get(named("popular_videos_repository")))
+            AddBlacklistVideoUseCase(get(named("popular_videos_repository"))),
+            GetVideoUseCase(get(named("blacklist_videos_repository")))
         )
     }
 
     viewModel {
         AddBlacklistChannelViewModel(
-            AddBlacklistChannelUseCase(get())
+            AddBlacklistChannelUseCase(get()),
+            GetChannelUseCase(get())
         )
     }
 }

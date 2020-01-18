@@ -3,6 +3,7 @@ package com.redbeanlatte11.factchecker.data.source
 import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Success
+import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.data.source.local.ChannelsLocalDataSource
 import com.redbeanlatte11.factchecker.data.source.remote.ChannelsRemoteDataSource
 import com.redbeanlatte11.factchecker.util.YoutubeUrlUtils
@@ -52,6 +53,27 @@ class DefaultChannelsRepository(
         }
     }
 
+    override suspend fun getChannel(channelId: String, forceUpdate: Boolean): Result<Channel> {
+
+        return withContext(ioDispatcher) {
+            // Respond immediately with cache if available
+            if (!forceUpdate) {
+                getChannelWithId(channelId)?.let {
+                    return@withContext Success(it)
+                }
+            }
+
+            val newChannel = fetchChannelFromRemoteOrLocal(channelId, forceUpdate)
+
+            // Refresh the cache with the new channels
+            (newChannel as? Success)?.let { cacheChannel(it.data) }
+
+            return@withContext newChannel
+        }
+    }
+
+    private fun getChannelWithId(id: String) = cachedChannels?.get(id)
+
     override suspend fun addBlacklistChannel(url: String, description: String): Result<Channel> {
         return channelsRemoteDataSource.addBlacklistChannel(
             YoutubeUrlUtils.extractChannelIdFromUrl(url),
@@ -96,6 +118,10 @@ class DefaultChannelsRepository(
         }
     }
 
+    private suspend fun refreshLocalDataSource(channel: Channel) {
+        channelsLocalDataSource.saveChannel(channel)
+    }
+
     private fun cacheChannel(channel: Channel): Channel {
         val cachedChannel = channel.copy()
         // Create if it doesn't exist.
@@ -109,5 +135,30 @@ class DefaultChannelsRepository(
     private inline fun cacheAndPerform(channel: Channel, perform: (Channel) -> Unit) {
         val cachedChannel = cacheChannel(channel)
         perform(cachedChannel)
+    }
+
+    private suspend fun fetchChannelFromRemoteOrLocal(
+        channelId: String,
+        forceUpdate: Boolean
+    ): Result<Channel> {
+        // Remote first
+        when (val remoteChannel = channelsRemoteDataSource.getChannel(channelId)) {
+            is Error -> Timber.w("Remote data source fetch failed")
+            is Success -> {
+                refreshLocalDataSource(remoteChannel.data)
+                return remoteChannel
+            }
+            else -> throw IllegalStateException()
+        }
+
+        // Don't read from local if it's forced
+        if (forceUpdate) {
+            return Error(Exception("Refresh failed"))
+        }
+
+        // Local if remote fails
+        val localChannel = channelsLocalDataSource.getChannel(channelId)
+        if (localChannel is Success) return localChannel
+        return Error(Exception("Error fetching from remote and local"))
     }
 }

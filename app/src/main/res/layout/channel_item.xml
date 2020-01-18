@@ -38,22 +38,22 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:contentDescription="@string/description_channel_thumbnail"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/linear_layout_content"
             app:imageUrl="@{channel.snippet.thumbnailUrl}" />
 
         <LinearLayout
-            app:layout_constraintHorizontal_weight="5"
+            app:layout_constraintHorizontal_weight="5.5"
             android:id="@+id/linear_layout_content"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/image_view_thumbnail"
-            app:layout_constraintEnd_toStartOf="@id/image_button_more">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
                 android:id="@+id/text_view_title"
@@ -70,7 +70,7 @@
         </LinearLayout>
 
         <ImageButton
-            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintHorizontal_weight="0"
             android:id="@+id/image_button_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

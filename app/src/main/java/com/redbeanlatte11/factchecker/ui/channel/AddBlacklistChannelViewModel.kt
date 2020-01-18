@@ -11,12 +11,14 @@ import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.domain.AddBlacklistChannelUseCase
+import com.redbeanlatte11.factchecker.domain.GetChannelUseCase
 import com.redbeanlatte11.factchecker.util.YoutubeUrlUtils
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class AddBlacklistChannelViewModel(
-    private val addBlacklistChannelUseCase: AddBlacklistChannelUseCase
+    private val addBlacklistChannelUseCase: AddBlacklistChannelUseCase,
+    private val getChannelUseCase: GetChannelUseCase
 ) : ViewModel() {
 
     private val _canAdd = MutableLiveData<Boolean>()
@@ -60,8 +62,20 @@ class AddBlacklistChannelViewModel(
     fun confirmChannelUrl(url: String) {
         viewModelScope.launch {
             if (YoutubeUrlUtils.validateChannelUrl(url)) {
-                _canAdd.value = true
-                showSnackbarMessage(R.string.confirm_url_pass)
+                val channelId = YoutubeUrlUtils.extractChannelIdFromUrl(url)
+                if (channelId != null) {
+                    val channel = getChannelUseCase(channelId)
+                    if (channel is Success) {
+                        _canAdd.value = false
+                        showSnackbarMessage(R.string.confirm_url_already_registered)
+                    } else {
+                        _canAdd.value = true
+                        showSnackbarMessage(R.string.confirm_url_pass)
+                    }
+                } else { // userName case
+                    _canAdd.value = true
+                    showSnackbarMessage(R.string.confirm_url_pass)
+                }
             } else {
                 _canAdd.value = false
                 showSnackbarMessage(R.string.confirm_url_fail)

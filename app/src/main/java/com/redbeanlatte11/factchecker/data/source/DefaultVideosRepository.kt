@@ -193,8 +193,8 @@ class DefaultVideosRepository(
         }
 
         // Local if remote fails
-        val localVideos = videosLocalDataSource.getVideo(videoId)
-        if (localVideos is Success) return localVideos
+        val localVideo = videosLocalDataSource.getVideo(videoId)
+        if (localVideo is Success) return localVideo
         return Error(Exception("Error fetching from remote and local"))
     }
 
