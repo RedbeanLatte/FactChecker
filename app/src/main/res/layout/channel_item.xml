@@ -65,7 +65,7 @@
             <TextView
                 style="@style/ListItemContentFont"
                 android:id="@+id/text_view_channel_statistics"
-                android:text="@{channel.statistics.subscriberCountToShow + ` · ` + channel.statistics.videoCountToShow}"
+                android:text="@{channel.statistics.subscriberCountAndVideoCountToShow}"
                 tools:text="subscriberCount and videoCount" />
         </LinearLayout>
 

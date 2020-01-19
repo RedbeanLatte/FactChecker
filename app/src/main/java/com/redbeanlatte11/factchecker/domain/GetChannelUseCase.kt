@@ -7,7 +7,7 @@ import com.redbeanlatte11.factchecker.data.source.ChannelsRepository
 class GetChannelUseCase(
     private val channelsRepository: ChannelsRepository
 ) {
-    suspend operator fun invoke(channelId: String): Result<Channel> {
-        return channelsRepository.getChannel(channelId)
+    suspend operator fun invoke(channelId: String, forceUpdate: Boolean = false): Result<Channel> {
+        return channelsRepository.getChannel(channelId, forceUpdate)
     }
 }

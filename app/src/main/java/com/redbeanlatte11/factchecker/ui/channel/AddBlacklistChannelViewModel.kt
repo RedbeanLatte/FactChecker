@@ -64,8 +64,8 @@ class AddBlacklistChannelViewModel(
             if (YoutubeUrlUtils.validateChannelUrl(url)) {
                 val channelId = YoutubeUrlUtils.extractChannelIdFromUrl(url)
                 if (channelId != null) {
-                    val channel = getChannelUseCase(channelId)
-                    if (channel is Success) {
+                    val foundChannel = getChannelUseCase(channelId, true)
+                    if (foundChannel is Success) {
                         _canAdd.value = false
                         showSnackbarMessage(R.string.confirm_url_already_registered)
                     } else {
