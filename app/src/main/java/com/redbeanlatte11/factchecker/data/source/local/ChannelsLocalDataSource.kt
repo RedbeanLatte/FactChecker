@@ -22,7 +22,7 @@ class ChannelsLocalDataSource(
         }
     }
 
-    suspend fun getChannel(channelId: String): Result<Channel> = withContext(ioDispatcher) {
+    override suspend fun getChannel(channelId: String): Result<Channel> = withContext(ioDispatcher) {
         try {
             val channel = channelsDao.getChannelById(channelId)
             if (channel != null) {

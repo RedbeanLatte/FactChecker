@@ -11,12 +11,14 @@ import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.domain.AddBlacklistVideoUseCase
+import com.redbeanlatte11.factchecker.domain.GetVideoUseCase
 import com.redbeanlatte11.factchecker.util.YoutubeUrlUtils
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class AddBlacklistVideoViewModel(
-    private val addBlacklistVideoUseCase: AddBlacklistVideoUseCase
+    private val addBlacklistVideoUseCase: AddBlacklistVideoUseCase,
+    private val getVideoUseCase: GetVideoUseCase
 ) : ViewModel() {
 
     private val _canAdd = MutableLiveData<Boolean>()
@@ -66,8 +68,15 @@ class AddBlacklistVideoViewModel(
     fun confirmVideoUrl(url: String) {
         viewModelScope.launch {
             if (YoutubeUrlUtils.validateVideoUrl(url)) {
-                _canAdd.value = true
-                showSnackbarMessage(R.string.confirm_url_pass)
+                val videoId = YoutubeUrlUtils.extractVideoIdFromUrl(url)
+                val foundVideo = getVideoUseCase(videoId!!, true)
+                if (foundVideo is Success) {
+                    _canAdd.value = false
+                    showSnackbarMessage(R.string.confirm_url_already_registered)
+                } else {
+                    _canAdd.value = true
+                    showSnackbarMessage(R.string.confirm_url_pass)
+                }
             } else {
                 _canAdd.value = false
                 showSnackbarMessage(R.string.confirm_url_fail)

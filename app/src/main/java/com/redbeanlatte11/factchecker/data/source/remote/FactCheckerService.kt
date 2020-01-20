@@ -16,8 +16,8 @@ interface FactCheckerService {
     @GET("popularvideos")
     suspend fun getPopularVideos(): List<Video>
 
-    @GET("videos")
-    suspend fun getVideo(@Query("id") id: String): Video
+    @GET("videos/{id}")
+    suspend fun getVideo(@Path("id") id: String): Video
 
     @POST("candidatevideos")
     suspend fun addBlacklistVideo(
@@ -28,6 +28,9 @@ interface FactCheckerService {
     @GET("channels")
     suspend fun getChannels(): List<Channel>
 
+    @GET("channels/{id}")
+    suspend fun getChannel(@Path("id") id: String): Channel
+
     @POST("candidatechannels")
     suspend fun addBlacklistChannel(
         @Query("channelId") channelId: String?,
@@ -37,7 +40,7 @@ interface FactCheckerService {
 
     companion object {
 
-        private const val BASE_URL = "http://10.253.57.209:4500/"
+        private const val BASE_URL = "http://13.124.99.48:4500/"
 
         fun create(): FactCheckerService {
             val gson = GsonBuilder()

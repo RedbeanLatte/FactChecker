@@ -39,7 +39,7 @@ class VideosViewModel(
 
     private var _currentFiltering = VideosFilterType.ALL_VIDEOS
 
-    private var _currentSearchPeriod = SearchPeriod.ALL
+    private var _currentSearchPeriod = DEFAULT_SEARCH_PERIOD
 
     // This LiveData depends on another so we can use a transformation.
     val empty: LiveData<Boolean> = Transformations.map(_items) {
@@ -155,5 +155,10 @@ class VideosViewModel(
 
     fun refresh() {
         loadVideos(true)
+    }
+
+    companion object {
+
+        val DEFAULT_SEARCH_PERIOD = SearchPeriod.ONE_MONTH
     }
 }

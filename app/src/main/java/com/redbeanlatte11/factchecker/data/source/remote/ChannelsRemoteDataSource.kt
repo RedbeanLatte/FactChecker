@@ -27,6 +27,14 @@ open class ChannelsRemoteDataSource(
         }
     }
 
+    override suspend fun getChannel(channelId: String): Result<Channel> = withContext(ioDispatcher) {
+        return@withContext try {
+            Success(factCheckerService.getChannel(channelId))
+        } catch (e: Exception) {
+            Error(e)
+        }
+    }
+
     suspend fun addBlacklistChannel(
         channelId: String?,
         userName: String?,
