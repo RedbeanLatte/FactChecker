@@ -17,23 +17,6 @@ data class Channel(
     val youtubeUrl: String?
         get() = "http://m.youtube.com/channel/$id"
 
-    @Ignore
-    private var _createdAtDateTime: DateTime? = null
-    val createdAtDateTime: DateTime
-        get() {
-            if (_createdAtDateTime == null) {
-                _createdAtDateTime = DateTime.parse(createdAt)
-            }
-            return _createdAtDateTime!!
-        }
-
-    object CreatedAtComparator : Comparator<Channel> {
-
-        override fun compare(c1: Channel, c2: Channel): Int {
-            return c2.createdAtDateTime.compareTo(c1.createdAtDateTime)
-        }
-    }
-
     object TitleComparator : Comparator<Channel> {
 
         override fun compare(c1: Channel, c2: Channel) : Int {
@@ -51,7 +34,7 @@ data class ChannelSnippet(
     @ColumnInfo(name = "country") val country: String? = "KR"
 ) {
     val thumbnailUrl: String?
-        get() = thumbnails["high"]?.url
+        get() = thumbnails["medium"]?.url
 }
 
 data class ChannelStatistics(

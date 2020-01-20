@@ -6,10 +6,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.redbeanlatte11.factchecker.BuildConfig
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.ui.home.VideosFilterType
+import com.redbeanlatte11.factchecker.util.linkToGooglePlay
 
 class MoreFragment : PreferenceFragmentCompat() {
+
+    companion object {
+
+        const val GOOGLE_PLAY_URI = "https://play.google.com/store/apps/details?id=com.redbeanlatte11.factchecker"
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.more_preferences, rootKey)
         setHasOptionsMenu(true)
@@ -60,6 +68,13 @@ class MoreFragment : PreferenceFragmentCompat() {
             } else {
                 text
             }
+        }
+
+        val appVersionPreference: Preference? = findPreference("app_version")
+        appVersionPreference?.title = "${requireContext().getString(R.string.title_app_version)} ${BuildConfig.VERSION_NAME}"
+        appVersionPreference?.setOnPreferenceClickListener {
+            requireContext().linkToGooglePlay(GOOGLE_PLAY_URI)
+            true
         }
     }
 }

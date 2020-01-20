@@ -45,6 +45,10 @@
             app:key="@string/saved_report_message"
             app:title="@string/report_message"
             app:iconSpaceReserved="false"/>
+        <Preference
+            app:key="app_version"
+            app:title="@string/title_app_version"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

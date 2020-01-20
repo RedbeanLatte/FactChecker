@@ -43,3 +43,11 @@ fun Context.unmute() {
     val audioManager: AudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0)
 }
+
+fun Context.linkToGooglePlay(uri: String) {
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse(uri)
+        setPackage("com.android.vending")
+    }
+    startActivity(intent)
+}
