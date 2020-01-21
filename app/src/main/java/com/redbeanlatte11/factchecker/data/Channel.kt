@@ -14,13 +14,19 @@ data class Channel(
     @Embedded val statistics: ChannelStatistics,
     @ColumnInfo(name = "createdAt") val createdAt: String = DateTime.now().toString()
 ) {
+
     val youtubeUrl: String?
         get() = "http://m.youtube.com/channel/$id"
 
-    object TitleComparator : Comparator<Channel> {
+    companion object {
 
-        override fun compare(c1: Channel, c2: Channel) : Int {
-            return OrderingByKoreanEnglishUtils.compare(c1.snippet.title, c2.snippet.title)
+        fun getComparator(): Comparator<Channel> = TitleComparator
+
+        object TitleComparator : Comparator<Channel> {
+
+            override fun compare(c1: Channel, c2: Channel): Int {
+                return OrderingByKoreanEnglishUtils.compare(c1.snippet.title, c2.snippet.title)
+            }
         }
     }
 }
@@ -33,6 +39,7 @@ data class ChannelSnippet(
     @ColumnInfo(name = "localized") val localized: Map<String, String>,
     @ColumnInfo(name = "country") val country: String? = "KR"
 ) {
+
     val thumbnailUrl: String?
         get() = thumbnails["medium"]?.url
 }
@@ -44,8 +51,9 @@ data class ChannelStatistics(
     @ColumnInfo(name = "hiddenSubscriberCount") val hiddenSubscriberCount: Boolean,
     @ColumnInfo(name = "videoCount") val videoCount: Int
 ) {
+
     val subscriberCountAndVideoCountToShow: String?
-        get() = if(subscriberCount > 0) {
+        get() = if (subscriberCount > 0) {
             "구독자 ${subscriberCount.toSummaryCount()}명 · 동영상 ${videoCount.toSummaryCount()}개"
         } else {
             "동영상 ${videoCount.toSummaryCount()}"

@@ -3,6 +3,7 @@ package com.redbeanlatte11.factchecker.util
 class OrderingByKoreanEnglishUtils {
 
     companion object {
+
         private const val LEFT_FIRST = -1
         private const val RIGHT_FIRST = 1
 

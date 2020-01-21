@@ -30,7 +30,7 @@ class DefaultChannelsRepository(
             // Respond immediately with cache if available and not dirty
             if (!forceUpdate) {
                 cachedChannels?.let { cachedChannels ->
-                    return@withContext Success(cachedChannels.values.sortedWith(Channel.TitleComparator))
+                    return@withContext Success(cachedChannels.values.sortedWith(Channel.getComparator()))
                 }
             }
 
@@ -40,7 +40,7 @@ class DefaultChannelsRepository(
             (newChannels as? Success)?.let { refreshCache(it.data) }
 
             cachedChannels?.values?.let { channels ->
-                return@withContext Success(channels.sortedWith(Channel.TitleComparator))
+                return@withContext Success(channels.sortedWith(Channel.getComparator()))
             }
 
             (newChannels as? Success)?.let {

@@ -1,14 +1,17 @@
 package com.redbeanlatte11.factchecker.ui.more
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
+import com.redbeanlatte11.factchecker.EventObserver
 import com.redbeanlatte11.factchecker.databinding.DonationFragBinding
 import com.redbeanlatte11.factchecker.domain.DonateUseCase.Companion.DEFAULT_DONATION_AMOUNT
 import com.redbeanlatte11.factchecker.util.BillingManager
+import com.redbeanlatte11.factchecker.util.setupSnackbar
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class DonationFragment : Fragment() {
@@ -36,13 +39,21 @@ class DonationFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
+        setupSnackbar()
+        setupNavigation()
         setupNumberPicker()
         setupBillingManager()
     }
 
-    private fun setupBillingManager() {
-        billingManager = BillingManager(activity as Activity)
-        viewModel.billingManager = billingManager
+    private fun setupSnackbar() {
+        view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
+    }
+
+    private fun setupNavigation() {
+        viewModel.donationFinishedEvent.observe(this, EventObserver {
+            val action = DonationFragmentDirections.actionDonationDestToMoreDest()
+            findNavController().navigate(action)
+        })
     }
 
     private fun setupNumberPicker() {
@@ -54,5 +65,10 @@ class DonationFragment : Fragment() {
                 viewModel.setDonationAmount(newValue * DEFAULT_DONATION_AMOUNT)
             }
         }
+    }
+
+    private fun setupBillingManager() {
+        billingManager = BillingManager(requireActivity())
+        viewModel.billingManager = billingManager
     }
 }

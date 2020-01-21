@@ -13,7 +13,7 @@ class GetPopularVideosUseCase(
         currentCategoryId: String = "25" // News & Politics
     ): Result<List<Video>> {
 
-        val videosResult = videosRepository.getVideos(forceUpdate)
+        val videosResult = videosRepository.getVideos(forceUpdate, Video.SortType.CREATED_AT)
 
         // Filter videos
         if (videosResult is Success) {

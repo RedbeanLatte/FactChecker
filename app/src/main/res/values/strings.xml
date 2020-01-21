@@ -66,6 +66,8 @@
     <string name="title_search_period_month">지난 1개월</string>
     <string name="title_search_period_year">지난 1년</string>
     <string name="title_account">계정</string>
-    <string name="title_search_period_all">모든 등록 날짜</string>
+    <string name="title_search_period_all">모든 날짜</string>
     <string name="title_app_version">앱 버전</string>
+
+    <string name="thanks_to_donation_message">후원해주셔서 감사합니다.</string>
 </resources>

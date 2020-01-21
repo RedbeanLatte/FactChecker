@@ -4,7 +4,10 @@ import com.redbeanlatte11.factchecker.util.BillingManager
 
 class DonateUseCase {
 
-    operator fun invoke(billingManager: BillingManager, donationAmount: Int
+    operator fun invoke(
+        billingManager: BillingManager,
+        donationAmount: Int,
+        onPurchaseFinished: () -> Unit
     ) {
         val skuId: String = when(donationAmount / DEFAULT_DONATION_AMOUNT) {
             1 -> BillingManager.SKU_ID_COFFEE_1
@@ -15,7 +18,7 @@ class DonateUseCase {
             else -> throw NotImplementedError()
         }
 
-        billingManager.purchase(skuId)
+        billingManager.purchase(skuId, onPurchaseFinished)
     }
 
     companion object {

@@ -5,7 +5,7 @@ import com.redbeanlatte11.factchecker.data.Result
 
 interface VideosRepository {
 
-    suspend fun getVideos(forceUpdate: Boolean = false): Result<List<Video>>
+    suspend fun getVideos(forceUpdate: Boolean = false, sortType: Video.SortType = Video.SortType.PUBLISHED_AT): Result<List<Video>>
 
     suspend fun getVideo(videoId: String, forceUpdate: Boolean = false): Result<Video>
 

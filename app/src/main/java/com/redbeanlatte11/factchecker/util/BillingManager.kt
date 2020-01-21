@@ -17,12 +17,16 @@ class BillingManager(
         .setListener(this)
         .build()
 
+    private var onPurchaseFinished: (() -> Unit)? = null
+
     init {
         billingClient.startConnection(object : BillingClientStateListener {
 
-            override fun onBillingSetupFinished(billingResult: BillingResult?) {
-                Timber.d("onBillingSetupFinished")
-                getSkuDetailsList()
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                Timber.d("onBillingSetupFinished, responseCode: ${billingResult.responseCode}")
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    getSkuDetailsList()
+                }
             }
 
             override fun onBillingServiceDisconnected() {
@@ -53,6 +57,9 @@ class BillingManager(
                         Timber.w("skuDetailsList is empty")
                         return@querySkuDetailsAsync
                     }
+                    skuDetailsList.forEach {
+                        skuDetailsMap[it.sku] = it
+                    }
                 }
             }
         } else {
@@ -60,8 +67,9 @@ class BillingManager(
         }
     }
 
-    fun purchase(skuId: String) {
+    fun purchase(skuId: String, onPurchaseFinished: () -> Unit) {
         Timber.d("purchase: $skuId")
+        this.onPurchaseFinished = onPurchaseFinished
         val skuDetails = skuDetailsMap[skuId]
 
         skuDetails?.let {
@@ -75,18 +83,26 @@ class BillingManager(
 
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
         Timber.d("onPurchasesUpdated: ${billingResult.responseCode}")
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+            onPurchaseFinished?.invoke()
+        }
+        allowMultiplePurchases(purchases)
     }
 
-    private fun handlePurchase(purchase: Purchase) {
-        if (purchase.purchaseState === Purchase.PurchaseState.PURCHASED) {
-            // Grant entitlement to the user.
-
-            // Acknowledge the purchase if it hasn't already been acknowledged.
-            if (!purchase.isAcknowledged) {
-                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+    private fun allowMultiplePurchases(purchases: List<Purchase>?) {
+        val purchase = purchases?.first()
+        if (purchase != null) {
+            val consumeParams = ConsumeParams.newBuilder()
                     .setPurchaseToken(purchase.purchaseToken)
+                    .setDeveloperPayload(purchase.developerPayload)
                     .build()
-//                billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener)
+
+            billingClient.consumeAsync(consumeParams) { billingResult, purchaseToken ->
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchaseToken != null) {
+                    Timber.d("allowMultiplePurchases success, responseCode: ${billingResult.responseCode}")
+                } else {
+                    Timber.d("Can't allowMultiplePurchases, responseCode: ${billingResult.responseCode}")
+                }
             }
         }
     }

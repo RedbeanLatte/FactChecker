@@ -6,7 +6,7 @@
         app:key="donation_category"
         app:title="@string/title_donation"
         app:iconSpaceReserved="false"
-        app:isPreferenceVisible="false">
+        app:isPreferenceVisible="true">
         <Preference
             app:key="donation"
             app:title="@string/donate_to_developer"

@@ -91,7 +91,11 @@
     <fragment
         android:id="@+id/donation_dest"
         android:name="com.redbeanlatte11.factchecker.ui.more.DonationFragment"
-        android:label="@string/donate_to_developer" />
+        android:label="@string/donate_to_developer" >
+        <action
+            android:id="@+id/action_donation_dest_to_more_dest"
+            app:destination="@id/more_dest" />
+    </fragment>
 
     <fragment
         android:id="@+id/add_blacklist_channel_dest"

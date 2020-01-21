@@ -16,22 +16,46 @@ data class Video(
     @ColumnInfo(name = "reported") var reported: Boolean = false,
     @ColumnInfo(name = "excluded") var excluded: Boolean = false
 ) {
+
     val youtubeUrl: String?
         get() = "https://m.youtube.com/watch?v=$id"
 
-    @Ignore private var _createdAtDateTime: DateTime? = null
-    val createdAtDateTime: DateTime
-        get() {
-            if (_createdAtDateTime == null) {
-                _createdAtDateTime = DateTime.parse(createdAt)
+    @delegate:Ignore
+    val createdAtDateTime: DateTime by lazy {
+        DateTime.parse(createdAt)
+    }
+
+    @delegate:Ignore
+    val publishedAtDateTime: DateTime by lazy {
+        DateTime.parse(snippet.publishedAt)
+    }
+
+    companion object {
+
+        fun getComparator(sortType: SortType): Comparator<Video> =
+            when(sortType) {
+                SortType.PUBLISHED_AT -> PublishedAtComparator
+                SortType.CREATED_AT -> CreatedAtComparator
             }
-            return _createdAtDateTime!!
+
+        object PublishedAtComparator : Comparator<Video> {
+
+            override fun compare(v1: Video, v2: Video): Int {
+                return v2.publishedAtDateTime.compareTo(v1.publishedAtDateTime)
+            }
         }
 
-    object CreatedAtComparator : Comparator<Video> {
-        override fun compare(v1: Video, v2: Video): Int {
-            return v2.createdAtDateTime.compareTo(v1.createdAtDateTime)
+        object CreatedAtComparator : Comparator<Video> {
+
+            override fun compare(v1: Video, v2: Video): Int {
+                return v2.createdAtDateTime.compareTo(v1.createdAtDateTime)
+            }
         }
+    }
+
+    enum class SortType {
+        PUBLISHED_AT,
+        CREATED_AT
     }
 }
 
@@ -47,6 +71,7 @@ data class VideoSnippet(
     @ColumnInfo(name = "liveBroadcastContent") val liveBroadcastContent: String,
     @ColumnInfo(name = "localized") val localized: Map<String, String>
 ) {
+
     val thumbnailUrl: String?
         get() = thumbnails["high"]?.url
 
@@ -61,6 +86,7 @@ data class VideoStatistics(
     @ColumnInfo(name = "favoriteCount") val favoriteCount: Int,
     @ColumnInfo(name = "commentCount") val commentCount: Int
 ) {
+
     val viewCountToShow
         get() = "조회수 ${viewCount.toSummaryCount()}"
 }

@@ -43,7 +43,7 @@ class GetVideosUseCase(
 
             return Success(
                 videosToShow.filter {
-                    val diffDuration = Duration(it.createdAtDateTime, DateTime.now())
+                    val diffDuration = Duration(it.publishedAtDateTime, DateTime.now())
                     diffDuration.isShorterThan(currentSearchPeriod.duration)
                 }
             )

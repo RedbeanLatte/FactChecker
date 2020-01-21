@@ -21,14 +21,15 @@ class DefaultVideosRepository(
     private var cachedVideos: ConcurrentMap<String, Video>? = null
 
     override suspend fun getVideos(
-        forceUpdate: Boolean
+        forceUpdate: Boolean,
+        sortType: Video.SortType
     ): Result<List<Video>> {
 
         return withContext(ioDispatcher) {
             // Respond immediately with cache if available and not dirty
             if (!forceUpdate) {
                 cachedVideos?.let { cachedVideos ->
-                    return@withContext Success(cachedVideos.values.sortedWith(Video.CreatedAtComparator))
+                    return@withContext Success(cachedVideos.values.sortedWith(Video.getComparator(sortType)))
                 }
             }
 
@@ -38,7 +39,7 @@ class DefaultVideosRepository(
             (newVideos as? Success)?.let { refreshCache(it.data) }
 
             cachedVideos?.let { videos ->
-                return@withContext Success(videos.values.sortedWith(Video.CreatedAtComparator))
+                return@withContext Success(videos.values.sortedWith(Video.getComparator(sortType)))
             }
 
             (newVideos as? Success)?.let {
