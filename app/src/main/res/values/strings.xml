@@ -74,4 +74,7 @@
 
     <string name="thanks_to_donation_message">후원해주셔서 감사합니다.</string>
     <string name="comment_message">댓글 문구</string>
+    <string name="title_auto_comment">자동 댓글</string>
+    <string name="saved_is_auto_comment_enabled">saved_is_auto_comment_enabled</string>
+    <string name="summary_auto_comment">유튜브 내 채널 생성 후 사용해 주세요.</string>
 </resources>

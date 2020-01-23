@@ -75,5 +75,15 @@ class PreferenceUtils {
             }
             Timber.d("saveSearchPeriod: $searchPeriod")
         }
+
+        fun loadIsAutoCommentEnabled(context: Context): Boolean {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val signInResult = sharedPreferences.getBoolean(
+                context.getString(R.string.saved_is_auto_comment_enabled),
+                false
+            )
+            Timber.d("loadIsAutoCommentEnabled: $signInResult")
+            return signInResult
+        }
     }
 }

@@ -20,6 +20,7 @@ class ReportVideoUseCase(
         video: Video,
         reportMessage: String,
         commentMessage: String,
+        isAutoCommentEnabled: Boolean = false,
         ioDispatcher: CoroutineDispatcher = Dispatchers.IO
     ) = suspendCoroutineWithTimeout<Unit>(TIME_OUT) { continuation ->
         with(webView) {
@@ -27,7 +28,8 @@ class ReportVideoUseCase(
             webViewClient = YoutubeWebViewClient(
                 continuation,
                 reportMessage,
-                commentMessage
+                commentMessage,
+                isAutoCommentEnabled
             ) {
                 CoroutineScope(ioDispatcher).launch { videosRepository.reportVideo(video) }
             }
@@ -39,6 +41,7 @@ class ReportVideoUseCase(
         val continuation: CancellableContinuation<Unit>,
         val reportMessage: String,
         val commentMessage: String,
+        val isAutoCommentEnabled: Boolean,
         val onReportFinished: () -> Unit
     ) : WebViewClient() {
 
@@ -47,82 +50,83 @@ class ReportVideoUseCase(
         override fun onPageFinished(webView: WebView, url: String) {
             super.onPageFinished(webView, url)
             Timber.d("onPageFinished, stage: $stage, url: $url")
+
             if (stage == 0 || (stage > 0 && url.contains("#dialog"))) {
                 reportVideo(webView)
             }
         }
 
-        private fun reportVideo(view: WebView) {
+        private fun reportVideo(webView: WebView) {
             when (stage) {
                 0 -> {
-                    view.loadUrl(
+                    webView.loadUrl(
                         "javascript: " +
                                 """
-                                let dislikeButton = document.getElementsByClassName('c3-material-button-button')[1];
-                                let pressed = dislikeButton.getAttribute('aria-pressed');
-                                if (pressed === "false") {
-                                    dislikeButton.click();
-                                }
-
-                                let commentSection = document.getElementsByTagName('ytm-comment-section-header-renderer')[0];
-                                if (commentSection != undefined) {
-                                    commentSection.click();
-                                    let expandButton = commentSection.getElementsByTagName('button')[0];
-                                    expandButton.click();
+                                    let dislikeButton = document.getElementsByClassName('c3-material-button-button')[1];
+                                    let pressed = dislikeButton.getAttribute('aria-pressed');
+                                    if (pressed === "false") {
+                                        dislikeButton.click();
+                                    }
                                     
-                                    let commentTextareaButton = document.getElementsByClassName('comment-simplebox-reply')[0];
-                                    commentTextareaButton.click();
-                                    
-                                    let commentTextarea = document.getElementsByClassName('comment-simplebox-reply')[0];
-                                    commentTextarea.value = '$commentMessage';
-                                    commentTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
-                                    commentTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
-                                    
-                                    let commentSimpleBoxSection = document.getElementsByClassName('comment-simplebox-buttons cbox')[0];
-                                    let commentButton = commentSimpleBoxSection.getElementsByClassName('c3-material-button-button')[1];
-                                    commentButton.click();
-                                }
-
-                                let reportButton = document.getElementsByClassName('c3-material-button-button')[4];
-                                reportButton.click();
-                            """.trimIndent()
+                                    let commentSection = document.getElementsByTagName('ytm-comment-section-header-renderer')[0];
+                                    if (commentSection != undefined && $isAutoCommentEnabled) {
+                                        commentSection.click();
+                                        let expandButton = commentSection.getElementsByTagName('button')[0];
+                                        expandButton.click();
+                                        
+                                        let commentTextareaButton = document.getElementsByClassName('comment-simplebox-reply')[0];
+                                        commentTextareaButton.click();
+                                        
+                                        let commentTextarea = document.getElementsByClassName('comment-simplebox-reply')[0];
+                                        commentTextarea.value = '$commentMessage';
+                                        commentTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
+                                        commentTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
+                                        
+                                        let commentSimpleBoxSection = document.getElementsByClassName('comment-simplebox-buttons cbox')[0];
+                                        let commentButton = commentSimpleBoxSection.getElementsByClassName('c3-material-button-button')[1];
+                                        commentButton.click();
+                                    }
+    
+                                    let reportButton = document.getElementsByClassName('c3-material-button-button')[4];
+                                    reportButton.click();
+                                """.trimIndent()
                     )
                     stage++
                 }
 
                 1 -> {
-                    view.loadUrl(
+                    webView.loadUrl(
                         "javascript: " +
                                 """
-                                let selectableItemSection = document.getElementsByTagName('ytm-option-selectable-item-renderer')[2];
-                                let radioButton = selectableItemSection.getElementsByTagName('input')[0];
-                                radioButton.click();
-
-                                let select = document.getElementsByClassName('select')[0];
-                                select.selectedIndex = 4;
-                                select.dispatchEvent(new Event('change', { 'bubbles': true }));
-
-                                let dialogButtonsSection = document.getElementsByClassName('dialog-buttons')[0];
-                                let nextButton = dialogButtonsSection.getElementsByClassName('c3-material-button-button')[1];
-                                nextButton.click();
-                            """.trimIndent()
+                                    let selectableItemSection = document.getElementsByTagName('ytm-option-selectable-item-renderer')[2];
+                                    let radioButton = selectableItemSection.getElementsByTagName('input')[0];
+                                    radioButton.click();
+    
+                                    let select = document.getElementsByClassName('select')[0];
+                                    select.selectedIndex = 4;
+                                    select.dispatchEvent(new Event('change', { 'bubbles': true }));
+    
+                                    let dialogButtonsSection = document.getElementsByClassName('dialog-buttons')[0];
+                                    let nextButton = dialogButtonsSection.getElementsByClassName('c3-material-button-button')[1];
+                                    nextButton.click();
+                                """.trimIndent()
                     )
                     stage++
                 }
 
                 2 -> {
-                    view.loadUrl(
+                    webView.loadUrl(
                         "javascript: " +
                                 """
-                                let reportTextarea = document.getElementsByClassName('report-details-form-description-input')[0];
-                                reportTextarea.value = '$reportMessage';
-                                reportTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
-                                reportTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
-
-                                let dialogButtonsSection2 = document.getElementsByClassName('dialog-buttons')[0];
-                                let submitButton = dialogButtonsSection2.getElementsByClassName('c3-material-button-button')[1];
-                                submitButton.click();
-                            """.trimIndent()
+                                    let reportTextarea = document.getElementsByClassName('report-details-form-description-input')[0];
+                                    reportTextarea.value = '$reportMessage';
+                                    reportTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
+                                    reportTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
+    
+                                    let dialogButtonsSection2 = document.getElementsByClassName('dialog-buttons')[0];
+                                    let submitButton = dialogButtonsSection2.getElementsByClassName('c3-material-button-button')[1];
+                                    submitButton.click();
+                                """.trimIndent()
                     )
                     stage++
                 }

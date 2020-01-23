@@ -117,6 +117,7 @@ class HomeFragment : Fragment() {
             video,
             PreferenceUtils.loadReportMessage(requireContext()),
             PreferenceUtils.loadCommentMessage(requireContext()),
+            PreferenceUtils.loadIsAutoCommentEnabled(requireContext()),
             OnReportCompleteListener {
                 progressDialog.dismiss()
                 ReportCompleteDialogFragment(1).show(
@@ -194,6 +195,7 @@ class HomeFragment : Fragment() {
             webView,
             PreferenceUtils.loadReportMessage(requireContext()),
             PreferenceUtils.loadCommentMessage(requireContext()),
+            PreferenceUtils.loadIsAutoCommentEnabled(requireContext()),
             listener
         )
     }
