@@ -3,11 +3,13 @@ package com.redbeanlatte11.factchecker.util
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.redbeanlatte11.factchecker.R
+import com.redbeanlatte11.factchecker.ui.home.SearchPeriod
 import timber.log.Timber
 
 class PreferenceUtils {
 
     companion object {
+
         fun loadSignInResult(context: Context): Boolean {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             val signInResult = sharedPreferences.getBoolean(
@@ -41,16 +43,37 @@ class PreferenceUtils {
             return reportMessage ?: defaultValue
         }
 
-        fun saveReportMessage(context: Context, reportMessage: String) {
+        fun loadCommentMessage(context: Context): String {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-            with(sharedPreferences.edit()) {
+            val defaultValue = context.getString(R.string.default_comment_message)
+            val reportMessage = sharedPreferences.getString(
+                context.getString(R.string.saved_comment_message),
+                defaultValue
+            )
+            Timber.d("loadCommentMessage: $reportMessage")
+            return reportMessage ?: defaultValue
+        }
+
+        fun loadSearchPeriod(context: Context): SearchPeriod {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val searchPeriod = sharedPreferences.getString(
+                context.getString(R.string.saved_search_period),
+                SearchPeriod.ALL.toString()
+            )
+            Timber.d("loadSearchPeriod: $searchPeriod")
+            return SearchPeriod.valueOf(searchPeriod!!)
+        }
+
+        fun saveSearchPeriod(context: Context, searchPeriod: SearchPeriod) {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+            with(sharedPref.edit()) {
                 putString(
-                    context.getString(R.string.saved_report_message),
-                    reportMessage
+                    context.getString(R.string.saved_search_period),
+                    searchPeriod.toString()
                 )
                 commit()
             }
-            Timber.d("saveReportMessage: $reportMessage")
+            Timber.d("saveSearchPeriod: $searchPeriod")
         }
     }
 }

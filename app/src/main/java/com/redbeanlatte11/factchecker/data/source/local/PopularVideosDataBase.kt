@@ -10,7 +10,7 @@ import com.redbeanlatte11.factchecker.data.Video
  *
  * Note that exportSchema should be true in production databases.
  */
-@Database(entities = [Video::class], version = 1, exportSchema = false)
+@Database(entities = [Video::class], version = 2, exportSchema = false)
 @TypeConverters(ThumbnailsConverter::class, StringListConverter::class, LocalizedConverter::class)
 abstract class PopularVideosDataBase : RoomDatabase() {
 

@@ -10,7 +10,7 @@ class JsonParserTest {
     fun printVideos() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        val videos = JsonParser.from(context, "popular_videos.json").getPopularVideos()
+        val videos = JsonParser.from(context, "test_popular_videos.json").getPopularVideos()
         Log.d("JsonParserTest", videos.toString())
 
         val channels = JsonParser.from(context, "channels.json").getChannels()

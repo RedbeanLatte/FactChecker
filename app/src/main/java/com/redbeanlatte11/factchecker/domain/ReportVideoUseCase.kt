@@ -8,7 +8,6 @@ import com.redbeanlatte11.factchecker.data.source.VideosRepository
 import com.redbeanlatte11.factchecker.util.suspendCoroutineWithTimeout
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 
 class ReportVideoUseCase(
@@ -16,37 +15,78 @@ class ReportVideoUseCase(
 ) {
 
     @SuppressLint("SetJavaScriptEnabled")
-    suspend operator fun invoke(webView: WebView, video: Video, reportMessage: String) =
-        suspendCoroutineWithTimeout<Unit>(TIME_OUT) { continuation ->
-            with(webView) {
-                settings.javaScriptEnabled = true
-                webViewClient =
-                    YoutubeWebViewClient(continuation, videosRepository, video, reportMessage)
-                loadUrl(video.youtubeUrl)
+    suspend operator fun invoke(
+        webView: WebView,
+        video: Video,
+        reportMessage: String,
+        commentMessage: String,
+        ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    ) = suspendCoroutineWithTimeout<Unit>(TIME_OUT) { continuation ->
+        with(webView) {
+            settings.javaScriptEnabled = true
+            webViewClient = YoutubeWebViewClient(
+                continuation,
+                reportMessage,
+                commentMessage
+            ) {
+                CoroutineScope(ioDispatcher).launch { videosRepository.reportVideo(video) }
             }
+            loadUrl(video.youtubeUrl)
         }
+    }
 
     private class YoutubeWebViewClient(
         val continuation: CancellableContinuation<Unit>,
-        val videosRepository: VideosRepository,
-        val video: Video,
         val reportMessage: String,
-        val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+        val commentMessage: String,
+        val onReportFinished: () -> Unit
     ) : WebViewClient() {
 
         private var stage = 0
-        private var resumed = AtomicBoolean(false)
 
         override fun onPageFinished(webView: WebView, url: String) {
             super.onPageFinished(webView, url)
-            Timber.d("onPageFinished, stage: $stage")
-            reportVideo(webView)
+            Timber.d("onPageFinished, stage: $stage, url: $url")
+            if (stage == 0 || (stage > 0 && url.contains("#dialog"))) {
+                reportVideo(webView)
+            }
         }
 
         private fun reportVideo(view: WebView) {
             when (stage) {
                 0 -> {
-                    view.loadUrl("javascript: document.getElementsByClassName('c3-material-button-button')[4].click();")
+                    view.loadUrl(
+                        "javascript: " +
+                                """
+                                let dislikeButton = document.getElementsByClassName('c3-material-button-button')[1];
+                                let pressed = dislikeButton.getAttribute('aria-pressed');
+                                if (pressed === "false") {
+                                    dislikeButton.click();
+                                }
+
+                                let commentSection = document.getElementsByTagName('ytm-comment-section-header-renderer')[0];
+                                if (commentSection != undefined) {
+                                    commentSection.click();
+                                    let expandButton = commentSection.getElementsByTagName('button')[0];
+                                    expandButton.click();
+                                    
+                                    let commentTextareaButton = document.getElementsByClassName('comment-simplebox-reply')[0];
+                                    commentTextareaButton.click();
+                                    
+                                    let commentTextarea = document.getElementsByClassName('comment-simplebox-reply')[0];
+                                    commentTextarea.value = '$commentMessage';
+                                    commentTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
+                                    commentTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
+                                    
+                                    let commentSimpleBoxSection = document.getElementsByClassName('comment-simplebox-buttons cbox')[0];
+                                    let commentButton = commentSimpleBoxSection.getElementsByClassName('c3-material-button-button')[1];
+                                    commentButton.click();
+                                }
+
+                                let reportButton = document.getElementsByClassName('c3-material-button-button')[4];
+                                reportButton.click();
+                            """.trimIndent()
+                    )
                     stage++
                 }
 
@@ -54,13 +94,16 @@ class ReportVideoUseCase(
                     view.loadUrl(
                         "javascript: " +
                                 """
-                                document.getElementById('radio:b').click();
-                        
-                                var select = document.getElementsByClassName('select')[0];
+                                let selectableItemSection = document.getElementsByTagName('ytm-option-selectable-item-renderer')[2];
+                                let radioButton = selectableItemSection.getElementsByTagName('input')[0];
+                                radioButton.click();
+
+                                let select = document.getElementsByClassName('select')[0];
                                 select.selectedIndex = 4;
                                 select.dispatchEvent(new Event('change', { 'bubbles': true }));
-                                
-                                var nextButton = document.getElementsByClassName('c3-material-button-button')[7];
+
+                                let dialogButtonsSection = document.getElementsByClassName('dialog-buttons')[0];
+                                let nextButton = dialogButtonsSection.getElementsByClassName('c3-material-button-button')[1];
                                 nextButton.click();
                             """.trimIndent()
                     )
@@ -71,40 +114,22 @@ class ReportVideoUseCase(
                     view.loadUrl(
                         "javascript: " +
                                 """
-                                var dislikeButton = document.getElementsByClassName('c3-material-button-button')[1];
-                                var pressed = dislikeButton.getAttribute('aria-pressed');
-                                if (pressed === "false") {
-                                    dislikeButton.click();
-                                }
+                                let reportTextarea = document.getElementsByClassName('report-details-form-description-input')[0];
+                                reportTextarea.value = '$reportMessage';
+                                reportTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
+                                reportTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
+
+                                let dialogButtonsSection2 = document.getElementsByClassName('dialog-buttons')[0];
+                                let submitButton = dialogButtonsSection2.getElementsByClassName('c3-material-button-button')[1];
+                                submitButton.click();
                             """.trimIndent()
                     )
                     stage++
                 }
 
                 3 -> {
-                    view.loadUrl(
-                        "javascript: " +
-                                """
-                                var textarea = document.getElementsByClassName('report-details-form-description-input')[0];
-                                textarea.value = '$reportMessage';
-                                textarea.dispatchEvent(new Event('input', { 'bubbles': true }));
-                                textarea.dispatchEvent(new Event('change', { 'bubbles': true }));
-                                
-                                var reportButton = document.getElementsByClassName('c3-material-button-button')[6];
-                                reportButton.click();
-                            """.trimIndent()
-                    )
-                    stage++
-                }
-
-                4 -> {
-                    if (!resumed.get()) {
-                        resumed.set(true)
-                        CoroutineScope(ioDispatcher).launch {
-                            videosRepository.reportVideo(video)
-                        }
-                        continuation.resume(Unit)
-                    }
+                    onReportFinished()
+                    continuation.resume(Unit)
                 }
             }
         }

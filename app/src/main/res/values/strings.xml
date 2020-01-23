@@ -27,7 +27,10 @@
     <string name="remove_video_from_list">목록에서 삭제</string>
     <string name="description_channel_thumbnail">채널 썸네일</string>
     <string name="saved_report_message">saved_report_message</string>
+    <string name="saved_comment_message">saved_comment_message</string>
+    <string name="saved_search_period">saved_search_period</string>
     <string name="default_report_message">Fake News Drives Political Disputes into Views. Human rights abuse.</string>
+    <string name="default_comment_message">Fake News Drives Political Disputes into Views. Human rights abuse.</string>
     <string name="title_settings">설정</string>
     <string name="report_message">신고 문구</string>
     <string name="title_donation">후원</string>
@@ -70,4 +73,5 @@
     <string name="title_app_version">앱 버전</string>
 
     <string name="thanks_to_donation_message">후원해주셔서 감사합니다.</string>
+    <string name="comment_message">댓글 문구</string>
 </resources>

@@ -36,6 +36,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.setFiltering(VideosFilterType.BLACKLIST_VIDEOS)
+        viewModel.setSearchPeriod(PreferenceUtils.loadSearchPeriod(requireContext()))
         viewModel.loadVideos(false)
     }
 
@@ -115,6 +116,7 @@ class HomeFragment : Fragment() {
             webView,
             video,
             PreferenceUtils.loadReportMessage(requireContext()),
+            PreferenceUtils.loadCommentMessage(requireContext()),
             OnReportCompleteListener {
                 progressDialog.dismiss()
                 ReportCompleteDialogFragment(1).show(
@@ -191,6 +193,7 @@ class HomeFragment : Fragment() {
         viewModel.reportAll(
             webView,
             PreferenceUtils.loadReportMessage(requireContext()),
+            PreferenceUtils.loadCommentMessage(requireContext()),
             listener
         )
     }
@@ -200,14 +203,14 @@ class HomeFragment : Fragment() {
         PopupMenu(requireContext(), view).run {
             menuInflater.inflate(R.menu.search_period_menu, menu)
             setOnMenuItemClickListener {
-                viewModel.setSearchPeriod(
-                    when(it.itemId) {
-                        R.id.search_period_week -> SearchPeriod.ONE_WEEK
-                        R.id.search_period_month -> SearchPeriod.ONE_MONTH
-                        R.id.search_period_year -> SearchPeriod.ONE_YEAR
-                        else -> SearchPeriod.ALL
-                    }
-                )
+                val searchPeriod = when(it.itemId) {
+                    R.id.search_period_week -> SearchPeriod.ONE_WEEK
+                    R.id.search_period_month -> SearchPeriod.ONE_MONTH
+                    R.id.search_period_year -> SearchPeriod.ONE_YEAR
+                    else -> SearchPeriod.ALL
+                }
+                viewModel.setSearchPeriod(searchPeriod)
+                PreferenceUtils.saveSearchPeriod(requireContext(), searchPeriod)
                 viewModel.loadVideos(false)
                 true
             }

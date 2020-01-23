@@ -70,6 +70,16 @@ class MoreFragment : PreferenceFragmentCompat() {
             }
         }
 
+        val commentMessagePreference: EditTextPreference? = findPreference(requireContext().getString(R.string.saved_comment_message))
+        commentMessagePreference?.summaryProvider = Preference.SummaryProvider<EditTextPreference> { preference ->
+            val text = preference.text
+            if (TextUtils.isEmpty(text)) {
+                requireContext().getString(R.string.default_comment_message)
+            } else {
+                text
+            }
+        }
+
         val appVersionPreference: Preference? = findPreference("app_version")
         appVersionPreference?.title = "${requireContext().getString(R.string.title_app_version)} ${BuildConfig.VERSION_NAME}"
         appVersionPreference?.setOnPreferenceClickListener {

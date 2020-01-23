@@ -39,7 +39,7 @@ class VideosViewModel(
 
     private var _currentFiltering = VideosFilterType.ALL_VIDEOS
 
-    private var _currentSearchPeriod = DEFAULT_SEARCH_PERIOD
+    private var _currentSearchPeriod = SearchPeriod.ALL
 
     // This LiveData depends on another so we can use a transformation.
     val empty: LiveData<Boolean> = Transformations.map(_items) {
@@ -83,6 +83,7 @@ class VideosViewModel(
     fun reportAll(
         webView: WebView,
         reportMessage: String,
+        commentMessage: String,
         onReportAllListener: OnReportAllListener
     ) {
         var reportedVideoCount = 0
@@ -93,7 +94,7 @@ class VideosViewModel(
                 Timber.d("report video: ${video.snippet.title}")
                 onReportAllListener.onNext(video)
                 try {
-                    reportVideoUseCase(webView, video, reportMessage)
+                    reportVideoUseCase(webView, video, reportMessage, commentMessage)
                     reportedVideoCount++
                 } catch (e: TimeoutCancellationException) {
                     Timber.w("report video timed out")
@@ -118,12 +119,13 @@ class VideosViewModel(
         webView: WebView,
         video: Video,
         reportMessage: String,
+        commentMessage: String,
         onReportCompleteListener: OnReportCompleteListener
     ) {
         reportJob = viewModelScope.launch {
             Timber.d("addBlacklistVideo: ${video.snippet.title}")
             try {
-                reportVideoUseCase(webView, video, reportMessage)
+                reportVideoUseCase(webView, video, reportMessage, commentMessage)
                 onReportCompleteListener.onComplete(video)
                 loadVideos(false)
             } catch (e: TimeoutCancellationException) {
@@ -155,10 +157,5 @@ class VideosViewModel(
 
     fun refresh() {
         loadVideos(true)
-    }
-
-    companion object {
-
-        val DEFAULT_SEARCH_PERIOD = SearchPeriod.ONE_MONTH
     }
 }

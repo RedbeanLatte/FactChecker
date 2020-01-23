@@ -12,7 +12,7 @@ data class Video(
     @PrimaryKey @ColumnInfo(name = "id") val id: String,
     @Embedded val snippet: VideoSnippet,
     @Embedded val statistics: VideoStatistics,
-    @ColumnInfo(name = "createdAt") val createdAt: String = DateTime.now().toString(),
+    @ColumnInfo(name = "createdAt") val createdAt: String? = DateTime.now().toString(),
     @ColumnInfo(name = "reported") var reported: Boolean = false,
     @ColumnInfo(name = "excluded") var excluded: Boolean = false
 ) {

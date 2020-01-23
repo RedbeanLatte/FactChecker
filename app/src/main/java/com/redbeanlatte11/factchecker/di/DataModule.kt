@@ -55,13 +55,15 @@ val dataModule = module {
         Room.databaseBuilder(
             androidContext(),
             FactCheckerDataBase::class.java, "FactCheckerDB.db"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     single {
         Room.databaseBuilder(
             androidContext(),
             PopularVideosDataBase::class.java, "PopularVideos.db"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 }
