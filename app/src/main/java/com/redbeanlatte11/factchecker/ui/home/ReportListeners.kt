@@ -11,12 +11,12 @@ interface OnReportAllListener {
 
 interface OnReportCompleteListener {
 
-    fun onComplete(video: Video)
+    fun onComplete(itemCount: Int)
 
     companion object {
-        inline operator fun invoke(crossinline op: (Video) -> Unit) =
+        inline operator fun invoke(crossinline op: (Int) -> Unit) =
             object : OnReportCompleteListener {
-                override fun onComplete(video: Video) = op(video)
+                override fun onComplete(itemCount: Int) = op(itemCount)
             }
     }
 }

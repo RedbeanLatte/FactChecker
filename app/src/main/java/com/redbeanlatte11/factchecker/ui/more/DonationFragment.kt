@@ -51,8 +51,7 @@ class DonationFragment : Fragment() {
 
     private fun setupNavigation() {
         viewModel.donationFinishedEvent.observe(this, EventObserver {
-            val action = DonationFragmentDirections.actionDonationDestToMoreDest()
-            findNavController().navigate(action)
+            findNavController().navigateUp()
         })
     }
 

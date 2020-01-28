@@ -8,6 +8,7 @@ import com.redbeanlatte11.factchecker.data.source.VideosRepository
 import com.redbeanlatte11.factchecker.util.suspendCoroutineWithTimeout
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 
 class ReportVideoUseCase(
@@ -46,6 +47,8 @@ class ReportVideoUseCase(
     ) : WebViewClient() {
 
         private var stage = 0
+
+        private val isResumed = AtomicBoolean(false)
 
         override fun onPageFinished(webView: WebView, url: String) {
             super.onPageFinished(webView, url)
@@ -132,8 +135,11 @@ class ReportVideoUseCase(
                 }
 
                 3 -> {
-                    onReportFinished()
-                    continuation.resume(Unit)
+                    if (!isResumed.get()) {
+                        isResumed.set(true)
+                        onReportFinished()
+                        continuation.resume(Unit)
+                    }
                 }
             }
         }

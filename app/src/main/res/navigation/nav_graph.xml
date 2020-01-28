@@ -26,7 +26,11 @@
         android:id="@+id/google_account_dest"
         android:name="com.redbeanlatte11.factchecker.ui.home.GoogleAccountFragment"
         android:label="@string/title_google_account"
-        tools:layout="@layout/google_account_frag"/>
+        tools:layout="@layout/google_account_frag">
+        <argument
+            android:name="entryPointName"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/channel_dest"
@@ -91,18 +95,10 @@
     <fragment
         android:id="@+id/donation_dest"
         android:name="com.redbeanlatte11.factchecker.ui.more.DonationFragment"
-        android:label="@string/donate_to_developer" >
-        <action
-            android:id="@+id/action_donation_dest_to_more_dest"
-            app:destination="@id/more_dest" />
-    </fragment>
+        android:label="@string/donate_to_developer" />
 
     <fragment
         android:id="@+id/add_blacklist_channel_dest"
         android:name="com.redbeanlatte11.factchecker.ui.channel.AddBlacklistChannelFragment"
-        android:label="@string/title_add_blacklist_channel" >
-        <action
-            android:id="@+id/action_add_blacklist_channel_dest_to_channel_dest"
-            app:destination="@id/channel_dest" />
-    </fragment>
+        android:label="@string/title_add_blacklist_channel" />
 </navigation>

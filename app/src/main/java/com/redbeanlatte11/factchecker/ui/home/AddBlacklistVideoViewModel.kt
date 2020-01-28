@@ -24,7 +24,7 @@ class AddBlacklistVideoViewModel(
     private val _canAdd = MutableLiveData<Boolean>()
     val canAdd: LiveData<Boolean> = _canAdd
 
-    private val _videoUrl = MutableLiveData<String>()
+    private val _videoUrl = MutableLiveData<String>("")
     val videoUrl: LiveData<String> = _videoUrl
 
     private val _description = MutableLiveData<String>("")

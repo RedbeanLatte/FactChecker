@@ -1,9 +1,6 @@
 package com.redbeanlatte11.factchecker.ui.popular
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.redbeanlatte11.factchecker.Event
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Result.Success
@@ -27,6 +24,11 @@ class PopularViewModel(
     val snackbarText: LiveData<Event<Int>> = _snackbarText
 
     private val isDataLoadingError = MutableLiveData<Boolean>()
+
+    // This LiveData depends on another so we can use a transformation.
+    val empty: LiveData<Boolean> = Transformations.map(_items) {
+        it.isEmpty()
+    }
 
     /**
      * @param forceUpdate   Pass in true to refresh the data in the [VideosDataSource]

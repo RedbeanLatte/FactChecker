@@ -99,6 +99,8 @@ class VideosViewModel(
                     reportedVideoCount++
                 } catch (e: TimeoutCancellationException) {
                     Timber.w("report video timed out")
+                    showSnackbarMessage(R.string.time_out_message)
+                    cancel(e)
                 }
             }
             Timber.d("reportAll completed")
@@ -126,14 +128,17 @@ class VideosViewModel(
     ) {
         reportJob = viewModelScope.launch {
             Timber.d("addBlacklistVideo: ${video.snippet.title}")
+            var itemCount = 0
             try {
                 reportVideoUseCase(webView, video, reportMessage, commentMessage, isAutoCommentEnabled)
-                onReportCompleteListener.onComplete(video)
-                loadVideos(false)
+                itemCount += 1
             } catch (e: TimeoutCancellationException) {
                 Timber.d("addBlacklistVideo timed out")
                 showSnackbarMessage(R.string.time_out_message)
+                cancel(e)
             }
+            onReportCompleteListener.onComplete(itemCount)
+            loadVideos(false)
         }
     }
 

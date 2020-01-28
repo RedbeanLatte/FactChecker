@@ -9,14 +9,16 @@ import timber.log.Timber
 class SignInUseCase {
 
     @SuppressLint("SetJavaScriptEnabled")
-    operator fun invoke(webView: WebView) =
+    operator fun invoke(webView: WebView, onCompleted: () -> Unit) =
         with(webView) {
             settings.javaScriptEnabled = true
-            webViewClient = GoogleAccountWebViewClient()
+            webViewClient = GoogleAccountWebViewClient(onCompleted)
             loadUrl("https://accounts.google.com")
         }
 
-    private class GoogleAccountWebViewClient : WebViewClient() {
+    private class GoogleAccountWebViewClient(
+        val onCompleted: () -> Unit
+    ) : WebViewClient() {
 
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
@@ -33,6 +35,7 @@ class SignInUseCase {
                 if (!savedSignInResult) {
                     PreferenceUtils.saveSignInResult(view.context, true)
                 }
+                onCompleted()
             }
         }
     }

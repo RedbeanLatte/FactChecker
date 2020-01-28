@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.redbeanlatte11.factchecker.ADD_BLACKLIST_RESULT_OK
 import com.redbeanlatte11.factchecker.EventObserver
 import com.redbeanlatte11.factchecker.databinding.AddBlacklistChannelFragBinding
 import com.redbeanlatte11.factchecker.util.setupSnackbar
@@ -46,9 +45,7 @@ class AddBlacklistChannelFragment : Fragment() {
 
     private fun setupNavigation() {
         viewModel.blacklistAddedEvent.observe(this, EventObserver {
-            val action = AddBlacklistChannelFragmentDirections
-                .actionAddBlacklistChannelDestToChannelDest(ADD_BLACKLIST_RESULT_OK)
-            findNavController().navigate(action)
+            findNavController().navigateUp()
         })
     }
 }

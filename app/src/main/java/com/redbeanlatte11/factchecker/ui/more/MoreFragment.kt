@@ -28,7 +28,7 @@ class MoreFragment : PreferenceFragmentCompat() {
     private fun setupPreferences() {
         val googleAccountPreference: Preference? = findPreference("google_account")
         googleAccountPreference?.setOnPreferenceClickListener {
-            val action = MoreFragmentDirections.actionMoreDestToGoogleAccountDest()
+            val action = MoreFragmentDirections.actionMoreDestToGoogleAccountDest(MoreFragment::class.java.simpleName)
             findNavController().navigate(action)
             true
         }

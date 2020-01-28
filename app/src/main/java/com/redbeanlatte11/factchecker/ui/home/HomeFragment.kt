@@ -125,7 +125,8 @@ class HomeFragment : Fragment() {
                     "ReportCompleteDialogFragment"
                 )
                 webView.loadYoutubeHome()
-            })
+            }
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

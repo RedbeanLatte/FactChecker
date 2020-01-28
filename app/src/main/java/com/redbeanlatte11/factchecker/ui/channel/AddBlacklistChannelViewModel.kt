@@ -24,7 +24,7 @@ class AddBlacklistChannelViewModel(
     private val _canAdd = MutableLiveData<Boolean>()
     val canAdd: LiveData<Boolean> = _canAdd
 
-    private val _channelUrl = MutableLiveData<String>()
+    private val _channelUrl = MutableLiveData<String>("")
     val channelUrl: LiveData<String> = _channelUrl
 
     private val _description = MutableLiveData<String>("")

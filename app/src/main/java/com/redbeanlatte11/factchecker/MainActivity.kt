@@ -1,7 +1,7 @@
 package com.redbeanlatte11.factchecker
 
-import android.app.Activity
 import android.os.Bundle
+import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,6 +16,8 @@ import com.redbeanlatte11.factchecker.util.unmute
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private lateinit var webView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        webView = findViewById(R.id.web_view)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -44,14 +48,13 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         applicationContext.mute()
+        webView.onResume()
     }
 
     override fun onPause() {
+        webView.onPause()
         applicationContext.unmute()
 
         super.onPause()
     }
 }
-
-// Keys for navigation
-const val ADD_BLACKLIST_RESULT_OK = Activity.RESULT_FIRST_USER + 1
