@@ -10,10 +10,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.data.Video
+import com.redbeanlatte11.factchecker.util.mute
+import com.redbeanlatte11.factchecker.util.unmute
+import timber.log.Timber
 
 class ReportProgressDialogFragment(
     private val itemCount: Int,
-    private val firstItemTitle: String,
     private val onCancelled: () -> Unit
 ) : DialogFragment() {
 
@@ -47,14 +49,18 @@ class ReportProgressDialogFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        isCancelable = false
+
         val progress = "1 / $itemCount"
         textViewProgress?.text = progress
-        textViewCurrentItem?.text = firstItemTitle
+        textViewCurrentItem?.text = ""
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     fun progress(video: Video) {
+        Timber.d("progress: [$currentVideoIndex] ${video.snippet.title}")
+
         val progressMessage = "$currentVideoIndex / $itemCount"
         textViewProgress?.text = progressMessage
         textViewCurrentItem?.text = video.snippet.title

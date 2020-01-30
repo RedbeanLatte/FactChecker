@@ -69,7 +69,7 @@ class AddBlacklistVideoViewModel(
         viewModelScope.launch {
             if (YoutubeUrlUtils.validateVideoUrl(url)) {
                 val videoId = YoutubeUrlUtils.extractVideoIdFromUrl(url)
-                val foundVideo = getVideoUseCase(videoId!!, true)
+                val foundVideo = getVideoUseCase(videoId!!)
                 if (foundVideo is Success) {
                     _canAdd.value = false
                     showSnackbarMessage(R.string.confirm_url_already_registered)

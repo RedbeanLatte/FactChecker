@@ -34,7 +34,11 @@ import com.redbeanlatte11.factchecker.ui.ScrollChildSwipeRefreshLayout
  * Transforms static java function Snackbar.make() to an extension function on View.
  */
 fun View.showSnackbar(snackbarText: String, timeLength: Int) {
-    Snackbar.make(this, snackbarText, timeLength).show()
+    try {
+        Snackbar.make(this, snackbarText, timeLength).show()
+    } catch (ex: IllegalArgumentException) {
+
+    }
 }
 
 /**
@@ -52,7 +56,6 @@ fun View.setupSnackbar(
         }
     })
 }
-
 
 fun Fragment.setupRefreshLayout(
     refreshLayout: ScrollChildSwipeRefreshLayout,

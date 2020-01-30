@@ -54,7 +54,7 @@ data class ChannelStatistics(
 
     val subscriberCountAndVideoCountToShow: String?
         get() = if (subscriberCount > 0) {
-            "구독자 ${subscriberCount.toSummaryCount()}명 · 동영상 ${videoCount.toSummaryCount()}개"
+            "구독자 ${subscriberCount.toSummaryCount()}명\n동영상 ${videoCount.toSummaryCount()}개"
         } else {
             "동영상 ${videoCount.toSummaryCount()}"
         }

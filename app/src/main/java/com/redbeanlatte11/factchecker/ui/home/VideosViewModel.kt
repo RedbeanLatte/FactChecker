@@ -4,6 +4,7 @@ import android.webkit.WebView
 import androidx.lifecycle.*
 import com.redbeanlatte11.factchecker.Event
 import com.redbeanlatte11.factchecker.R
+import com.redbeanlatte11.factchecker.data.ReportParams
 import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Video
@@ -30,6 +31,15 @@ class VideosViewModel(
 
     private val _snackbarText = MutableLiveData<Event<Int>>()
     val snackbarText: LiveData<Event<Int>> = _snackbarText
+
+    private val _reportStartedEvent = MutableLiveData<Event<Int>>()
+    val reportStartedEvent: LiveData<Event<Int>> = _reportStartedEvent
+
+    private val _reportOnNextEvent = MutableLiveData<Event<Video>>()
+    val reportOnNextEvent: LiveData<Event<Video>> = _reportOnNextEvent
+
+    private val _reportCompletedEvent = MutableLiveData<Event<Int>>()
+    val reportCompletedEvent: LiveData<Event<Int>> = _reportCompletedEvent
 
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
@@ -80,72 +90,52 @@ class VideosViewModel(
         _snackbarText.value = Event(message)
     }
 
-    fun reportAll(
-        webView: WebView,
-        reportMessage: String,
-        commentMessage: String,
-        isAutoCommentEnabled: Boolean,
-        onReportAllListener: OnReportAllListener
-    ) {
-        var reportedVideoCount = 0
-
-        reportAllJob = viewModelScope.launch {
-            Timber.d("reportAll")
-            items.value?.forEach { video ->
-                Timber.d("report video: ${video.snippet.title}")
-                onReportAllListener.onNext(video)
-                try {
-                    reportVideoUseCase(webView, video, reportMessage, commentMessage, isAutoCommentEnabled)
-                    reportedVideoCount++
-                } catch (e: TimeoutCancellationException) {
-                    Timber.w("report video timed out")
-                    showSnackbarMessage(R.string.time_out_message)
-                    cancel(e)
-                }
-            }
-            Timber.d("reportAll completed")
-            items.value?.let { onReportAllListener.onCompleted(reportedVideoCount) }
-            loadVideos(false)
-        }
-    }
-
-    fun cancelReportAll() {
-        reportAllJob?.run {
-            Timber.d("cancelReportAll")
-            cancel("cancelReportAll")
-            loadVideos(false)
-            showSnackbarMessage(R.string.cancel_report_all)
-        }
-    }
-
     fun reportVideo(
         webView: WebView,
-        video: Video,
-        reportMessage: String,
-        commentMessage: String,
-        isAutoCommentEnabled: Boolean,
-        onReportCompleteListener: OnReportCompleteListener
+        reportParams: ReportParams,
+        video: Video
     ) {
+        reportVideos(webView, reportParams, listOf(video))
+    }
+
+    fun reportAllVideos(
+        webView: WebView,
+        reportParams: ReportParams
+    ) {
+        _items.value?.let { reportVideos(webView, reportParams, it) }
+    }
+
+    private fun reportVideos(
+        webView: WebView,
+        reportParams: ReportParams,
+        videoItems: List<Video>
+    ) {
+        _reportStartedEvent.value = Event(videoItems.size)
         reportJob = viewModelScope.launch {
-            Timber.d("addBlacklistVideo: ${video.snippet.title}")
-            var itemCount = 0
-            try {
-                reportVideoUseCase(webView, video, reportMessage, commentMessage, isAutoCommentEnabled)
-                itemCount += 1
-            } catch (e: TimeoutCancellationException) {
-                Timber.d("addBlacklistVideo timed out")
-                showSnackbarMessage(R.string.time_out_message)
-                cancel(e)
+            var reportedVideoCount = 0
+            videoItems.forEach { video ->
+                Timber.d("report video: ${video.snippet.title}")
+                _reportOnNextEvent.value = Event(video)
+                try {
+                    reportVideoUseCase(webView, video, reportParams)
+                    reportedVideoCount += 1
+                } catch (ex: TimeoutCancellationException) {
+                    Timber.w("report video timed out")
+                    showSnackbarMessage(R.string.time_out_message)
+                    cancel(ex)
+                }
             }
-            onReportCompleteListener.onComplete(itemCount)
+
+            Timber.d("reportVideos completed")
+            _reportCompletedEvent.value = Event(reportedVideoCount)
             loadVideos(false)
         }
     }
 
-    fun cancelReportVideo() {
+    fun cancelReport() {
         reportJob?.run {
-            Timber.d("cancelReportVideo")
-            cancel("cancelReportVideo")
+            Timber.d("cancelReport")
+            cancel("cancelReport")
             loadVideos(false)
             showSnackbarMessage(R.string.cancel_report)
         }

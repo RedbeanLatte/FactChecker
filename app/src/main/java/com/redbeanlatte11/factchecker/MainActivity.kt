@@ -9,8 +9,6 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.redbeanlatte11.factchecker.util.mute
-import com.redbeanlatte11.factchecker.util.unmute
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,13 +45,11 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        applicationContext.mute()
         webView.onResume()
     }
 
     override fun onPause() {
         webView.onPause()
-        applicationContext.unmute()
 
         super.onPause()
     }

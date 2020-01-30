@@ -7,10 +7,13 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.redbeanlatte11.factchecker.EventObserver
 import com.redbeanlatte11.factchecker.R
+import com.redbeanlatte11.factchecker.data.ReportParams
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.databinding.VideosFragBinding
 import com.redbeanlatte11.factchecker.util.*
+import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -21,6 +24,14 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewDataBinding: VideosFragBinding
 
+    private lateinit var webView: WebView
+
+    private var progressDialogFragment: ReportProgressDialogFragment? = null
+
+    private var popupMenu: PopupMenu? = null
+
+    private var isShowingPopupMenu: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,8 +41,51 @@ class HomeFragment : Fragment() {
             viewmodel = viewModel
         }
 
+        webView = activity?.findViewById(R.id.web_view)!!
+
         setHasOptionsMenu(true)
+        setupEventObserver()
+
         return viewDataBinding.root
+    }
+
+    private fun setupEventObserver() {
+        viewModel.reportStartedEvent.observe(this, EventObserver { itemCount ->
+            prepareReport()
+
+            progressDialogFragment = ReportProgressDialogFragment(
+                itemCount
+            ) {
+                viewModel.cancelReport()
+            }
+
+            progressDialogFragment?.show(
+                activity?.supportFragmentManager!!,
+                "MessageDialogFragment"
+            )
+        })
+
+        viewModel.reportOnNextEvent.observe(this, EventObserver { video ->
+            CoroutineScope(Dispatchers.Main).launch {
+                progressDialogFragment?.progress(video)
+            }
+        })
+
+        viewModel.reportCompletedEvent.observe(this, EventObserver { reportedVideoCount ->
+            progressDialogFragment?.dismiss()
+
+            val message = if (reportedVideoCount > 0) {
+                "$reportedVideoCount ${getString(R.string.dialog_report_complete)}"
+            } else {
+                getString(R.string.dialog_report_error)
+            }
+            MessageDialogFragment(message).show(
+                activity?.supportFragmentManager!!,
+                "MessageDialogFragment"
+            )
+
+            clearPreparingReport(webView)
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,8 +135,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun showPopupMenu(view: View, video: Video) {
-        PopupMenu(requireContext(), view).run {
+        if (isShowingPopupMenu) {
+            popupMenu?.dismiss()
+            isShowingPopupMenu = false
+            return
+        }
+
+        popupMenu = PopupMenu(requireContext(), view).apply {
             menuInflater.inflate(R.menu.video_item_more_menu, menu)
+
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.report_video -> {
@@ -98,35 +159,63 @@ class HomeFragment : Fragment() {
                 }
                 true
             }
-            show()
+
+            setOnDismissListener {
+                isShowingPopupMenu = false
+            }
         }
+        popupMenu?.show()
+        isShowingPopupMenu = true
     }
 
     private fun reportVideo(video: Video) {
-        val webView: WebView = activity?.findViewById(R.id.web_view)!!
-
-        val progressDialog = ReportProgressDialogFragment(1, video.snippet.title) {
-            viewModel.cancelReportVideo()
-            webView.loadYoutubeHome()
-        }
-        progressDialog.isCancelable = false
-        progressDialog.show(activity?.supportFragmentManager!!, "ReportProgressDialogFragment")
+        val reportParams = ReportParams(
+            PreferenceUtils.loadReportMessage(requireContext()),
+            PreferenceUtils.loadCommentMessage(requireContext()),
+            PreferenceUtils.loadIsAutoCommentEnabled(requireContext())
+        )
 
         viewModel.reportVideo(
             webView,
-            video,
+            reportParams,
+            video
+        )
+    }
+
+    private fun reportAllVideos() {
+        val itemCount = viewModel.items.value?.size ?: 0
+        if (itemCount == 0) {
+            MessageDialogFragment(requireContext().getString(R.string.dialog_report_empty)).show(
+                activity?.supportFragmentManager!!,
+                "MessageDialogFragment"
+            )
+            return
+        }
+
+        val reportParams = ReportParams(
             PreferenceUtils.loadReportMessage(requireContext()),
             PreferenceUtils.loadCommentMessage(requireContext()),
-            PreferenceUtils.loadIsAutoCommentEnabled(requireContext()),
-            OnReportCompleteListener {
-                progressDialog.dismiss()
-                ReportCompleteDialogFragment(1).show(
-                    activity?.supportFragmentManager!!,
-                    "ReportCompleteDialogFragment"
-                )
-                webView.loadYoutubeHome()
-            }
+            PreferenceUtils.loadIsAutoCommentEnabled(requireContext())
         )
+
+        viewModel.reportAllVideos(
+            webView,
+            reportParams
+        )
+    }
+
+    private fun prepareReport() {
+        requireActivity().keepScreenOn()
+        requireActivity().applicationContext.mute()
+    }
+
+    private fun clearPreparingReport(webView: WebView) {
+        webView.loadYoutubeHome()
+        requireActivity().clearKeepScreenOn()
+        CoroutineScope(Dispatchers.Default).launch {
+            delay(500)
+            requireActivity().applicationContext.unmute()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -143,7 +232,7 @@ class HomeFragment : Fragment() {
             R.id.menu_report_all -> {
                 val savedSignInResult = PreferenceUtils.loadSignInResult(requireContext())
                 if (savedSignInResult) {
-                    val reportDialog = ReportAllDialogFragment { reportAll() }
+                    val reportDialog = ReportAllDialogFragment { reportAllVideos() }
                     reportDialog.show(activity?.supportFragmentManager!!, "ReportAllDialogFragment")
                 } else {
                     SignInDialogFragment().show(
@@ -157,56 +246,12 @@ class HomeFragment : Fragment() {
             else -> false
         }
 
-    private fun reportAll() {
-        val itemCount = viewModel.items.value?.size ?: 0
-        if (itemCount == 0) {
-                ReportCompleteDialogFragment(itemCount).show(
-                    activity?.supportFragmentManager!!,
-                    "ReportCompleteDialogFragment"
-                )
-            return
-        }
-
-        val webView: WebView = activity?.findViewById(R.id.web_view)!!
-        val firstItemTitle = viewModel.items.value?.first()?.snippet?.title ?: ""
-        val progressDialog = ReportProgressDialogFragment(itemCount, firstItemTitle) {
-            viewModel.cancelReportAll()
-            webView.loadYoutubeHome()
-        }
-        progressDialog.isCancelable = false
-        progressDialog.show(activity?.supportFragmentManager!!, "ReportProgressDialogFragment")
-
-        val listener = object : OnReportAllListener {
-
-            override fun onNext(video: Video) {
-                progressDialog.progress(video)
-            }
-
-            override fun onCompleted(itemCount: Int) {
-                progressDialog.dismiss()
-                ReportCompleteDialogFragment(itemCount).show(
-                    activity?.supportFragmentManager!!,
-                    "ReportCompleteDialogFragment"
-                )
-                webView.loadYoutubeHome()
-            }
-        }
-
-        viewModel.reportAll(
-            webView,
-            PreferenceUtils.loadReportMessage(requireContext()),
-            PreferenceUtils.loadCommentMessage(requireContext()),
-            PreferenceUtils.loadIsAutoCommentEnabled(requireContext()),
-            listener
-        )
-    }
-
     private fun showSearchPeriodPopUpMenu() {
         val view = activity?.findViewById<View>(R.id.menu_search_period) ?: return
         PopupMenu(requireContext(), view).run {
             menuInflater.inflate(R.menu.search_period_menu, menu)
             setOnMenuItemClickListener {
-                val searchPeriod = when(it.itemId) {
+                val searchPeriod = when (it.itemId) {
                     R.id.search_period_week -> SearchPeriod.ONE_WEEK
                     R.id.search_period_month -> SearchPeriod.ONE_MONTH
                     R.id.search_period_year -> SearchPeriod.ONE_YEAR

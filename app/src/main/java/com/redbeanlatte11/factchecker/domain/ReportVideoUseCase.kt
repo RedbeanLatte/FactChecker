@@ -3,6 +3,7 @@ package com.redbeanlatte11.factchecker.domain
 import android.annotation.SuppressLint
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.redbeanlatte11.factchecker.data.ReportParams
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.source.VideosRepository
 import com.redbeanlatte11.factchecker.util.suspendCoroutineWithTimeout
@@ -19,18 +20,14 @@ class ReportVideoUseCase(
     suspend operator fun invoke(
         webView: WebView,
         video: Video,
-        reportMessage: String,
-        commentMessage: String,
-        isAutoCommentEnabled: Boolean = false,
+        reportParams: ReportParams,
         ioDispatcher: CoroutineDispatcher = Dispatchers.IO
     ) = suspendCoroutineWithTimeout<Unit>(TIME_OUT) { continuation ->
         with(webView) {
             settings.javaScriptEnabled = true
             webViewClient = YoutubeWebViewClient(
                 continuation,
-                reportMessage,
-                commentMessage,
-                isAutoCommentEnabled
+                reportParams
             ) {
                 CoroutineScope(ioDispatcher).launch { videosRepository.reportVideo(video) }
             }
@@ -40,9 +37,7 @@ class ReportVideoUseCase(
 
     private class YoutubeWebViewClient(
         val continuation: CancellableContinuation<Unit>,
-        val reportMessage: String,
-        val commentMessage: String,
-        val isAutoCommentEnabled: Boolean,
+        val reportParams: ReportParams,
         val onReportFinished: () -> Unit
     ) : WebViewClient() {
 
@@ -72,7 +67,7 @@ class ReportVideoUseCase(
                                     }
                                     
                                     let commentSection = document.getElementsByTagName('ytm-comment-section-header-renderer')[0];
-                                    if (commentSection != undefined && $isAutoCommentEnabled) {
+                                    if (commentSection != undefined && ${reportParams.isAutoCommentEnabled}) {
                                         commentSection.click();
                                         let expandButton = commentSection.getElementsByTagName('button')[0];
                                         expandButton.click();
@@ -81,7 +76,7 @@ class ReportVideoUseCase(
                                         commentTextareaButton.click();
                                         
                                         let commentTextarea = document.getElementsByClassName('comment-simplebox-reply')[0];
-                                        commentTextarea.value = '$commentMessage';
+                                        commentTextarea.value = '${reportParams.commentMessage}';
                                         commentTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
                                         commentTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
                                         
@@ -122,7 +117,7 @@ class ReportVideoUseCase(
                         "javascript: " +
                                 """
                                     let reportTextarea = document.getElementsByClassName('report-details-form-description-input')[0];
-                                    reportTextarea.value = '$reportMessage';
+                                    reportTextarea.value = '${reportParams.reportMessage}';
                                     reportTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
                                     reportTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
     

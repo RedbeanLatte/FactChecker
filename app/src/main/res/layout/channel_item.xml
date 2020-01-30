@@ -45,7 +45,7 @@
             app:imageUrl="@{channel.snippet.thumbnailUrl}" />
 
         <LinearLayout
-            app:layout_constraintHorizontal_weight="5.5"
+            app:layout_constraintHorizontal_weight="4"
             android:id="@+id/linear_layout_content"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -70,16 +70,17 @@
         </LinearLayout>
 
         <ImageButton
-            app:layout_constraintHorizontal_weight="0"
             android:id="@+id/image_button_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="4dp"
             android:background="#00FFFFFF"
             android:src="@drawable/ic_more_vert"
             android:tint="@color/colorGrey"
             android:contentDescription="@string/description_more_button"
             android:onClick="@{moreClickListener}"
             android:visibility="gone"
+            app:layout_constraintHorizontal_weight="0"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/linear_layout_content"
             app:layout_constraintEnd_toEndOf="parent" />

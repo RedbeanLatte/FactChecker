@@ -40,7 +40,7 @@ class AddBlacklistChannelFragment : Fragment() {
     }
 
     private fun setupSnackbar() {
-        view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
+        view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_LONG)
     }
 
     private fun setupNavigation() {
