@@ -6,7 +6,7 @@
     <string name="title_more">더보기</string>
     <string name="title_google_account">구글 계정</string>
     <string name="title_report_all">모두 신고</string>
-    <string name="dialog_report_all">모두 신고 하시겠습니까?</string>
+    <string name="dialog_report_all">모두 신고 하시겠습니까? (상위 25건)</string>
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
 
@@ -38,8 +38,8 @@
     <string name="title_video">동영상</string>
     <string name="title_progress_report_message">신고 중</string>
     <string name="dialog_report_complete">건 신고 완료</string>
-    <string name="dialog_report_empty">신고할 동영상이 없습니다.</string>
-    <string name="dialog_report_error">신고 중 에러가 발생 했습니다.</string>
+    <string name="dialog_no_video_for_report">신고할 동영상이 없습니다.</string>
+    <string name="dialog_report_complete_zero">신고한 동영상이 없습니다.</string>
     <string name="video_marked_excluded">동영상이 제외 되었습니다.</string>
     <string name="video_marked_added">동영상이 추가 되었습니다.</string>
     <string name="title_reported_videos">신고한 동영상</string>
@@ -51,7 +51,7 @@
 
     <string name="title_add_blacklist_video">블랙리스트에 동영상 추가</string>
     <string name="title_add_blacklist_channel">블랙리스트에 채널 추가</string>
-    <string name="time_out_message">작업시간이 초과되었습니다. 1시간 후에 다시 시도해주세요.</string>
+    <string name="time_out_message">작업시간이 초과되었습니다. 잠시 후 다시 시도해주세요.</string>
     <string name="donation_image">use laptop computer</string>
     <string name="title_donation_button">후원</string>
     <string name="cancel_report">신고가 취소되었습니다.</string>
@@ -78,5 +78,5 @@
     <string name="comment_message">동영상 댓글 문구</string>
     <string name="title_auto_comment">동영상 자동 댓글</string>
     <string name="saved_is_auto_comment_enabled">saved_is_auto_comment_enabled</string>
-    <string name="summary_auto_comment">유튜브 내 채널 생성 후 사용해 주세요.</string>
+    <string name="summary_auto_comment">신고한 유튜브 동영상에 댓글이 자동으로 생성됩니다.\n내 채널을 만든 후 사용해 주세요.</string>
 </resources>

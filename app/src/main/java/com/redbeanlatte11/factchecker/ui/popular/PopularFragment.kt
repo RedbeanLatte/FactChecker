@@ -79,6 +79,10 @@ class PopularFragment : Fragment() {
                         val action = PopularFragmentDirections.actionPopularDestToAddVideoBlacklistDest(video.youtubeUrl!!)
                         findNavController().navigate(action)
                     }
+                    R.id.add_channel_to_blacklist -> {
+                        val action = PopularFragmentDirections.actionPopularDestToAddBlacklistChannelDest(video.channelUrl!!)
+                        findNavController().navigate(action)
+                    }
                 }
                 true
             }

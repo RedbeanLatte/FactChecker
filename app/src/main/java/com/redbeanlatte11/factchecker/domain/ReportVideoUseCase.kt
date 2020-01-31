@@ -48,9 +48,15 @@ class ReportVideoUseCase(
         override fun onPageFinished(webView: WebView, url: String) {
             super.onPageFinished(webView, url)
             Timber.d("onPageFinished, stage: $stage, url: $url")
+            if (continuation.isCancelled) {
+                return
+            }
 
             if (stage == 0 || (stage > 0 && url.contains("#dialog"))) {
-                reportVideo(webView)
+                runBlocking {
+                    delay(DELAY_LOAD_URL)
+                    reportVideo(webView)
+                }
             }
         }
 
@@ -60,32 +66,32 @@ class ReportVideoUseCase(
                     webView.loadUrl(
                         "javascript: " +
                                 """
-                                    let dislikeButton = document.getElementsByClassName('c3-material-button-button')[1];
-                                    let pressed = dislikeButton.getAttribute('aria-pressed');
+                                    var dislikeButton = document.getElementsByClassName('c3-material-button-button')[1];
+                                    var pressed = dislikeButton.getAttribute('aria-pressed');
                                     if (pressed === "false") {
                                         dislikeButton.click();
                                     }
                                     
-                                    let commentSection = document.getElementsByTagName('ytm-comment-section-header-renderer')[0];
+                                    var commentSection = document.getElementsByTagName('ytm-comment-section-header-renderer')[0];
                                     if (commentSection != undefined && ${reportParams.isAutoCommentEnabled}) {
                                         commentSection.click();
-                                        let expandButton = commentSection.getElementsByTagName('button')[0];
+                                        var expandButton = commentSection.getElementsByTagName('button')[0];
                                         expandButton.click();
                                         
-                                        let commentTextareaButton = document.getElementsByClassName('comment-simplebox-reply')[0];
+                                        var commentTextareaButton = document.getElementsByClassName('comment-simplebox-reply')[0];
                                         commentTextareaButton.click();
                                         
-                                        let commentTextarea = document.getElementsByClassName('comment-simplebox-reply')[0];
+                                        var commentTextarea = document.getElementsByClassName('comment-simplebox-reply')[0];
                                         commentTextarea.value = '${reportParams.commentMessage}';
                                         commentTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
                                         commentTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
                                         
-                                        let commentSimpleBoxSection = document.getElementsByClassName('comment-simplebox-buttons cbox')[0];
-                                        let commentButton = commentSimpleBoxSection.getElementsByClassName('c3-material-button-button')[1];
+                                        var commentSimpleBoxSection = document.getElementsByClassName('comment-simplebox-buttons cbox')[0];
+                                        var commentButton = commentSimpleBoxSection.getElementsByClassName('c3-material-button-button')[1];
                                         commentButton.click();
                                     }
     
-                                    let reportButton = document.getElementsByClassName('c3-material-button-button')[4];
+                                    var reportButton = document.getElementsByClassName('c3-material-button-button')[4];
                                     reportButton.click();
                                 """.trimIndent()
                     )
@@ -96,16 +102,16 @@ class ReportVideoUseCase(
                     webView.loadUrl(
                         "javascript: " +
                                 """
-                                    let selectableItemSection = document.getElementsByTagName('ytm-option-selectable-item-renderer')[2];
-                                    let radioButton = selectableItemSection.getElementsByTagName('input')[0];
+                                    var selectableItemSection = document.getElementsByTagName('ytm-option-selectable-item-renderer')[2];
+                                    var radioButton = selectableItemSection.getElementsByTagName('input')[0];
                                     radioButton.click();
     
-                                    let select = document.getElementsByClassName('select')[0];
+                                    var select = document.getElementsByClassName('select')[0];
                                     select.selectedIndex = 4;
                                     select.dispatchEvent(new Event('change', { 'bubbles': true }));
     
-                                    let dialogButtonsSection = document.getElementsByClassName('dialog-buttons')[0];
-                                    let nextButton = dialogButtonsSection.getElementsByClassName('c3-material-button-button')[1];
+                                    var dialogButtonsSection = document.getElementsByClassName('dialog-buttons')[0];
+                                    var nextButton = dialogButtonsSection.getElementsByClassName('c3-material-button-button')[1];
                                     nextButton.click();
                                 """.trimIndent()
                     )
@@ -116,13 +122,13 @@ class ReportVideoUseCase(
                     webView.loadUrl(
                         "javascript: " +
                                 """
-                                    let reportTextarea = document.getElementsByClassName('report-details-form-description-input')[0];
+                                    var reportTextarea = document.getElementsByClassName('report-details-form-description-input')[0];
                                     reportTextarea.value = '${reportParams.reportMessage}';
                                     reportTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
                                     reportTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
     
-                                    let dialogButtonsSection2 = document.getElementsByClassName('dialog-buttons')[0];
-                                    let submitButton = dialogButtonsSection2.getElementsByClassName('c3-material-button-button')[1];
+                                    var dialogButtonsSection2 = document.getElementsByClassName('dialog-buttons')[0];
+                                    var submitButton = dialogButtonsSection2.getElementsByClassName('c3-material-button-button')[1];
                                     submitButton.click();
                                 """.trimIndent()
                     )
@@ -130,7 +136,7 @@ class ReportVideoUseCase(
                 }
 
                 3 -> {
-                    if (!isResumed.get()) {
+                    if (!isResumed.get() && !continuation.isCancelled) {
                         isResumed.set(true)
                         onReportFinished()
                         continuation.resume(Unit)
@@ -142,5 +148,6 @@ class ReportVideoUseCase(
 
     companion object {
         const val TIME_OUT = 15000L
+        const val DELAY_LOAD_URL = 200L
     }
 }

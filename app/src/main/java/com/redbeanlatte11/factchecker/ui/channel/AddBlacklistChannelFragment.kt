@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.redbeanlatte11.factchecker.EventObserver
 import com.redbeanlatte11.factchecker.databinding.AddBlacklistChannelFragBinding
@@ -15,6 +16,8 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class AddBlacklistChannelFragment : Fragment() {
 
     private lateinit var viewDataBinding: AddBlacklistChannelFragBinding
+
+    private val args: AddBlacklistChannelFragmentArgs by navArgs()
 
     private val viewModel: AddBlacklistChannelViewModel by viewModel()
 
@@ -29,6 +32,10 @@ class AddBlacklistChannelFragment : Fragment() {
 
         setHasOptionsMenu(true)
         return viewDataBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.setChannelUrl(args.channelUrl)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -20,6 +20,9 @@ data class Video(
     val youtubeUrl: String?
         get() = "https://m.youtube.com/watch?v=$id"
 
+    val channelUrl: String?
+        get() = "https://m.youtube.com/channel/${snippet.channelId}"
+
     @delegate:Ignore
     val createdAtDateTime: DateTime by lazy {
         DateTime.parse(createdAt)

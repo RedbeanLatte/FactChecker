@@ -73,7 +73,7 @@ class ChannelsFragment : Fragment() {
         viewDataBinding.addBlacklistChannelFab.run {
             visibility = View.VISIBLE
             setOnClickListener {
-                val action = ChannelsFragmentDirections.actionChannelDestToAddBlacklistChannelDest()
+                val action = ChannelsFragmentDirections.actionChannelDestToAddBlacklistChannelDest("")
                 findNavController().navigate(action)
             }
         }

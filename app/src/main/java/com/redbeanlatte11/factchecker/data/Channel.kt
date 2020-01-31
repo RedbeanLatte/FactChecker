@@ -16,7 +16,7 @@ data class Channel(
 ) {
 
     val youtubeUrl: String?
-        get() = "http://m.youtube.com/channel/$id"
+        get() = "https://m.youtube.com/channel/$id"
 
     companion object {
 
@@ -52,10 +52,9 @@ data class ChannelStatistics(
     @ColumnInfo(name = "videoCount") val videoCount: Int
 ) {
 
-    val subscriberCountAndVideoCountToShow: String?
-        get() = if (subscriberCount > 0) {
-            "구독자 ${subscriberCount.toSummaryCount()}명\n동영상 ${videoCount.toSummaryCount()}개"
-        } else {
-            "동영상 ${videoCount.toSummaryCount()}"
-        }
+    val subscriberCountToShow: String?
+        get() = "구독자 ${subscriberCount.toSummaryCount()}명"
+
+    val videoCountToShow: String?
+        get() = "동영상 ${videoCount.toSummaryCount()}"
 }

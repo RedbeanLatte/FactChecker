@@ -59,6 +59,12 @@ class AddBlacklistChannelViewModel(
         }
     }
 
+    fun setChannelUrl(channelUrl: String) {
+        viewModelScope.launch {
+            _channelUrl.value = channelUrl
+        }
+    }
+
     fun confirmChannelUrl(url: String) {
         viewModelScope.launch {
             if (YoutubeUrlUtils.validateChannelUrl(url)) {

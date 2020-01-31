@@ -26,8 +26,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/list_item_height"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/list_item_padding"
+        android:paddingEnd="@dimen/list_item_padding"
         android:paddingTop="@dimen/list_item_padding"
         android:paddingBottom="@dimen/list_item_padding"
         android:onClick="@{() -> itemClickListener.onClick(channel)}">
@@ -64,9 +64,16 @@
 
             <TextView
                 style="@style/ListItemContentFont"
-                android:id="@+id/text_view_channel_statistics"
-                android:text="@{channel.statistics.subscriberCountAndVideoCountToShow}"
-                tools:text="subscriberCount and videoCount" />
+                android:id="@+id/text_view_channel_subscriber_count"
+                android:text="@{channel.statistics.subscriberCountToShow}"
+                android:visibility="@{channel.statistics.subscriberCount > 0 ? View.VISIBLE : View.GONE}"
+                tools:text="subscriberCount" />
+
+            <TextView
+                style="@style/ListItemContentFont"
+                android:id="@+id/text_view_channel_video_count"
+                android:text="@{channel.statistics.videoCountToShow}"
+                tools:text="videoCount" />
         </LinearLayout>
 
         <ImageButton

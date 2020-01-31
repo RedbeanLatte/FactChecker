@@ -28,10 +28,6 @@ class HomeFragment : Fragment() {
 
     private var progressDialogFragment: ReportProgressDialogFragment? = null
 
-    private var popupMenu: PopupMenu? = null
-
-    private var isShowingPopupMenu: Boolean = false
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,6 +43,12 @@ class HomeFragment : Fragment() {
         setupEventObserver()
 
         return viewDataBinding.root
+    }
+
+    override fun onPause() {
+        viewModel.cancelReport()
+
+        super.onPause()
     }
 
     private fun setupEventObserver() {
@@ -66,9 +68,7 @@ class HomeFragment : Fragment() {
         })
 
         viewModel.reportOnNextEvent.observe(this, EventObserver { video ->
-            CoroutineScope(Dispatchers.Main).launch {
-                progressDialogFragment?.progress(video)
-            }
+            progressDialogFragment?.progress(video)
         })
 
         viewModel.reportCompletedEvent.observe(this, EventObserver { reportedVideoCount ->
@@ -77,15 +77,19 @@ class HomeFragment : Fragment() {
             val message = if (reportedVideoCount > 0) {
                 "$reportedVideoCount ${getString(R.string.dialog_report_complete)}"
             } else {
-                getString(R.string.dialog_report_error)
+                getString(R.string.dialog_report_complete_zero)
             }
-            MessageDialogFragment(message).show(
-                activity?.supportFragmentManager!!,
-                "MessageDialogFragment"
-            )
 
+            showMessageDialog(message)
             clearPreparingReport(webView)
         })
+    }
+
+    private fun showMessageDialog(message: String) {
+        MessageDialogFragment(message).show(
+            activity?.supportFragmentManager!!,
+            "MessageDialogFragment"
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -135,13 +139,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showPopupMenu(view: View, video: Video) {
-        if (isShowingPopupMenu) {
-            popupMenu?.dismiss()
-            isShowingPopupMenu = false
-            return
-        }
-
-        popupMenu = PopupMenu(requireContext(), view).apply {
+        PopupMenu(requireContext(), view).apply {
             menuInflater.inflate(R.menu.video_item_more_menu, menu)
 
             setOnMenuItemClickListener {
@@ -159,13 +157,7 @@ class HomeFragment : Fragment() {
                 }
                 true
             }
-
-            setOnDismissListener {
-                isShowingPopupMenu = false
-            }
-        }
-        popupMenu?.show()
-        isShowingPopupMenu = true
+        }.show()
     }
 
     private fun reportVideo(video: Video) {
@@ -185,36 +177,34 @@ class HomeFragment : Fragment() {
     private fun reportAllVideos() {
         val itemCount = viewModel.items.value?.size ?: 0
         if (itemCount == 0) {
-            MessageDialogFragment(requireContext().getString(R.string.dialog_report_empty)).show(
-                activity?.supportFragmentManager!!,
-                "MessageDialogFragment"
-            )
+            showMessageDialog(getString(R.string.dialog_no_video_for_report))
             return
         }
 
         val reportParams = ReportParams(
             PreferenceUtils.loadReportMessage(requireContext()),
             PreferenceUtils.loadCommentMessage(requireContext()),
-            PreferenceUtils.loadIsAutoCommentEnabled(requireContext())
+            PreferenceUtils.loadIsAutoCommentEnabled(requireContext()),
+            DEFAULT_REPORT_TARGET_COUNT
         )
 
-        viewModel.reportAllVideos(
+        viewModel.reportVideos(
             webView,
             reportParams
         )
     }
 
     private fun prepareReport() {
-        requireActivity().keepScreenOn()
-        requireActivity().applicationContext.mute()
+        activity?.keepScreenOn()
+        activity?.applicationContext?.mute()
     }
 
     private fun clearPreparingReport(webView: WebView) {
         webView.loadYoutubeHome()
-        requireActivity().clearKeepScreenOn()
+        activity?.clearKeepScreenOn()
         CoroutineScope(Dispatchers.Default).launch {
             delay(500)
-            requireActivity().applicationContext.unmute()
+            activity?.applicationContext?.unmute()
         }
     }
 
@@ -264,5 +254,10 @@ class HomeFragment : Fragment() {
             }
             show()
         }
+    }
+
+    companion object {
+
+        const val DEFAULT_REPORT_TARGET_COUNT = 25
     }
 }

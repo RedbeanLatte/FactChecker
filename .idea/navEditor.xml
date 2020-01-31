@@ -200,6 +200,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_popular_dest_to_add_blacklist_channel_dest">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_popular_dest_to_add_video_blacklist_dest">
                               <value>
                                 <LayoutPositions />

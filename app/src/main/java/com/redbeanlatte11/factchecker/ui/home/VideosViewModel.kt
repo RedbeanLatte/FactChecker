@@ -43,13 +43,13 @@ class VideosViewModel(
 
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
-    private var reportAllJob: Job? = null
-
     private var reportJob: Job? = null
 
     private var _currentFiltering = VideosFilterType.ALL_VIDEOS
 
     private var _currentSearchPeriod = SearchPeriod.ALL
+
+    private var reportedVideoCount = 0
 
     // This LiveData depends on another so we can use a transformation.
     val empty: LiveData<Boolean> = Transformations.map(_items) {
@@ -98,11 +98,19 @@ class VideosViewModel(
         reportVideos(webView, reportParams, listOf(video))
     }
 
-    fun reportAllVideos(
+    fun reportVideos(
         webView: WebView,
         reportParams: ReportParams
     ) {
-        _items.value?.let { reportVideos(webView, reportParams, it) }
+        _items.value?.let { videos ->
+            val videosToReport = if (videos.size > reportParams.targetCount) {
+                videos.subList(0, reportParams.targetCount)
+            } else {
+                videos
+            }
+
+            reportVideos(webView, reportParams, videosToReport)
+        }
     }
 
     private fun reportVideos(
@@ -112,8 +120,12 @@ class VideosViewModel(
     ) {
         _reportStartedEvent.value = Event(videoItems.size)
         reportJob = viewModelScope.launch {
-            var reportedVideoCount = 0
+            reportedVideoCount = 0
             videoItems.forEach { video ->
+                if (!isActive) {
+                    return@launch
+                }
+
                 Timber.d("report video: ${video.snippet.title}")
                 _reportOnNextEvent.value = Event(video)
                 try {
@@ -121,23 +133,29 @@ class VideosViewModel(
                     reportedVideoCount += 1
                 } catch (ex: TimeoutCancellationException) {
                     Timber.w("report video timed out")
-                    showSnackbarMessage(R.string.time_out_message)
                     cancel(ex)
+                    _reportCompletedEvent.value = Event(reportedVideoCount)
+                    showSnackbarMessage(R.string.time_out_message)
                 }
             }
 
-            Timber.d("reportVideos completed")
-            _reportCompletedEvent.value = Event(reportedVideoCount)
-            loadVideos(false)
+            if (isActive) {
+                Timber.d("reportVideos completed")
+                _reportCompletedEvent.value = Event(reportedVideoCount)
+                loadVideos(false)
+            }
         }
     }
 
     fun cancelReport() {
         reportJob?.run {
-            Timber.d("cancelReport")
-            cancel("cancelReport")
-            loadVideos(false)
-            showSnackbarMessage(R.string.cancel_report)
+            if (isActive) {
+                Timber.d("cancelReport")
+                cancel("cancelReport")
+                _reportCompletedEvent.value = Event(reportedVideoCount)
+                loadVideos(false)
+                showSnackbarMessage(R.string.cancel_report)
+            }
         }
     }
 
