@@ -222,7 +222,13 @@ class HomeFragment : Fragment() {
             R.id.menu_report_all -> {
                 val savedSignInResult = PreferenceUtils.loadSignInResult(requireContext())
                 if (savedSignInResult) {
-                    val reportDialog = ReportAllDialogFragment { reportAllVideos() }
+                    val videoItems = viewModel.items.value!!
+                    val targetCount = if (videoItems.size > DEFAULT_REPORT_TARGET_COUNT) {
+                        DEFAULT_REPORT_TARGET_COUNT
+                    } else {
+                        videoItems.size
+                    }
+                    val reportDialog = ReportAllDialogFragment(targetCount) { reportAllVideos() }
                     reportDialog.show(activity?.supportFragmentManager!!, "ReportAllDialogFragment")
                 } else {
                     SignInDialogFragment().show(

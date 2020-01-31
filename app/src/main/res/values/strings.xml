@@ -6,7 +6,8 @@
     <string name="title_more">더보기</string>
     <string name="title_google_account">구글 계정</string>
     <string name="title_report_all">모두 신고</string>
-    <string name="dialog_report_all">모두 신고 하시겠습니까? (상위 25건)</string>
+    <string name="dialog_report_all_prefix">모두 신고 하시겠습니까? (상위</string>
+    <string name="dialog_report_all_postfix">건)</string>
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
 

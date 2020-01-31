@@ -53,7 +53,7 @@ fun setChannelItems(listView: RecyclerView, items: List<Channel>) {
 
 @BindingAdapter("donationButtonText")
 fun setDonationButtonText(button: Button, donationAmount: Int) {
-    val text = "₩ $donationAmount    후원"
+    val text = "₩ $donationAmount  후원"
     button.text = text
 }
 

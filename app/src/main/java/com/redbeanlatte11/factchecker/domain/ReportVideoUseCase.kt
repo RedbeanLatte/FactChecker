@@ -148,6 +148,6 @@ class ReportVideoUseCase(
 
     companion object {
         const val TIME_OUT = 15000L
-        const val DELAY_LOAD_URL = 200L
+        const val DELAY_LOAD_URL = 500L
     }
 }

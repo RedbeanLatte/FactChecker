@@ -8,13 +8,18 @@ import com.redbeanlatte11.factchecker.R
 import timber.log.Timber
 
 class ReportAllDialogFragment(
+    private val targetCount: Int,
     private val perform: () -> Unit
 ) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
-            builder.setMessage(R.string.dialog_report_all)
+            val message = getString(R.string.dialog_report_all_prefix) +
+                    " $targetCount " +
+                    getString(R.string.dialog_report_all_postfix)
+
+            builder.setMessage(message)
                 .setPositiveButton(R.string.ok) { _, _ ->
                     try {
                         perform()
