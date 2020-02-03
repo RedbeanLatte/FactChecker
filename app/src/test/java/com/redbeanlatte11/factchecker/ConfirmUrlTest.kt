@@ -13,5 +13,8 @@ class ConfirmUrlTest {
         println(YoutubeUrlUtils.validateVideoUrl("https://www.youtube.com/watch?v=TfVS71BuGbY&list=PLzUSBUvdIZrUs01zl2dB-mF7fLIL-8KSK"))
 
         println(YoutubeUrlUtils.extractVideoIdFromUrl("https://www.youtube.com/watch?v=TfVS71BuGbY&list=PLzUSBUvdIZrUs01zl2dB-mF7fLIL-8KSK"))
+
+        println(YoutubeUrlUtils.validateVideoUrl("https://youtu.be/RlcCH4-JId0"))
+        println(YoutubeUrlUtils.validateVideoUrl("https://youtu.be/8FPn_2JPbnU"))
     }
 }

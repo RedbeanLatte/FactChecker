@@ -64,6 +64,7 @@
                         android:textSize="16sp"
                         android:text="@string/title_no_videos" />
                 </LinearLayout>
+
             </RelativeLayout>
 
         </com.redbeanlatte11.factchecker.ui.ScrollChildSwipeRefreshLayout>
@@ -78,6 +79,16 @@
             app:fabSize="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <WebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

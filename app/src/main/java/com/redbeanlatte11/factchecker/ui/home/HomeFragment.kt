@@ -1,8 +1,10 @@
 package com.redbeanlatte11.factchecker.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -13,7 +15,10 @@ import com.redbeanlatte11.factchecker.data.ReportParams
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.databinding.VideosFragBinding
 import com.redbeanlatte11.factchecker.util.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -37,8 +42,7 @@ class HomeFragment : Fragment() {
             viewmodel = viewModel
         }
 
-        webView = activity?.findViewById(R.id.web_view)!!
-
+        setupWebView()
         setHasOptionsMenu(true)
         setupEventObserver()
 
@@ -49,6 +53,13 @@ class HomeFragment : Fragment() {
         viewModel.cancelReport()
 
         super.onPause()
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun setupWebView() {
+        webView = viewDataBinding.webView
+        webView.settings.javaScriptEnabled = true
+        webView.webViewClient = WebViewClient()
     }
 
     private fun setupEventObserver() {
@@ -81,7 +92,7 @@ class HomeFragment : Fragment() {
             }
 
             showMessageDialog(message)
-            clearPreparingReport(webView)
+            clearPreparingReport()
         })
     }
 
@@ -93,6 +104,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.d("onViewCreated")
         viewModel.setFiltering(VideosFilterType.BLACKLIST_VIDEOS)
         viewModel.setSearchPeriod(PreferenceUtils.loadSearchPeriod(requireContext()))
         viewModel.loadVideos(false)
@@ -199,7 +211,7 @@ class HomeFragment : Fragment() {
         activity?.applicationContext?.mute()
     }
 
-    private fun clearPreparingReport(webView: WebView) {
+    private fun clearPreparingReport() {
         webView.loadYoutubeHome()
         activity?.clearKeepScreenOn()
         CoroutineScope(Dispatchers.Default).launch {

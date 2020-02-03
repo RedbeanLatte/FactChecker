@@ -1,6 +1,5 @@
 package com.redbeanlatte11.factchecker.domain
 
-import android.annotation.SuppressLint
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.redbeanlatte11.factchecker.data.ReportParams
@@ -16,7 +15,6 @@ class ReportVideoUseCase(
     private val videosRepository: VideosRepository
 ) {
 
-    @SuppressLint("SetJavaScriptEnabled")
     suspend operator fun invoke(
         webView: WebView,
         video: Video,
@@ -24,13 +22,13 @@ class ReportVideoUseCase(
         ioDispatcher: CoroutineDispatcher = Dispatchers.IO
     ) = suspendCoroutineWithTimeout<Unit>(TIME_OUT) { continuation ->
         with(webView) {
-            settings.javaScriptEnabled = true
             webViewClient = YoutubeWebViewClient(
                 continuation,
                 reportParams
             ) {
                 CoroutineScope(ioDispatcher).launch { videosRepository.reportVideo(video) }
             }
+
             loadUrl(video.youtubeUrl)
         }
     }
@@ -147,7 +145,7 @@ class ReportVideoUseCase(
     }
 
     companion object {
-        const val TIME_OUT = 15000L
+        const val TIME_OUT = 10000L
         const val DELAY_LOAD_URL = 500L
     }
 }
