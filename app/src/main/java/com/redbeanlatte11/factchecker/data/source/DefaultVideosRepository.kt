@@ -29,7 +29,13 @@ class DefaultVideosRepository(
             // Respond immediately with cache if available and not dirty
             if (!forceUpdate) {
                 cachedVideos?.let { cachedVideos ->
-                    return@withContext Success(cachedVideos.values.sortedWith(Video.getComparator(sortType)))
+                    return@withContext Success(
+                        cachedVideos.values.sortedWith(
+                            Video.getComparator(
+                                sortType
+                            )
+                        )
+                    )
                 }
             }
 
@@ -59,7 +65,7 @@ class DefaultVideosRepository(
             is Success -> {
                 val newVideos = combineLocalDataWithRemoteData(remoteVideos.data)
                 refreshLocalDataSource(newVideos)
-                return remoteVideos
+                return Success(newVideos)
             }
             else -> throw IllegalStateException()
         }
@@ -91,6 +97,18 @@ class DefaultVideosRepository(
         }
 
         return remoteVideos
+    }
+
+    private suspend fun combineLocalDataWithRemoteData(remoteVideo: Video): Video {
+        val localVideo = videosLocalDataSource.getVideo(remoteVideo.id)
+        if (localVideo is Success) {
+            return remoteVideo.copy(
+                reported = localVideo.data.reported,
+                excluded = localVideo.data.excluded
+            )
+        }
+
+        return remoteVideo
     }
 
     private fun refreshCache(videos: List<Video>) {
@@ -182,8 +200,9 @@ class DefaultVideosRepository(
         when (val remoteVideo = videosRemoteDataSource.getVideo(videoId)) {
             is Error -> Timber.w("Remote data source fetch failed")
             is Success -> {
-                refreshLocalDataSource(remoteVideo.data)
-                return remoteVideo
+                val newVideo = combineLocalDataWithRemoteData(remoteVideo.data)
+                refreshLocalDataSource(newVideo)
+                return Success(newVideo)
             }
             else -> throw IllegalStateException()
         }
@@ -200,6 +219,9 @@ class DefaultVideosRepository(
     }
 
     override suspend fun addBlacklistVideo(url: String, description: String): Result<Video> {
-        return videosRemoteDataSource.addBlacklistVideo(YoutubeUrlUtils.extractVideoIdFromUrl(url)!!, description)
+        return videosRemoteDataSource.addBlacklistVideo(
+            YoutubeUrlUtils.extractVideoIdFromUrl(url)!!,
+            description
+        )
     }
 }

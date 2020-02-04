@@ -98,7 +98,7 @@ class VideosViewModel(
         reportVideos(webView, reportParams, listOf(video))
     }
 
-    fun reportVideos(
+    fun reportAllVideos(
         webView: WebView,
         reportParams: ReportParams
     ) {
@@ -118,9 +118,11 @@ class VideosViewModel(
         reportParams: ReportParams,
         videoItems: List<Video>
     ) {
-        _reportStartedEvent.value = Event(videoItems.size)
         reportJob = viewModelScope.launch {
+            _reportStartedEvent.value = Event(videoItems.size)
+
             reportedVideoCount = 0
+            var retryCount = 0
             videoItems.forEach { video ->
                 if (!isActive) {
                     return@launch
@@ -131,11 +133,17 @@ class VideosViewModel(
                 try {
                     reportVideoUseCase(webView, video, reportParams)
                     reportedVideoCount += 1
+                    retryCount = 0
                 } catch (ex: TimeoutCancellationException) {
                     Timber.w("report video timed out")
-                    cancel(ex)
-                    _reportCompletedEvent.value = Event(reportedVideoCount)
-                    showSnackbarMessage(R.string.time_out_message)
+
+                    if (retryCount >= MAX_RETRY_COUNT) {
+                        cancel(ex)
+                        _reportCompletedEvent.value = Event(reportedVideoCount)
+                        showSnackbarMessage(R.string.time_out_message)
+                    } else {
+                        retryCount += 1
+                    }
                 }
             }
 
@@ -172,5 +180,9 @@ class VideosViewModel(
 
     fun refresh() {
         loadVideos(true)
+    }
+
+    companion object {
+        const val MAX_RETRY_COUNT = 2
     }
 }

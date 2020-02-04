@@ -104,7 +104,6 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.d("onViewCreated")
         viewModel.setFiltering(VideosFilterType.BLACKLIST_VIDEOS)
         viewModel.setSearchPeriod(PreferenceUtils.loadSearchPeriod(requireContext()))
         viewModel.loadVideos(false)
@@ -187,12 +186,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun reportAllVideos() {
-        val itemCount = viewModel.items.value?.size ?: 0
-        if (itemCount == 0) {
-            showMessageDialog(getString(R.string.dialog_no_video_for_report))
-            return
-        }
-
         val reportParams = ReportParams(
             PreferenceUtils.loadReportMessage(requireContext()),
             PreferenceUtils.loadCommentMessage(requireContext()),
@@ -200,7 +193,7 @@ class HomeFragment : Fragment() {
             DEFAULT_REPORT_TARGET_COUNT
         )
 
-        viewModel.reportVideos(
+        viewModel.reportAllVideos(
             webView,
             reportParams
         )
@@ -235,13 +228,19 @@ class HomeFragment : Fragment() {
                 val savedSignInResult = PreferenceUtils.loadSignInResult(requireContext())
                 if (savedSignInResult) {
                     val videoItems = viewModel.items.value!!
-                    val targetCount = if (videoItems.size > DEFAULT_REPORT_TARGET_COUNT) {
-                        DEFAULT_REPORT_TARGET_COUNT
+
+                    if (videoItems.isNotEmpty()) {
+                        val targetCount = if (videoItems.size > DEFAULT_REPORT_TARGET_COUNT) {
+                            DEFAULT_REPORT_TARGET_COUNT
+                        } else {
+                            videoItems.size
+                        }
+
+                        val reportDialog = ReportAllDialogFragment(targetCount) { reportAllVideos() }
+                        reportDialog.show(activity?.supportFragmentManager!!, "ReportAllDialogFragment")
                     } else {
-                        videoItems.size
+                        showMessageDialog(getString(R.string.dialog_no_video_for_report))
                     }
-                    val reportDialog = ReportAllDialogFragment(targetCount) { reportAllVideos() }
-                    reportDialog.show(activity?.supportFragmentManager!!, "ReportAllDialogFragment")
                 } else {
                     SignInDialogFragment().show(
                         activity?.supportFragmentManager!!,
