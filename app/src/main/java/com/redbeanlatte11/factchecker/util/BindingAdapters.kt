@@ -15,12 +15,14 @@
  */
 package com.redbeanlatte11.factchecker.util
 
+import ChannelsGridAdapter
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputEditText
 import com.redbeanlatte11.factchecker.ui.channel.ChannelsAdapter
 import com.redbeanlatte11.factchecker.data.Video
@@ -31,7 +33,19 @@ import com.redbeanlatte11.factchecker.ui.home.VideosAdapter
 @BindingAdapter("imageUrl")
 fun setImageUrl(view: ImageView, url: String?) {
     url?.let {
-        Glide.with(view.context).load(it).into(view)
+        Glide.with(view.context)
+            .load(it)
+            .into(view)
+    }
+}
+
+@BindingAdapter("imageUrlWithCircleCrop")
+fun setImageUrlWithCircleCrop(view: ImageView, url: String?) {
+    url?.let {
+        Glide.with(view.context)
+            .load(it)
+            .apply(RequestOptions.circleCropTransform())
+            .into(view)
     }
 }
 
@@ -49,6 +63,11 @@ fun setVideoItems(listView: RecyclerView, items: List<Video>) {
 @BindingAdapter("channelItems")
 fun setChannelItems(listView: RecyclerView, items: List<Channel>) {
     (listView.adapter as ChannelsAdapter).submitList(items)
+}
+
+@BindingAdapter("channelGridItems")
+fun setChannelGridItems(listView: RecyclerView, items: List<Channel>) {
+    (listView.adapter as ChannelsGridAdapter).submitList(items)
 }
 
 @BindingAdapter("donationButtonText")

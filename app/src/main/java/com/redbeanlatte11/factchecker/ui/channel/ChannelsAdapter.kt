@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.databinding.ChannelItemBinding
-import com.redbeanlatte11.factchecker.ui.channel.ChannelsAdapter.ViewHolder
 
 /**
  * Adapter for the product list.
@@ -31,21 +30,25 @@ import com.redbeanlatte11.factchecker.ui.channel.ChannelsAdapter.ViewHolder
 class ChannelsAdapter(
     private val itemClickListener: ChannelItemClickListener,
     private val moreClickListener: View.OnClickListener
-) : ListAdapter<Channel, ViewHolder>(ChannelDiffCallback()) {
+) : ListAdapter<Channel, ChannelsAdapter.ViewHolder>(ChannelDiffCallback()) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder.from(parent)
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item, itemClickListener, moreClickListener)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
-    }
-
     class ViewHolder private constructor(private val binding: ChannelItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Channel, itemClickListener: ChannelItemClickListener, moreClickListener: View.OnClickListener) {
+        fun bind(
+            item: Channel,
+            itemClickListener: ChannelItemClickListener,
+            moreClickListener: View.OnClickListener
+        ) {
             binding.channel = item
             binding.itemClickListener = itemClickListener
             binding.moreClickListener = moreClickListener

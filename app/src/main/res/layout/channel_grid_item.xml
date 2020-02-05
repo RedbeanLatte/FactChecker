@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.widget.CompoundButton" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="channel"
+            type="com.redbeanlatte11.factchecker.data.Channel" />
+
+        <variable
+            name="itemClickListener"
+            type="com.redbeanlatte11.factchecker.ui.channel.ChannelItemClickListener" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/grid_item_width"
+        android:layout_height="@dimen/grid_item_height"
+        android:padding="@dimen/list_item_padding"
+        android:onClick="@{() -> itemClickListener.onClick(channel)}">
+
+        <ImageView
+            app:layout_constraintVertical_weight="3"
+            android:id="@+id/image_view_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/description_channel_thumbnail"
+            android:scaleType="fitCenter"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/text_view_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:imageUrlWithCircleCrop="@{channel.snippet.thumbnailUrl}" />
+
+
+        <TextView
+            app:layout_constraintVertical_weight="2"
+            android:id="@+id/text_view_title"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            style="@style/GridItemTitleFont"
+            android:text="@{channel.snippet.title}"
+            tools:text="title"
+            app:layout_constraintTop_toBottomOf="@id/image_view_thumbnail"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

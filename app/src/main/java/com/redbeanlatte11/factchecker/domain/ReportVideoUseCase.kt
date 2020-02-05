@@ -51,10 +51,7 @@ class ReportVideoUseCase(
             }
 
             if (stage == 0 || (stage > 0 && url.contains("#dialog"))) {
-                runBlocking {
-                    delay(DELAY_LOAD_URL)
-                    reportVideo(webView)
-                }
+                reportVideo(webView)
             }
         }
 
@@ -146,6 +143,5 @@ class ReportVideoUseCase(
 
     companion object {
         const val TIME_OUT = 10000L
-        const val DELAY_LOAD_URL = 500L
     }
 }

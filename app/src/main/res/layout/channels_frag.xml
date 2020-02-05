@@ -6,9 +6,15 @@
 
         <import type="android.view.View" />
 
+        <import type="com.redbeanlatte11.factchecker.ui.channel.ChannelsViewType" />
+
         <variable
             name="viewmodel"
             type="com.redbeanlatte11.factchecker.ui.channel.ChannelsViewModel" />
+
+        <variable
+            name="viewtype"
+            type="com.redbeanlatte11.factchecker.ui.channel.ChannelsViewType" />
 
     </data>
 
@@ -31,13 +37,28 @@
                 android:focusable="true"
                 android:orientation="vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/channels_list"
+                <FrameLayout
+                    android:id="@+id/channels_frame_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{viewmodel.dataLoading ? View.GONE : View.VISIBLE}"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:channelItems="@{viewmodel.items}" />
+                    android:layout_height="match_parent"
+                    android:visibility="@{viewmodel.dataLoading ? View.GONE : View.VISIBLE}">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/channels_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="@{viewtype == ChannelsViewType.LIST ? View.VISIBLE : View.GONE}"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:channelItems="@{viewmodel.items}" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/channels_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="@{viewtype == ChannelsViewType.GRID ? View.VISIBLE : View.GONE}"
+                        app:channelGridItems="@{viewmodel.items}" />
+
+                </FrameLayout>
 
                 <LinearLayout
                     android:id="@+id/no_channels_layout"

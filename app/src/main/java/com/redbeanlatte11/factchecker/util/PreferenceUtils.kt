@@ -3,6 +3,7 @@ package com.redbeanlatte11.factchecker.util
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.redbeanlatte11.factchecker.R
+import com.redbeanlatte11.factchecker.ui.channel.ChannelsViewType
 import com.redbeanlatte11.factchecker.ui.home.SearchPeriod
 import timber.log.Timber
 
@@ -84,6 +85,28 @@ class PreferenceUtils {
             )
             Timber.d("loadIsAutoCommentEnabled: $signInResult")
             return signInResult
+        }
+
+        fun loadChannelsViewType(context: Context): ChannelsViewType {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val channelsViewType = sharedPreferences.getString(
+                context.getString(R.string.saved_channels_view_type),
+                ChannelsViewType.DEFAULT_VALUE.toString()
+            )
+            Timber.d("loadChannelsViewType: $channelsViewType")
+            return ChannelsViewType.valueOf(channelsViewType!!)
+        }
+
+        fun saveChannelsViewType(context: Context, channelsViewType: ChannelsViewType) {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+            with(sharedPref.edit()) {
+                putString(
+                    context.getString(R.string.saved_channels_view_type),
+                    channelsViewType.toString()
+                )
+                commit()
+            }
+            Timber.d("saveChannelsViewType: $channelsViewType")
         }
     }
 }

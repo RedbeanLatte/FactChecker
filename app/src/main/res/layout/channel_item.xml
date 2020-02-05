@@ -25,7 +25,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_height"
+        android:layout_height="@dimen/channel_item_height"
         android:paddingStart="@dimen/list_item_padding"
         android:paddingEnd="@dimen/list_item_padding"
         android:paddingTop="@dimen/list_item_padding"
@@ -42,7 +42,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/linear_layout_content"
-            app:imageUrl="@{channel.snippet.thumbnailUrl}" />
+            app:imageUrlWithCircleCrop="@{channel.snippet.thumbnailUrl}" />
 
         <LinearLayout
             app:layout_constraintHorizontal_weight="4"

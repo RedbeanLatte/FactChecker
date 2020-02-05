@@ -21,7 +21,7 @@
 
     <style name="Toolbar" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="ListItemTitleFont" parent="@android:style/TextAppearance.Medium">
+    <style name="ListItemTitleFont" parent="TextAppearance.AppCompat.Medium">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@android:color/black</item>
@@ -30,13 +30,23 @@
         <item name="android:maxLines">3</item>
     </style>
 
-    <style name="ListItemContentFont" parent="@android:style/TextAppearance.Medium">
+    <style name="ListItemContentFont" parent="TextAppearance.AppCompat.Medium">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorGrey</item>
         <item name="android:textSize">12sp</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="GridItemTitleFont" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorGrey</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="ProgressContentFont" parent="TextAppearance.AppCompat.Medium">
