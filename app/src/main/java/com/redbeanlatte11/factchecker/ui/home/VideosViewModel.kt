@@ -140,6 +140,7 @@ class VideosViewModel(
                     if (retryCount >= MAX_RETRY_COUNT) {
                         cancel(ex)
                         _reportCompletedEvent.value = Event(reportedVideoCount)
+                        loadVideos(false)
                         showSnackbarMessage(R.string.time_out_message)
                     } else {
                         retryCount += 1
