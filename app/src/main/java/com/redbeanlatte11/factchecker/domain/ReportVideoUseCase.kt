@@ -78,8 +78,7 @@ class ReportVideoUseCase(
                                         
                                         var commentTextarea = document.getElementsByClassName('comment-simplebox-reply')[0];
                                         commentTextarea.value = '${reportParams.commentMessage}';
-                                        commentTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
-                                        commentTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
+                                        commentTextarea.dispatchEvent(new Event('input', { bubbles: true }));
                                         
                                         var commentSimpleBoxSection = document.getElementsByClassName('comment-simplebox-buttons cbox')[0];
                                         var commentButton = commentSimpleBoxSection.getElementsByClassName('c3-material-button-button')[1];
@@ -103,7 +102,7 @@ class ReportVideoUseCase(
     
                                     var select = document.getElementsByClassName('select')[0];
                                     select.selectedIndex = 4;
-                                    select.dispatchEvent(new Event('change', { 'bubbles': true }));
+                                    select.dispatchEvent(new Event('change', { bubbles: true }));
     
                                     var dialogButtonsSection = document.getElementsByClassName('dialog-buttons')[0];
                                     var nextButton = dialogButtonsSection.getElementsByClassName('c3-material-button-button')[1];
@@ -117,11 +116,18 @@ class ReportVideoUseCase(
                     webView.loadUrl(
                         "javascript: " +
                                 """
+                                    var minutesNumber = document.getElementsByClassName('timestamp-input-minutes timestamp-number-input')[0];
+                                    minutesNumber.value = 0;
+                                    minutesNumber.dispatchEvent(new Event('input', { bubbles: true }));
+                                    
+                                    var secondsNumber = document.getElementsByClassName('timestamp-input-seconds timestamp-number-input')[0];
+                                    secondsNumber.value = 0;
+                                    secondsNumber.dispatchEvent(new Event('input', { bubbles: true }));
+                                    
                                     var reportTextarea = document.getElementsByClassName('report-details-form-description-input')[0];
                                     reportTextarea.value = '${reportParams.reportMessage}';
-                                    reportTextarea.dispatchEvent(new Event('input', { 'bubbles': true }));
-                                    reportTextarea.dispatchEvent(new Event('change', { 'bubbles': true }));
-    
+                                    reportTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+                                    
                                     var dialogButtonsSection2 = document.getElementsByClassName('dialog-buttons')[0];
                                     var submitButton = dialogButtonsSection2.getElementsByClassName('c3-material-button-button')[1];
                                     submitButton.click();

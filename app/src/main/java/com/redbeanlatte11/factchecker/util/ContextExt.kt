@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.net.Uri
+import android.widget.Toast
 import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.data.Video
 import timber.log.Timber
@@ -50,4 +51,8 @@ fun Context.linkToGooglePlay(uri: String) {
         setPackage("com.android.vending")
     }
     startActivity(intent)
+}
+
+fun Context.showToast(message: String) {
+    Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
 }

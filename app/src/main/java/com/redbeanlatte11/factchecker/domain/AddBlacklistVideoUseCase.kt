@@ -5,10 +5,10 @@ import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.source.VideosRepository
 
 class AddBlacklistVideoUseCase(
-    private val popularVideosRepository: VideosRepository
+    private val videosRepository: VideosRepository
 ) {
 
-    suspend operator fun invoke(url: String, description: String): Result<Video> {
-        return popularVideosRepository.addBlacklistVideo(url, description)
+    suspend operator fun invoke(url: String, description: String = ""): Result<Video> {
+        return videosRepository.addBlacklistVideo(url, description)
     }
 }

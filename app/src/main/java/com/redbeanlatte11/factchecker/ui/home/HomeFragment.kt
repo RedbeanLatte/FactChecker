@@ -208,7 +208,7 @@ class HomeFragment : Fragment() {
         webView.loadYoutubeHome()
         activity?.clearKeepScreenOn()
         CoroutineScope(Dispatchers.Default).launch {
-            delay(500)
+            delay(DELAY_TO_UNMUTE)
             activity?.applicationContext?.unmute()
         }
     }
@@ -236,8 +236,12 @@ class HomeFragment : Fragment() {
                             videoItems.size
                         }
 
-                        val reportDialog = ReportAllDialogFragment(targetCount) { reportAllVideos() }
-                        reportDialog.show(activity?.supportFragmentManager!!, "ReportAllDialogFragment")
+                        val reportDialog =
+                            ReportAllDialogFragment(targetCount) { reportAllVideos() }
+                        reportDialog.show(
+                            activity?.supportFragmentManager!!,
+                            "ReportAllDialogFragment"
+                        )
                     } else {
                         showMessageDialog(getString(R.string.dialog_no_video_for_report))
                     }
@@ -276,5 +280,6 @@ class HomeFragment : Fragment() {
     companion object {
 
         const val DEFAULT_REPORT_TARGET_COUNT = 25
+        const val DELAY_TO_UNMUTE = 1000L
     }
 }

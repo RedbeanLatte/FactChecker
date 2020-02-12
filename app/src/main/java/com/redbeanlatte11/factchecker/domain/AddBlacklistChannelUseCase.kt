@@ -8,7 +8,7 @@ class AddBlacklistChannelUseCase(
     private val channelsRepository: ChannelsRepository
 ) {
 
-    suspend operator fun invoke(url: String, description: String): Result<Channel> {
+    suspend operator fun invoke(url: String, description: String = ""): Result<Channel> {
         return channelsRepository.addBlacklistChannel(url, description)
     }
 }

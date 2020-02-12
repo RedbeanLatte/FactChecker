@@ -83,4 +83,5 @@
     <string name="title_view_list">단일 열 보기</string>
     <string name="title_view_grid">여러 열 보기</string>
     <string name="saved_channels_view_type">saved_channels_view_type</string>
+    <string name="title_add_blacklist">블랙리스트에 추가 하시겠습니까?</string>
 </resources>

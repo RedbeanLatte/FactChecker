@@ -76,7 +76,7 @@ data class VideoSnippet(
 ) {
 
     val thumbnailUrl: String?
-        get() = thumbnails["high"]?.url
+        get() = thumbnails["medium"]?.url
 
     val publishedAtToShow: String?
         get() = DateTime.parse(publishedAt).toAgoTime()

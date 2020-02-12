@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:contentDescription="@string/description_video_thumbnail"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:imageUrl="@{video.snippet.thumbnailUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/linear_layout_content"
