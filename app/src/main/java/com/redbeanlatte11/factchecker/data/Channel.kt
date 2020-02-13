@@ -12,7 +12,7 @@ data class Channel(
     @PrimaryKey @ColumnInfo(name = "id") val id: String,
     @Embedded val snippet: ChannelSnippet,
     @Embedded val statistics: ChannelStatistics,
-    @ColumnInfo(name = "createdAt") val createdAt: String = DateTime.now().toString()
+    @ColumnInfo(name = "createdAt") val createdAt: String? = DateTime.now().toString()
 ) {
 
     val youtubeUrl: String?
@@ -45,7 +45,7 @@ data class ChannelSnippet(
 }
 
 data class ChannelStatistics(
-    @ColumnInfo(name = "viewCount") val viewCount: Int,
+    @ColumnInfo(name = "viewCount") val viewCount: Long,
     @ColumnInfo(name = "commentCount") val commentCount: Int,
     @ColumnInfo(name = "subscriberCount") val subscriberCount: Int,
     @ColumnInfo(name = "hiddenSubscriberCount") val hiddenSubscriberCount: Boolean,

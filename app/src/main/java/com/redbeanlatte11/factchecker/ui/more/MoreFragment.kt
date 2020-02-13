@@ -62,22 +62,12 @@ class MoreFragment : PreferenceFragmentCompat() {
 
         val reportMessagePreference: EditTextPreference? = findPreference(requireContext().getString(R.string.saved_report_message))
         reportMessagePreference?.summaryProvider = Preference.SummaryProvider<EditTextPreference> { preference ->
-            val text = preference.text
-            if (TextUtils.isEmpty(text)) {
-                requireContext().getString(R.string.default_report_message)
-            } else {
-                text
-            }
+            preference.text
         }
 
         val commentMessagePreference: EditTextPreference? = findPreference(requireContext().getString(R.string.saved_comment_message))
         commentMessagePreference?.summaryProvider = Preference.SummaryProvider<EditTextPreference> { preference ->
-            val text = preference.text
-            if (TextUtils.isEmpty(text)) {
-                requireContext().getString(R.string.default_comment_message)
-            } else {
-                text
-            }
+            preference.text
         }
 
         val appVersionPreference: Preference? = findPreference("app_version")

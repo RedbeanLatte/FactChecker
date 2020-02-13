@@ -35,24 +35,22 @@ class PreferenceUtils {
 
         fun loadReportMessage(context: Context): String {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-            val defaultValue = context.getString(R.string.default_report_message)
             val reportMessage = sharedPreferences.getString(
                 context.getString(R.string.saved_report_message),
-                defaultValue
+                ""
             )
             Timber.d("loadReportMessage: $reportMessage")
-            return reportMessage ?: defaultValue
+            return reportMessage ?: ""
         }
 
         fun loadCommentMessage(context: Context): String {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-            val defaultValue = context.getString(R.string.default_comment_message)
             val reportMessage = sharedPreferences.getString(
                 context.getString(R.string.saved_comment_message),
-                defaultValue
+                ""
             )
             Timber.d("loadCommentMessage: $reportMessage")
-            return reportMessage ?: defaultValue
+            return reportMessage ?: ""
         }
 
         fun loadSearchPeriod(context: Context): SearchPeriod {
