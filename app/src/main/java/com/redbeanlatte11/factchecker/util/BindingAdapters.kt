@@ -81,8 +81,3 @@ fun setDonationButtonText(button: Button, donationAmount: Int) {
 fun setTextWatcher(textInputEditText: TextInputEditText, textWatcher: TextWatcher) {
     textInputEditText.addTextChangedListener(textWatcher)
 }
-
-@BindingAdapter("textInputEditText")
-fun setTextInputEditText(textInputEditText: TextInputEditText, text: String) {
-    textInputEditText.text = SpannableStringBuilder(text)
-}

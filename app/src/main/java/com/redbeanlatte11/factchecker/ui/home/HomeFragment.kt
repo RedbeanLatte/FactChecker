@@ -114,6 +114,14 @@ class HomeFragment : Fragment() {
             showMessageDialog("${getString(R.string.too_many_flags)}\n\n$message")
             clearPreparingReport()
         })
+
+        viewModel.signInConfirmationEvent.observe(this, EventObserver { isSignIn ->
+            Timber.d("isSignIn: $isSignIn")
+            if (!isSignIn) {
+                SignInDialogFragment()
+                    .show(activity?.supportFragmentManager!!, "SignInDialogFragment")
+            }
+        })
     }
 
     private fun showMessageDialog(message: String) {
@@ -175,15 +183,7 @@ class HomeFragment : Fragment() {
 
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.report_video -> {
-                        val savedSignInResult = PreferenceUtils.loadSignInResult(requireContext())
-                        if (savedSignInResult) {
-                            reportVideo(video)
-                        } else {
-                            SignInDialogFragment()
-                                .show(activity?.supportFragmentManager!!, "SignInDialogFragment")
-                        }
-                    }
+                    R.id.report_video -> reportVideo(video)
                     R.id.remove_video_from_list -> viewModel.excludeVideo(video, true)
                 }
                 true
@@ -247,32 +247,13 @@ class HomeFragment : Fragment() {
             }
 
             R.id.menu_report_all -> {
-                val savedSignInResult = PreferenceUtils.loadSignInResult(requireContext())
-                if (savedSignInResult) {
-                    val videoItems = viewModel.items.value!!
-
-                    if (videoItems.isNotEmpty()) {
-                        val targetCount = if (videoItems.size > DEFAULT_REPORT_TARGET_COUNT) {
-                            DEFAULT_REPORT_TARGET_COUNT
-                        } else {
-                            videoItems.size
-                        }
-
-                        val reportDialog =
-                            ReportAllDialogFragment(targetCount) { reportAllVideos() }
-                        reportDialog.show(
-                            activity?.supportFragmentManager!!,
-                            "ReportAllDialogFragment"
-                        )
-                    } else {
-                        showMessageDialog(getString(R.string.dialog_no_video_for_report))
-                    }
+                val videoItems = viewModel.items.value!!
+                if (videoItems.isNotEmpty()) {
+                    reportAllVideos()
                 } else {
-                    SignInDialogFragment().show(
-                        activity?.supportFragmentManager!!,
-                        "SignInDialogFragment"
-                    )
+                    showMessageDialog(getString(R.string.dialog_no_video_for_report))
                 }
+
                 true
             }
 

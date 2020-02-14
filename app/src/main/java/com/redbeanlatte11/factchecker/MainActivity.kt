@@ -9,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.redbeanlatte11.factchecker.domain.IsSignInUseCase
 import com.redbeanlatte11.factchecker.util.PreferenceUtils
 import kotlinx.android.synthetic.main.main_act.*
 
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
         navGraph.startDestination = if (PreferenceUtils.loadSignInResult(applicationContext)) {
             R.id.home_dest
-        } else{
+        } else {
             R.id.setup_dest
         }
         navController.graph = navGraph

@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="context"
+            type="android.content.Context" />
+
+        <variable
             name="viewmodel"
             type="com.redbeanlatte11.factchecker.ui.setup.SetupViewModel" />
     </data>
@@ -33,17 +37,18 @@
             android:id="@+id/text_input_layout_report_message"
             android:layout_width="match_parent"
             android:layout_height="@dimen/setup_item_height"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
+            android:hint="@{@string/report_message + ` *`}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image_view_app_icon">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_text_report_message"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/report_message"
-                app:textInputEditText="@{viewmodel.reportMessage}"
-                app:textWatcher="@{viewmodel.reportMessageTextWatcher}"/>
+                android:text="@{viewmodel.reportMessage}"
+                app:textWatcher="@{viewmodel.reportMessageTextWatcher}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,15 +57,16 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/setup_item_height"
             android:layout_marginTop="16dp"
+            android:hint="@string/comment_message"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_input_layout_report_message">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_text_comment_message"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/comment_message"
-                app:textInputEditText="@{viewmodel.commentMessage}"
+                android:text="@{viewmodel.commentMessage}"
                 app:textWatcher="@{viewmodel.commentMessageTextWatcher}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -68,7 +74,7 @@
         <Switch
             android:id="@+id/switch_auto_comment"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/setup_item_height"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:contentDescription="@string/summary_auto_comment"
             android:switchPadding="16dp"
@@ -82,6 +88,7 @@
             android:id="@+id/text_view_summary_auto_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/summary_auto_comment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/switch_auto_comment" />
@@ -98,7 +105,8 @@
             android:enabled="@{viewmodel.canLink}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:onClick="@{() -> viewmodel.linkToGoogleAccount()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

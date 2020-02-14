@@ -58,7 +58,7 @@ class ReportVideoUseCase(
             super.onPageFinished(webView, url)
 
             Timber.d("onPageFinished, stage: $stage, url: $url")
-            if (continuation.isCancelled) {
+            if (continuation.isCancelled || !url.contains("youtube.com")) {
                 return
             }
 

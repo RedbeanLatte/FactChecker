@@ -6,24 +6,24 @@ import android.webkit.WebViewClient
 import com.redbeanlatte11.factchecker.util.PreferenceUtils
 import timber.log.Timber
 
-class SignInUseCase {
+class LinkGoogleAccountUseCase {
 
     @SuppressLint("SetJavaScriptEnabled")
-    operator fun invoke(webView: WebView, onCompleted: () -> Unit, onSignOutCompleted: () -> Unit) =
+    operator fun invoke(webView: WebView, onSignInCompleted: () -> Unit, onSignOutCompleted: () -> Unit) =
         with(webView) {
             settings.javaScriptEnabled = true
-            webViewClient = GoogleAccountWebViewClient(onCompleted, onSignOutCompleted)
+            webViewClient = GoogleAccountWebViewClient(onSignInCompleted, onSignOutCompleted)
             loadUrl("https://accounts.google.com")
         }
 
     private class GoogleAccountWebViewClient(
-        val onCompleted: () -> Unit,
+        val onSignInCompleted: () -> Unit,
         val onSignOutCompleted: () -> Unit
     ) : WebViewClient() {
 
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
-            Timber.d("onPageFinished, stage: $url")
+            Timber.d("onPageFinished, url: $url")
 
             val savedSignInResult = PreferenceUtils.loadSignInResult(view.context)
 
@@ -36,8 +36,8 @@ class SignInUseCase {
             } else if (url.contains("https://myaccount.google.com")) {
                 if (!savedSignInResult) {
                     PreferenceUtils.saveSignInResult(view.context, true)
+                    onSignInCompleted()
                 }
-                onCompleted()
             }
         }
     }

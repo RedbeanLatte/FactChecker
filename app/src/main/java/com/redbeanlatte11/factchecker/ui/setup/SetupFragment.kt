@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.redbeanlatte11.factchecker.EventObserver
 import com.redbeanlatte11.factchecker.R
 import com.redbeanlatte11.factchecker.databinding.SetupFragBinding
 import com.redbeanlatte11.factchecker.util.PreferenceUtils
 import org.koin.android.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class SetupFragment : Fragment() {
 
@@ -31,38 +30,23 @@ class SetupFragment : Fragment() {
         }
 
         prepareSetup()
-
-        setupObserver()
+        setupEventObserver()
 
         return viewDataBinding.root
+    }
+
+    private fun setupEventObserver() {
+        viewModel.setupParamsSavedEvent.observe(this, EventObserver { setupParams ->
+            PreferenceUtils.saveReportMessage(requireContext(), setupParams.reportMessage)
+            PreferenceUtils.saveCommentMessage(requireContext(), setupParams.commentMessage)
+            PreferenceUtils.saveAutoCommentEnabled(requireContext(), setupParams.autoCommentEnabled)
+        })
     }
 
     private fun prepareSetup() {
         (activity as AppCompatActivity).supportActionBar?.hide()
         val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
         navView.visibility = View.GONE
-    }
-
-    private fun clearPreparingSetup() {
-        (activity as AppCompatActivity).supportActionBar?.show()
-
-        val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
-        navView.visibility = View.VISIBLE
-    }
-
-    private fun setupObserver() {
-        viewModel.reportMessage.observe(this, Observer { reportMessage ->
-            Timber.d("reportMessage: $reportMessage")
-            PreferenceUtils.saveReportMessage(requireContext(), reportMessage)
-        })
-
-        viewModel.commentMessage.observe(this, Observer { commentMessage ->
-            PreferenceUtils.saveCommentMessage(requireContext(), commentMessage)
-        })
-
-        viewModel.autoCommentEnabled.observe(this, Observer { autoCommentEnabled ->
-            PreferenceUtils.saveAutoCommentEnabled(requireContext(), autoCommentEnabled)
-        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -79,11 +63,9 @@ class SetupFragment : Fragment() {
     }
 
     private fun setupNavigation() {
-        viewDataBinding.buttonLinkGoogleAccount.setOnClickListener {
-            clearPreparingSetup()
-
+        viewModel.linkToGoogleAccountEvent.observe(this, EventObserver {
             val action = SetupFragmentDirections.actionSetupDestToGoogleAccountDest(SetupFragment::class.java.simpleName)
             findNavController().navigate(action)
-        }
+        })
     }
 }

@@ -9,10 +9,7 @@ import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.source.VideosDataSource
-import com.redbeanlatte11.factchecker.domain.ExcludeVideoUseCase
-import com.redbeanlatte11.factchecker.domain.GetVideosUseCase
-import com.redbeanlatte11.factchecker.domain.IncludeVideoUseCase
-import com.redbeanlatte11.factchecker.domain.ReportVideoUseCase
+import com.redbeanlatte11.factchecker.domain.*
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -20,7 +17,8 @@ class VideosViewModel(
     private val getVideosUseCase: GetVideosUseCase,
     private val reportVideoUseCase: ReportVideoUseCase,
     private val excludeVideoUseCase: ExcludeVideoUseCase,
-    private val includeVideoUseCase: IncludeVideoUseCase
+    private val includeVideoUseCase: IncludeVideoUseCase,
+    private val isSignInUseCase: IsSignInUseCase
 ) : ViewModel() {
 
     private val _items = MutableLiveData<List<Video>>().apply { value = emptyList() }
@@ -43,6 +41,9 @@ class VideosViewModel(
 
     private val _tooManyFlagsEvent = MutableLiveData<Event<Int>>()
     val tooManyFlagsEvent: LiveData<Event<Int>> = _tooManyFlagsEvent
+
+    private val _signInConfirmationEvent = MutableLiveData<Event<Boolean>>()
+    val signInConfirmationEvent: LiveData<Event<Boolean>> = _signInConfirmationEvent
 
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
@@ -122,6 +123,10 @@ class VideosViewModel(
         videoItems: List<Video>
     ) {
         reportJob = viewModelScope.launch {
+            val isSignIn = isSignInUseCase(webView)
+            _signInConfirmationEvent.value = Event(isSignIn)
+            if (!isSignIn) return@launch
+
             _reportStartedEvent.value = Event(videoItems.size)
 
             reportedVideoCount = 0

@@ -25,12 +25,13 @@ val viewModelModule = module {
             GetVideosUseCase(get(named("blacklist_videos_repository"))),
             ReportVideoUseCase(get(named("blacklist_videos_repository"))),
             ExcludeVideoUseCase(get(named("blacklist_videos_repository"))),
-            IncludeVideoUseCase(get(named("blacklist_videos_repository")))
+            IncludeVideoUseCase(get(named("blacklist_videos_repository"))),
+            IsSignInUseCase()
         )
     }
 
     viewModel {
-        GoogleAccountViewModel(SignInUseCase())
+        GoogleAccountViewModel(LinkGoogleAccountUseCase())
     }
 
     viewModel {
