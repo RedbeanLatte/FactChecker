@@ -8,12 +8,17 @@ import com.redbeanlatte11.factchecker.ui.home.GoogleAccountViewModel
 import com.redbeanlatte11.factchecker.ui.home.VideosViewModel
 import com.redbeanlatte11.factchecker.ui.more.DonationViewModel
 import com.redbeanlatte11.factchecker.ui.popular.PopularViewModel
+import com.redbeanlatte11.factchecker.ui.setup.SetupViewModel
 import com.redbeanlatte11.factchecker.ui.share.ShareViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val viewModelModule = module {
+
+    viewModel {
+        SetupViewModel()
+    }
 
     viewModel {
         VideosViewModel(

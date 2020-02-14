@@ -43,14 +43,39 @@ class PreferenceUtils {
             return reportMessage ?: ""
         }
 
+        fun saveReportMessage(context: Context, reportMessage: String) {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+            with(sharedPref.edit()) {
+                putString(
+                    context.getString(R.string.saved_report_message),
+                    reportMessage
+                )
+                commit()
+            }
+            Timber.d("saveReportMessage: $reportMessage")
+        }
+
         fun loadCommentMessage(context: Context): String {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val defaultValue = context.getString(R.string.default_comment_message)
             val reportMessage = sharedPreferences.getString(
                 context.getString(R.string.saved_comment_message),
-                ""
+                defaultValue
             )
             Timber.d("loadCommentMessage: $reportMessage")
-            return reportMessage ?: ""
+            return reportMessage ?: defaultValue
+        }
+
+        fun saveCommentMessage(context: Context, commentMessage: String) {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+            with(sharedPref.edit()) {
+                putString(
+                    context.getString(R.string.saved_comment_message),
+                    commentMessage
+                )
+                commit()
+            }
+            Timber.d("saveCommentMessage: $commentMessage")
         }
 
         fun loadSearchPeriod(context: Context): SearchPeriod {
@@ -75,14 +100,26 @@ class PreferenceUtils {
             Timber.d("saveSearchPeriod: $searchPeriod")
         }
 
-        fun loadIsAutoCommentEnabled(context: Context): Boolean {
+        fun loadAutoCommentEnabled(context: Context): Boolean {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             val signInResult = sharedPreferences.getBoolean(
-                context.getString(R.string.saved_is_auto_comment_enabled),
+                context.getString(R.string.saved_auto_comment_enabled),
                 false
             )
-            Timber.d("loadIsAutoCommentEnabled: $signInResult")
+            Timber.d("loadAutoCommentEnabled: $signInResult")
             return signInResult
+        }
+
+        fun saveAutoCommentEnabled(context: Context, autoCommentEnabled: Boolean) {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+            with(sharedPref.edit()) {
+                putBoolean(
+                    context.getString(R.string.saved_auto_comment_enabled),
+                    autoCommentEnabled
+                )
+                commit()
+            }
+            Timber.d("saveAutoCommentEnabled: $autoCommentEnabled")
         }
 
         fun loadChannelsViewType(context: Context): ChannelsViewType {
@@ -105,6 +142,16 @@ class PreferenceUtils {
                 commit()
             }
             Timber.d("saveChannelsViewType: $channelsViewType")
+        }
+
+        fun loadTimeoutValue(context: Context): Int {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val timeoutValue = sharedPreferences.getString(
+                context.getString(R.string.saved_timeout_value),
+                context.getString(R.string.default_timeout_value)
+            )
+            Timber.d("loadTimeoutValue: $timeoutValue")
+            return timeoutValue?.toInt()!!
         }
     }
 }

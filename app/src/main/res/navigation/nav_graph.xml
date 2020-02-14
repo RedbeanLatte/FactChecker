@@ -3,7 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/home_dest">
+    app:startDestination="@+id/setup_dest">
+
+    <fragment
+        android:id="@+id/setup_dest"
+        android:name="com.redbeanlatte11.factchecker.ui.setup.SetupFragment"
+        tools:layout="@layout/setup_frag" >
+        <action
+            android:id="@+id/action_setup_dest_to_google_account_dest"
+            app:destination="@id/google_account_dest" />
+    </fragment>
 
     <fragment
         android:id="@+id/home_dest"

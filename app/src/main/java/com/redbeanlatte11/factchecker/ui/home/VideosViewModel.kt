@@ -41,6 +41,9 @@ class VideosViewModel(
     private val _reportCompletedEvent = MutableLiveData<Event<Int>>()
     val reportCompletedEvent: LiveData<Event<Int>> = _reportCompletedEvent
 
+    private val _tooManyFlagsEvent = MutableLiveData<Event<Int>>()
+    val tooManyFlagsEvent: LiveData<Event<Int>> = _tooManyFlagsEvent
+
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
     private var reportJob: Job? = null
@@ -122,7 +125,6 @@ class VideosViewModel(
             _reportStartedEvent.value = Event(videoItems.size)
 
             reportedVideoCount = 0
-            var retryCount = 0
             videoItems.forEach { video ->
                 if (!isActive) {
                     return@launch
@@ -131,20 +133,16 @@ class VideosViewModel(
                 Timber.d("report video: ${video.snippet.title}")
                 _reportOnNextEvent.value = Event(video)
                 try {
-                    reportVideoUseCase(webView, video, reportParams)
+                    reportVideoUseCase(webView, video, reportParams) {
+                        Timber.w("Too many flags")
+                        cancel(CancellationException("Too many flags"))
+                        _tooManyFlagsEvent.value = Event(reportedVideoCount)
+                        loadVideos(false)
+                    }
                     reportedVideoCount += 1
-                    retryCount = 0
                 } catch (ex: TimeoutCancellationException) {
                     Timber.w("report video timed out")
-
-                    if (retryCount >= MAX_RETRY_COUNT) {
-                        cancel(ex)
-                        _reportCompletedEvent.value = Event(reportedVideoCount)
-                        loadVideos(false)
-                        showSnackbarMessage(R.string.time_out_message)
-                    } else {
-                        retryCount += 1
-                    }
+                    showSnackbarMessage(R.string.time_out_message)
                 }
             }
 
@@ -181,9 +179,5 @@ class VideosViewModel(
 
     fun refresh() {
         loadVideos(true)
-    }
-
-    companion object {
-        const val MAX_RETRY_COUNT = 2
     }
 }

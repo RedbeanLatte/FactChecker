@@ -1,7 +1,6 @@
 package com.redbeanlatte11.factchecker.domain
 
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import com.redbeanlatte11.factchecker.data.ReportParams
 import com.redbeanlatte11.factchecker.data.Video
 import com.redbeanlatte11.factchecker.data.source.VideosRepository
@@ -19,8 +18,9 @@ class ReportVideoUseCase(
         webView: WebView,
         video: Video,
         reportParams: ReportParams,
-        ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-    ) = suspendCoroutineWithTimeout<Unit>(TIME_OUT) { continuation ->
+        ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+        onReceivedTooManyFlags: () -> Unit
+    ) = suspendCoroutineWithTimeout<Unit>(reportParams.reportTimeoutValue * 1000L) { continuation ->
         with(webView) {
             webViewClient = YoutubeWebViewClient(
                 continuation,
@@ -29,6 +29,11 @@ class ReportVideoUseCase(
                 CoroutineScope(ioDispatcher).launch { videosRepository.reportVideo(video) }
             }
 
+            val youtubeWebViewInterface = YoutubeWebViewInterface(continuation) {
+                onReceivedTooManyFlags()
+            }
+
+            addJavascriptInterface(youtubeWebViewInterface, "YoutubeWebViewInterface")
             loadUrl(video.youtubeUrl)
         }
     }
@@ -43,8 +48,15 @@ class ReportVideoUseCase(
 
         private val isResumed = AtomicBoolean(false)
 
+        override fun onLoadResource(view: WebView, url: String?) {
+            super.onLoadResource(view, url)
+
+            if (stage == 3) checkTooManyFlags(view)
+        }
+
         override fun onPageFinished(webView: WebView, url: String) {
             super.onPageFinished(webView, url)
+
             Timber.d("onPageFinished, stage: $stage, url: $url")
             if (continuation.isCancelled) {
                 return
@@ -68,7 +80,7 @@ class ReportVideoUseCase(
                                     }
                                     
                                     var commentSection = document.getElementsByTagName('ytm-comment-section-header-renderer')[0];
-                                    if (commentSection != undefined && ${reportParams.isAutoCommentEnabled}) {
+                                    if (commentSection != undefined && ${reportParams.autoCommentEnabled}) {
                                         commentSection.click();
                                         var expandButton = commentSection.getElementsByTagName('button')[0];
                                         expandButton.click();
@@ -145,9 +157,34 @@ class ReportVideoUseCase(
                 }
             }
         }
+
+
+        private fun checkTooManyFlags(webView: WebView) {
+            webView.loadUrl(
+                "javascript: " +
+                        """
+                            var responseText = document.getElementsByClassName('notification-action-response-text')[0];
+                            if (responseText != undefined && responseText.textContent == 'Too many flags.') {
+                                YoutubeWebViewInterface.handleTooManyFlags();
+                            }
+                        """.trimIndent()
+            )
+        }
     }
 
-    companion object {
-        const val TIME_OUT = 10000L
+    private class YoutubeWebViewInterface(
+        val continuation: CancellableContinuation<Unit>,
+        val onReceivedTooManyFlags: () -> Unit
+    ) {
+
+        val isHandledTooManyFlags = AtomicBoolean(false)
+
+        @JavascriptInterface
+        fun handleTooManyFlags() {
+            if (!isHandledTooManyFlags.get() && !continuation.isCancelled) {
+                isHandledTooManyFlags.set(true)
+                CoroutineScope(Dispatchers.Main).launch { onReceivedTooManyFlags() }
+            }
+        }
     }
 }

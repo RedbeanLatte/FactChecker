@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         app:key="donation_category"
@@ -45,15 +44,22 @@
             app:key="@string/saved_report_message"
             app:title="@string/report_message"
             app:iconSpaceReserved="false"/>
-        <SwitchPreferenceCompat
-            app:key="@string/saved_is_auto_comment_enabled"
-            app:title="@string/title_auto_comment"
-            app:summary="@string/summary_auto_comment"
-            app:iconSpaceReserved="false" />
         <EditTextPreference
             app:key="@string/saved_comment_message"
             app:title="@string/comment_message"
             app:iconSpaceReserved="false"/>
+        <SwitchPreferenceCompat
+            app:key="@string/saved_auto_comment_enabled"
+            app:title="@string/title_auto_comment"
+            app:summary="@string/summary_auto_comment"
+            app:iconSpaceReserved="false" />
+        <ListPreference
+            app:key="@string/saved_timeout_value"
+            app:title="@string/title_timeout_value"
+            app:iconSpaceReserved="false"
+            app:entries="@array/timeout_values"
+            app:entryValues="@array/timeout_values"
+            app:defaultValue="@string/default_timeout_value"/>
         <Preference
             app:key="app_version"
             app:title="@string/title_app_version"

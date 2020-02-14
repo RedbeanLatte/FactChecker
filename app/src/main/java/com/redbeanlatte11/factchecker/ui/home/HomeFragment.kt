@@ -8,6 +8,7 @@ import android.webkit.WebViewClient
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.redbeanlatte11.factchecker.EventObserver
 import com.redbeanlatte11.factchecker.R
@@ -42,11 +43,17 @@ class HomeFragment : Fragment() {
             viewmodel = viewModel
         }
 
+        setupNavView()
         setupWebView()
         setHasOptionsMenu(true)
         setupEventObserver()
 
         return viewDataBinding.root
+    }
+
+    private fun setupNavView() {
+        val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
+        navView.visibility = View.VISIBLE
     }
 
     override fun onPause() {
@@ -92,6 +99,19 @@ class HomeFragment : Fragment() {
             }
 
             showMessageDialog(message)
+            clearPreparingReport()
+        })
+
+        viewModel.tooManyFlagsEvent.observe(this, EventObserver { reportedVideoCount ->
+            progressDialogFragment?.dismiss()
+
+            val message = if (reportedVideoCount > 0) {
+                "$reportedVideoCount ${getString(R.string.dialog_report_complete)}"
+            } else {
+                getString(R.string.dialog_report_complete_zero)
+            }
+
+            showMessageDialog("${getString(R.string.too_many_flags)}\n\n$message")
             clearPreparingReport()
         })
     }
@@ -173,9 +193,10 @@ class HomeFragment : Fragment() {
 
     private fun reportVideo(video: Video) {
         val reportParams = ReportParams(
+            PreferenceUtils.loadTimeoutValue(requireContext()),
             PreferenceUtils.loadReportMessage(requireContext()),
             PreferenceUtils.loadCommentMessage(requireContext()),
-            PreferenceUtils.loadIsAutoCommentEnabled(requireContext())
+            PreferenceUtils.loadAutoCommentEnabled(requireContext())
         )
 
         viewModel.reportVideo(
@@ -187,9 +208,10 @@ class HomeFragment : Fragment() {
 
     private fun reportAllVideos() {
         val reportParams = ReportParams(
+            PreferenceUtils.loadTimeoutValue(requireContext()),
             PreferenceUtils.loadReportMessage(requireContext()),
             PreferenceUtils.loadCommentMessage(requireContext()),
-            PreferenceUtils.loadIsAutoCommentEnabled(requireContext()),
+            PreferenceUtils.loadAutoCommentEnabled(requireContext()),
             DEFAULT_REPORT_TARGET_COUNT
         )
 

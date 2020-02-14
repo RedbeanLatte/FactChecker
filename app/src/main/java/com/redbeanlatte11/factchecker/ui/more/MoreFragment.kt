@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import androidx.navigation.fragment.findNavController
 import androidx.preference.EditTextPreference
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.redbeanlatte11.factchecker.BuildConfig
@@ -62,12 +63,27 @@ class MoreFragment : PreferenceFragmentCompat() {
 
         val reportMessagePreference: EditTextPreference? = findPreference(requireContext().getString(R.string.saved_report_message))
         reportMessagePreference?.summaryProvider = Preference.SummaryProvider<EditTextPreference> { preference ->
-            preference.text
+            val text = preference.text
+            if (TextUtils.isEmpty(text)) {
+                requireContext().getString(R.string.default_report_message)
+            } else {
+                text
+            }
         }
 
         val commentMessagePreference: EditTextPreference? = findPreference(requireContext().getString(R.string.saved_comment_message))
         commentMessagePreference?.summaryProvider = Preference.SummaryProvider<EditTextPreference> { preference ->
-            preference.text
+            val text = preference.text
+            if (TextUtils.isEmpty(text)) {
+                requireContext().getString(R.string.default_comment_message)
+            } else {
+                text
+            }
+        }
+
+        val timeoutValuePreference: Preference? = findPreference(getString(R.string.saved_timeout_value))
+        timeoutValuePreference?.summaryProvider = Preference.SummaryProvider<ListPreference> { preference ->
+            "${preference.value}${getString(R.string.seconds)}"
         }
 
         val appVersionPreference: Preference? = findPreference("app_version")
