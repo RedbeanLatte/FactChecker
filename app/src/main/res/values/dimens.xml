@@ -14,5 +14,6 @@
     <dimen name="grid_item_width">96dp</dimen>
     <dimen name="grid_item_height">150dp</dimen>
     <dimen name="channel_item_height">96dp</dimen>
+    <dimen name="setup_item_height">96dp</dimen>
 </resources>
 

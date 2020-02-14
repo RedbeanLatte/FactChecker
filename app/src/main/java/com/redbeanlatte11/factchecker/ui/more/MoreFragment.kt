@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import androidx.navigation.fragment.findNavController
 import androidx.preference.EditTextPreference
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.redbeanlatte11.factchecker.BuildConfig
@@ -78,6 +79,11 @@ class MoreFragment : PreferenceFragmentCompat() {
             } else {
                 text
             }
+        }
+
+        val timeoutValuePreference: Preference? = findPreference(getString(R.string.saved_timeout_value))
+        timeoutValuePreference?.summaryProvider = Preference.SummaryProvider<ListPreference> { preference ->
+            "${preference.value}${getString(R.string.seconds)}"
         }
 
         val appVersionPreference: Preference? = findPreference("app_version")

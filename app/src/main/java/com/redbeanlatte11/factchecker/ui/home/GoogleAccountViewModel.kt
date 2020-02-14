@@ -16,11 +16,16 @@ class GoogleAccountViewModel(
     private val _signInCompletedEvent = MutableLiveData<Event<Unit>>()
     val signInCompletedEvent: LiveData<Event<Unit>> = _signInCompletedEvent
 
+    private val _signOutCompletedEvent = MutableLiveData<Event<Unit>>()
+    val signOutCompletedEvent: LiveData<Event<Unit>> = _signInCompletedEvent
+
     fun signIn(webView: WebView) {
         viewModelScope.launch {
-            signInUseCase(webView) {
-                _signInCompletedEvent.value = Event(Unit)
-            }
+            signInUseCase(
+                webView,
+                { _signInCompletedEvent.value = Event(Unit) },
+                { _signOutCompletedEvent.value = Event(Unit) }
+            )
         }
     }
 }

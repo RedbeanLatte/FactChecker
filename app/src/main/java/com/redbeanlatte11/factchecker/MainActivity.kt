@@ -3,11 +3,14 @@ package com.redbeanlatte11.factchecker
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.redbeanlatte11.factchecker.util.PreferenceUtils
+import kotlinx.android.synthetic.main.main_act.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,10 +22,24 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.main_act)
         setSupportActionBar(findViewById(R.id.toolbar))
+        setupStartDestination()
 
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
+    }
+
+    private fun setupStartDestination() {
+        val navHostFragment = nav_host_fragment as NavHostFragment
+        val navController = navHostFragment.navController
+
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+        navGraph.startDestination = if (PreferenceUtils.loadSignInResult(applicationContext)) {
+            R.id.home_dest
+        } else{
+            R.id.setup_dest
+        }
+        navController.graph = navGraph
     }
 
     private fun setupBottomNavigationBar() {
@@ -39,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         // Now that BottomNavigationBar has restored its instance state
         // and its selectedItemId, we can proceed with setting up the

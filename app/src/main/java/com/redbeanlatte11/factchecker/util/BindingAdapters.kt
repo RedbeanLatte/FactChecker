@@ -16,6 +16,7 @@
 package com.redbeanlatte11.factchecker.util
 
 import ChannelsGridAdapter
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.ImageView
@@ -79,4 +80,9 @@ fun setDonationButtonText(button: Button, donationAmount: Int) {
 @BindingAdapter("textWatcher")
 fun setTextWatcher(textInputEditText: TextInputEditText, textWatcher: TextWatcher) {
     textInputEditText.addTextChangedListener(textWatcher)
+}
+
+@BindingAdapter("textInputEditText")
+fun setTextInputEditText(textInputEditText: TextInputEditText, text: String) {
+    textInputEditText.text = SpannableStringBuilder(text)
 }
