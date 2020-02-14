@@ -123,14 +123,6 @@ class HomeFragment : Fragment() {
             }
         })
     }
-
-    private fun showMessageDialog(message: String) {
-        MessageDialogFragment(message).show(
-            activity?.supportFragmentManager!!,
-            "MessageDialogFragment"
-        )
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.setFiltering(VideosFilterType.BLACKLIST_VIDEOS)
         viewModel.setSearchPeriod(PreferenceUtils.loadSearchPeriod(requireContext()))
@@ -183,7 +175,13 @@ class HomeFragment : Fragment() {
 
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.report_video -> reportVideo(video)
+                    R.id.report_video -> {
+                        if (PreferenceUtils.loadSignInResult(requireContext())) {
+                            reportVideo(video)
+                        } else {
+                            showSignInDialog()
+                        }
+                    }
                     R.id.remove_video_from_list -> viewModel.excludeVideo(video, true)
                 }
                 true
@@ -249,7 +247,11 @@ class HomeFragment : Fragment() {
             R.id.menu_report_all -> {
                 val videoItems = viewModel.items.value!!
                 if (videoItems.isNotEmpty()) {
-                    reportAllVideos()
+                    if (PreferenceUtils.loadSignInResult(requireContext())) {
+                        reportAllVideos()
+                    } else {
+                        showSignInDialog()
+                    }
                 } else {
                     showMessageDialog(getString(R.string.dialog_no_video_for_report))
                 }
@@ -278,6 +280,20 @@ class HomeFragment : Fragment() {
             }
             show()
         }
+    }
+
+    private fun showMessageDialog(message: String) {
+        MessageDialogFragment(message).show(
+            activity?.supportFragmentManager!!,
+            "MessageDialogFragment"
+        )
+    }
+
+    private fun showSignInDialog() {
+        SignInDialogFragment().show(
+            activity?.supportFragmentManager!!,
+            "SignInDialogFragment"
+        )
     }
 
     companion object {

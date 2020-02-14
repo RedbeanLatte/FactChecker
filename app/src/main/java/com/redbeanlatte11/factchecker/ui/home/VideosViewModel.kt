@@ -17,8 +17,7 @@ class VideosViewModel(
     private val getVideosUseCase: GetVideosUseCase,
     private val reportVideoUseCase: ReportVideoUseCase,
     private val excludeVideoUseCase: ExcludeVideoUseCase,
-    private val includeVideoUseCase: IncludeVideoUseCase,
-    private val isSignInUseCase: IsSignInUseCase
+    private val includeVideoUseCase: IncludeVideoUseCase
 ) : ViewModel() {
 
     private val _items = MutableLiveData<List<Video>>().apply { value = emptyList() }
@@ -123,10 +122,6 @@ class VideosViewModel(
         videoItems: List<Video>
     ) {
         reportJob = viewModelScope.launch {
-            val isSignIn = isSignInUseCase(webView)
-            _signInConfirmationEvent.value = Event(isSignIn)
-            if (!isSignIn) return@launch
-
             _reportStartedEvent.value = Event(videoItems.size)
 
             reportedVideoCount = 0
