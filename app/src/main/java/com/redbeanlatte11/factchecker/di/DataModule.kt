@@ -55,7 +55,7 @@ val dataModule = module {
         Room.databaseBuilder(
             androidContext(),
             FactCheckerDataBase::class.java, "FactCheckerDB.db"
-        ).fallbackToDestructiveMigration()
+        ).addMigrations(FactCheckerDataBase.MIGRATION_2_3)
             .build()
     }
 

@@ -298,7 +298,7 @@ class HomeFragment : Fragment() {
 
     companion object {
 
-        const val DEFAULT_REPORT_TARGET_COUNT = 25
+        const val DEFAULT_REPORT_TARGET_COUNT = 30
         const val DELAY_TO_UNMUTE = 1000L
     }
 }

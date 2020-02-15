@@ -3,6 +3,8 @@ package com.redbeanlatte11.factchecker.data.source.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.data.Video
 
@@ -11,11 +13,22 @@ import com.redbeanlatte11.factchecker.data.Video
  *
  * Note that exportSchema should be true in production databases.
  */
-@Database(entities = [Video::class, Channel::class], version = 2, exportSchema = false)
+@Database(entities = [Video::class, Channel::class], version = 3, exportSchema = false)
 @TypeConverters(ThumbnailsConverter::class, StringListConverter::class, LocalizedConverter::class)
 abstract class FactCheckerDataBase : RoomDatabase() {
 
     abstract fun videoDao(): VideosDao
 
     abstract fun channelDao(): ChannelsDao
+
+    companion object {
+
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE channels "
+                    + " MODIFY viewCount BIGINT")
+            }
+        }
+    }
 }
