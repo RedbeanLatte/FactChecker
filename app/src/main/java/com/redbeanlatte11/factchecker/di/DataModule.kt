@@ -4,10 +4,7 @@ import androidx.room.Room
 import com.redbeanlatte11.factchecker.data.source.ChannelsRepository
 import com.redbeanlatte11.factchecker.data.source.DefaultChannelsRepository
 import com.redbeanlatte11.factchecker.data.source.DefaultVideosRepository
-import com.redbeanlatte11.factchecker.data.source.local.ChannelsLocalDataSource
-import com.redbeanlatte11.factchecker.data.source.local.FactCheckerDataBase
-import com.redbeanlatte11.factchecker.data.source.local.PopularVideosDataBase
-import com.redbeanlatte11.factchecker.data.source.local.VideosLocalDataSource
+import com.redbeanlatte11.factchecker.data.source.local.*
 import com.redbeanlatte11.factchecker.data.source.remote.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
@@ -55,7 +52,7 @@ val dataModule = module {
         Room.databaseBuilder(
             androidContext(),
             FactCheckerDataBase::class.java, "FactCheckerDB.db"
-        ).addMigrations(FactCheckerDataBase.MIGRATION_2_3)
+        ).addMigrations(FactCheckerDataBaseMigration.MIGRATION_2_3)
             .build()
     }
 

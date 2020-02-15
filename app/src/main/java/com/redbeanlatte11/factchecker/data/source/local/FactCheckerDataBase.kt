@@ -20,15 +20,4 @@ abstract class FactCheckerDataBase : RoomDatabase() {
     abstract fun videoDao(): VideosDao
 
     abstract fun channelDao(): ChannelsDao
-
-    companion object {
-
-        val MIGRATION_2_3 = object : Migration(2, 3) {
-
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE channels "
-                    + " MODIFY viewCount BIGINT")
-            }
-        }
-    }
 }
