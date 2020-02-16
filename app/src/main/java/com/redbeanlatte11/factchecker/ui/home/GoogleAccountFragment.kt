@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -45,7 +46,11 @@ class GoogleAccountFragment : Fragment() {
     private fun setupWebView() {
         viewDataBinding.webView.apply {
             settings.javaScriptEnabled = true
+            settings.cacheMode = WebSettings.LOAD_NO_CACHE
+            settings.setAppCacheEnabled(false)
             webViewClient = WebViewClient()
+            clearHistory()
+            clearCache(true)
         }
     }
 

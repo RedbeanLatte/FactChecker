@@ -3,6 +3,7 @@ package com.redbeanlatte11.factchecker.ui.home
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.widget.PopupMenu
@@ -66,6 +67,8 @@ class HomeFragment : Fragment() {
     private fun setupWebView() {
         webView = viewDataBinding.webView
         webView.settings.javaScriptEnabled = true
+        webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+        webView.settings.setAppCacheEnabled(false)
         webView.webViewClient = WebViewClient()
     }
 
@@ -220,6 +223,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareReport() {
+        webView.clearHistory()
+        webView.clearCache(true)
         activity?.keepScreenOn()
         activity?.applicationContext?.mute()
     }
