@@ -3,9 +3,6 @@ package com.redbeanlatte11.factchecker.ui.home
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,6 +20,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import android.webkit.*
 
 
 class HomeFragment : Fragment() {
@@ -57,8 +55,15 @@ class HomeFragment : Fragment() {
         navView.visibility = View.VISIBLE
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        webView.onResume()
+    }
+
     override fun onPause() {
         viewModel.cancelReport()
+        webView.onPause()
 
         super.onPause()
     }
@@ -66,10 +71,12 @@ class HomeFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView() {
         webView = viewDataBinding.webView
-        webView.settings.javaScriptEnabled = true
-        webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
-        webView.settings.setAppCacheEnabled(false)
-        webView.webViewClient = WebViewClient()
+        webView.apply {
+            settings.javaScriptEnabled = true
+            webViewClient = WebViewClient()
+            clearHistory()
+            clearCache(true)
+        }
     }
 
     private fun setupEventObserver() {
@@ -126,6 +133,7 @@ class HomeFragment : Fragment() {
             }
         })
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.setFiltering(VideosFilterType.BLACKLIST_VIDEOS)
         viewModel.setSearchPeriod(PreferenceUtils.loadSearchPeriod(requireContext()))
@@ -223,14 +231,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareReport() {
-        webView.clearHistory()
-        webView.clearCache(true)
         activity?.keepScreenOn()
         activity?.applicationContext?.mute()
     }
 
     private fun clearPreparingReport() {
-        webView.loadYoutubeHome()
+        webView.loadBlank()
         activity?.clearKeepScreenOn()
         CoroutineScope(Dispatchers.Default).launch {
             delay(DELAY_TO_UNMUTE)

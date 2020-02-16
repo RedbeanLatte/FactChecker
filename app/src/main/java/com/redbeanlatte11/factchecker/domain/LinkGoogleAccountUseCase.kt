@@ -11,7 +11,6 @@ class LinkGoogleAccountUseCase {
     @SuppressLint("SetJavaScriptEnabled")
     operator fun invoke(webView: WebView, onSignInCompleted: () -> Unit, onSignOutCompleted: () -> Unit) =
         with(webView) {
-            settings.javaScriptEnabled = true
             webViewClient = GoogleAccountWebViewClient(onSignInCompleted, onSignOutCompleted)
             loadUrl("https://accounts.google.com")
         }

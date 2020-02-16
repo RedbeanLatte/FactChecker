@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.CookieManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -64,6 +65,9 @@ class SetupFragment : Fragment() {
 
     private fun setupNavigation() {
         viewModel.linkToGoogleAccountEvent.observe(this, EventObserver {
+            val cookieManager = CookieManager.getInstance()
+            cookieManager.removeAllCookies {  }
+
             val action = SetupFragmentDirections.actionSetupDestToGoogleAccountDest(SetupFragment::class.java.simpleName)
             findNavController().navigate(action)
         })
