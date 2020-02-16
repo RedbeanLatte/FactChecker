@@ -14,99 +14,108 @@
             type="com.redbeanlatte11.factchecker.ui.setup.SetupViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin">
+        android:gravity ="center"
+        android:fillViewport="true">
 
-        <ImageView
-            android:id="@+id/image_view_app_icon"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/web_hi_res_512" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_layout_report_message"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/setup_item_height"
-            android:layout_marginTop="16dp"
-            android:hint="@{@string/report_message + ` *`}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_view_app_icon">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_edit_text_report_message"
+            <ImageView
+                android:id="@+id/image_view_app_icon"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/web_hi_res_512" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_report_message"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@{viewmodel.reportMessage}"
-                app:textWatcher="@{viewmodel.reportMessageTextWatcher}" />
+                android:layout_height="@dimen/setup_item_height"
+                android:layout_marginTop="16dp"
+                android:hint="@{@string/report_message + ` *`}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_view_app_icon">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_input_edit_text_report_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@{viewmodel.reportMessage}"
+                    app:textWatcher="@{viewmodel.reportMessageTextWatcher}" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_layout_comment_message"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/setup_item_height"
-            android:layout_marginTop="16dp"
-            android:hint="@string/comment_message"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_input_layout_report_message">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_edit_text_comment_message"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_comment_message"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@{viewmodel.commentMessage}"
-                app:textWatcher="@{viewmodel.commentMessageTextWatcher}"/>
+                android:layout_height="@dimen/setup_item_height"
+                android:layout_marginTop="16dp"
+                android:hint="@string/comment_message"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_input_layout_report_message">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_input_edit_text_comment_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@{viewmodel.commentMessage}"
+                    app:textWatcher="@{viewmodel.commentMessageTextWatcher}" />
 
-        <Switch
-            android:id="@+id/switch_auto_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/summary_auto_comment"
-            android:switchPadding="16dp"
-            android:text="@string/title_auto_comment"
-            android:textSize="16sp"
-            android:checked="@={viewmodel.autoCommentEnabled}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_input_layout_comment_message" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/text_view_summary_auto_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/summary_auto_comment"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/switch_auto_comment" />
+            <Switch
+                android:id="@+id/switch_auto_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:checked="@={viewmodel.autoCommentEnabled}"
+                android:contentDescription="@string/summary_auto_comment"
+                android:switchPadding="16dp"
+                android:text="@string/title_auto_comment"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_input_layout_comment_message" />
 
-        <Button
-            android:id="@+id/button_link_google_account"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:text="@string/link_google_account"
-            android:textSize="20sp"
-            android:enabled="@{viewmodel.canLink}"
-            app:layout_constraintTop_toBottomOf="@id/text_view_summary_auto_comment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:onClick="@{() -> viewmodel.linkToGoogleAccount()}"/>
+            <TextView
+                android:id="@+id/text_view_summary_auto_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/summary_auto_comment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/switch_auto_comment" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/button_link_google_account"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:enabled="@{viewmodel.canLink}"
+                android:onClick="@{() -> viewmodel.linkToGoogleAccount()}"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/link_google_account"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_view_summary_auto_comment" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 </layout>

@@ -56,5 +56,5 @@ data class ChannelStatistics(
         get() = "구독자 ${subscriberCount.toSummaryCount()}명"
 
     val videoCountToShow: String?
-        get() = "동영상 ${videoCount.toSummaryCount()}"
+        get() = "동영상 ${videoCount.toSummaryCount()}개"
 }

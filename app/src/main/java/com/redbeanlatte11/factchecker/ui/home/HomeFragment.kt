@@ -85,8 +85,8 @@ class HomeFragment : Fragment() {
             )
         })
 
-        viewModel.reportOnNextEvent.observe(this, EventObserver { video ->
-            progressDialogFragment?.progress(video)
+        viewModel.reportOnNextEvent.observe(this, EventObserver { (video, reportedVideoCount) ->
+            progressDialogFragment?.progress(video, reportedVideoCount)
         })
 
         viewModel.reportCompletedEvent.observe(this, EventObserver { reportedVideoCount ->

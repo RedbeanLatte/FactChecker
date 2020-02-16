@@ -32,8 +32,8 @@ class VideosViewModel(
     private val _reportStartedEvent = MutableLiveData<Event<Int>>()
     val reportStartedEvent: LiveData<Event<Int>> = _reportStartedEvent
 
-    private val _reportOnNextEvent = MutableLiveData<Event<Video>>()
-    val reportOnNextEvent: LiveData<Event<Video>> = _reportOnNextEvent
+    private val _reportOnNextEvent = MutableLiveData<Event<Pair<Video, Int>>>()
+    val reportOnNextEvent: LiveData<Event<Pair<Video, Int>>> = _reportOnNextEvent
 
     private val _reportCompletedEvent = MutableLiveData<Event<Int>>()
     val reportCompletedEvent: LiveData<Event<Int>> = _reportCompletedEvent
@@ -131,7 +131,7 @@ class VideosViewModel(
                 }
 
                 Timber.d("report video: ${video.snippet.title}")
-                _reportOnNextEvent.value = Event(video)
+                _reportOnNextEvent.value = Event(Pair(video, reportedVideoCount))
                 try {
                     reportVideoUseCase(webView, video, reportParams) {
                         Timber.w("Too many flags")
