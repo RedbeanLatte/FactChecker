@@ -15,6 +15,6 @@ fun DateTime.toAgoTime(): String {
         period.hours > 0 -> "${period.hours}시간 전"
         period.minutes > 0 -> "${period.minutes}분 전"
         period.seconds > 0 -> "${period.seconds}초 전"
-        else -> ""
+        else -> "방금 전"
     }
 }

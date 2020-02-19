@@ -78,24 +78,6 @@ class ReportVideoUseCase(
                                     if (pressed === "false") {
                                         dislikeButton.click();
                                     }
-                                    
-                                    var commentSection = document.getElementsByTagName('ytm-comment-section-header-renderer')[0];
-                                    if (commentSection != undefined && ${reportParams.autoCommentEnabled}) {
-                                        commentSection.click();
-                                        var expandButton = commentSection.getElementsByTagName('button')[0];
-                                        expandButton.click();
-                                        
-                                        var commentTextareaButton = document.getElementsByClassName('comment-simplebox-reply')[0];
-                                        commentTextareaButton.click();
-                                        
-                                        var commentTextarea = document.getElementsByClassName('comment-simplebox-reply')[0];
-                                        commentTextarea.value = '${reportParams.commentMessage}';
-                                        commentTextarea.dispatchEvent(new Event('input', { bubbles: true }));
-                                        
-                                        var commentSimpleBoxSection = document.getElementsByClassName('comment-simplebox-buttons cbox')[0];
-                                        var commentButton = commentSimpleBoxSection.getElementsByClassName('c3-material-button-button')[1];
-                                        commentButton.click();
-                                    }
     
                                     var reportButton = document.getElementsByClassName('c3-material-button-button')[4];
                                     reportButton.click();

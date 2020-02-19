@@ -26,9 +26,6 @@
             android:name="userMessage"
             app:argType="integer"
             android:defaultValue="0" />
-        <action
-            android:id="@+id/action_home_dest_to_google_account_dest"
-            app:destination="@id/google_account_dest" />
     </fragment>
 
     <fragment

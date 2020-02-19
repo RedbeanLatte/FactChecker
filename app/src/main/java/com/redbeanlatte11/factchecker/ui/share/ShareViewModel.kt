@@ -5,11 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.redbeanlatte11.factchecker.Event
-import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Result.Error
-import com.redbeanlatte11.factchecker.domain.AddBlacklistChannelUseCase
+import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.domain.AddBlacklistVideoUseCase
-import com.redbeanlatte11.factchecker.domain.GetChannelUseCase
 import com.redbeanlatte11.factchecker.domain.GetVideoUseCase
 import com.redbeanlatte11.factchecker.util.YoutubeUrlUtils
 import kotlinx.coroutines.launch
@@ -17,16 +15,11 @@ import timber.log.Timber
 
 class ShareViewModel(
     private val addBlacklistVideoUseCase: AddBlacklistVideoUseCase,
-    private val getVideoUseCase: GetVideoUseCase,
-    private val addBlacklistChannelUseCase: AddBlacklistChannelUseCase,
-    private val getChannelUseCase: GetChannelUseCase
+    private val getVideoUseCase: GetVideoUseCase
 ) : ViewModel() {
 
     private val _videoUrlConfirmedEvent = MutableLiveData<Event<Unit>>()
     val videoUrlConfirmedEvent: LiveData<Event<Unit>> = _videoUrlConfirmedEvent
-
-    private val _channelUrlConfirmedEvent = MutableLiveData<Event<Unit>>()
-    val channelUrlConfirmedEvent: LiveData<Event<Unit>> = _channelUrlConfirmedEvent
 
     private val _duplicatedUrlEvent = MutableLiveData<Event<Unit>>()
     val duplicatedUrlEvent: LiveData<Event<Unit>> = _duplicatedUrlEvent
@@ -47,18 +40,6 @@ class ShareViewModel(
                 } else {
                     _videoUrlConfirmedEvent.value = Event(Unit)
                 }
-            } else if (YoutubeUrlUtils.validateChannelUrl(url)) {
-                val channelId = YoutubeUrlUtils.extractChannelIdFromUrl(url)
-                if (channelId != null) {
-                    val foundChannel = getChannelUseCase(channelId, true)
-                    if (foundChannel is Success) {
-                        _duplicatedUrlEvent.value = Event(Unit)
-                    } else {
-                        _channelUrlConfirmedEvent.value = Event(Unit)
-                    }
-                } else { // userName case
-                    _channelUrlConfirmedEvent.value = Event(Unit)
-                }
             } else {
                 _addFailedEvent.value = Event(Unit)
             }
@@ -68,18 +49,6 @@ class ShareViewModel(
     fun addBlacklistVideo(url: String) {
         viewModelScope.launch {
             val result = addBlacklistVideoUseCase(url)
-            if (result is Success) {
-                _blacklistAddedEvent.value = Event(Unit)
-            } else {
-                Timber.e((result as Error).exception)
-                _addFailedEvent.value = Event(Unit)
-            }
-        }
-    }
-
-    fun addBlacklistChannel(url: String) {
-        viewModelScope.launch {
-            val result = addBlacklistChannelUseCase(url)
             if (result is Success) {
                 _blacklistAddedEvent.value = Event(Unit)
             } else {

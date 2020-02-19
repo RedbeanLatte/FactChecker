@@ -21,6 +21,8 @@ import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import android.webkit.*
+import androidx.appcompat.app.AppCompatActivity
+import org.joda.time.DateTime
 
 
 class HomeFragment : Fragment() {
@@ -102,12 +104,7 @@ class HomeFragment : Fragment() {
         viewModel.reportCompletedEvent.observe(this, EventObserver { reportedVideoCount ->
             progressDialogFragment?.dismiss()
 
-            val message = if (reportedVideoCount > 0) {
-                "$reportedVideoCount ${getString(R.string.dialog_report_complete)}"
-            } else {
-                getString(R.string.dialog_report_complete_zero)
-            }
-
+            val message = getMessageFromReportedVideoCount(reportedVideoCount)
             showMessageDialog(message)
             clearPreparingReport()
         })
@@ -115,24 +112,18 @@ class HomeFragment : Fragment() {
         viewModel.tooManyFlagsEvent.observe(this, EventObserver { reportedVideoCount ->
             progressDialogFragment?.dismiss()
 
-            val message = if (reportedVideoCount > 0) {
-                "$reportedVideoCount ${getString(R.string.dialog_report_complete)}"
-            } else {
-                getString(R.string.dialog_report_complete_zero)
-            }
-
+            val message = getMessageFromReportedVideoCount(reportedVideoCount)
             showMessageDialog("${getString(R.string.too_many_flags)}\n\n$message")
             clearPreparingReport()
         })
-
-        viewModel.signInConfirmationEvent.observe(this, EventObserver { isSignIn ->
-            Timber.d("isSignIn: $isSignIn")
-            if (!isSignIn) {
-                SignInDialogFragment()
-                    .show(activity?.supportFragmentManager!!, "SignInDialogFragment")
-            }
-        })
     }
+
+    private fun getMessageFromReportedVideoCount(reportedVideoCount: Int) =
+        if (reportedVideoCount > 0) {
+            "$reportedVideoCount ${getString(R.string.dialog_report_complete)}"
+        } else {
+            getString(R.string.dialog_report_complete_zero)
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.setFiltering(VideosFilterType.BLACKLIST_VIDEOS)
@@ -186,13 +177,7 @@ class HomeFragment : Fragment() {
 
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.report_video -> {
-                        if (PreferenceUtils.loadSignInResult(requireContext())) {
-                            reportVideo(video)
-                        } else {
-                            showSignInDialog()
-                        }
-                    }
+                    R.id.report_video -> reportVideo(video)
                     R.id.remove_video_from_list -> viewModel.excludeVideo(video, true)
                 }
                 true
@@ -203,9 +188,7 @@ class HomeFragment : Fragment() {
     private fun reportVideo(video: Video) {
         val reportParams = ReportParams(
             PreferenceUtils.loadTimeoutValue(requireContext()),
-            PreferenceUtils.loadReportMessage(requireContext()),
-            PreferenceUtils.loadCommentMessage(requireContext()),
-            PreferenceUtils.loadAutoCommentEnabled(requireContext())
+            PreferenceUtils.loadReportMessage(requireContext())
         )
 
         viewModel.reportVideo(
@@ -219,8 +202,6 @@ class HomeFragment : Fragment() {
         val reportParams = ReportParams(
             PreferenceUtils.loadTimeoutValue(requireContext()),
             PreferenceUtils.loadReportMessage(requireContext()),
-            PreferenceUtils.loadCommentMessage(requireContext()),
-            PreferenceUtils.loadAutoCommentEnabled(requireContext()),
             DEFAULT_REPORT_TARGET_COUNT
         )
 
@@ -258,11 +239,7 @@ class HomeFragment : Fragment() {
             R.id.menu_report_all -> {
                 val videoItems = viewModel.items.value!!
                 if (videoItems.isNotEmpty()) {
-                    if (PreferenceUtils.loadSignInResult(requireContext())) {
-                        reportAllVideos()
-                    } else {
-                        showSignInDialog()
-                    }
+                    reportAllVideos()
                 } else {
                     showMessageDialog(getString(R.string.dialog_no_video_for_report))
                 }
@@ -297,13 +274,6 @@ class HomeFragment : Fragment() {
         MessageDialogFragment(message).show(
             activity?.supportFragmentManager!!,
             "MessageDialogFragment"
-        )
-    }
-
-    private fun showSignInDialog() {
-        SignInDialogFragment().show(
-            activity?.supportFragmentManager!!,
-            "SignInDialogFragment"
         )
     }
 

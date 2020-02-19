@@ -50,7 +50,6 @@ class ChannelsFragment : Fragment() {
         setupSnackbar()
         setupListAdapter()
         setupRefreshLayout(viewDataBinding.refreshLayout, viewDataBinding.channelsList)
-        setupFab()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -101,17 +100,6 @@ class ChannelsFragment : Fragment() {
         }
     }
 
-    private fun setupFab() {
-        viewDataBinding.addBlacklistChannelFab.run {
-            visibility = View.VISIBLE
-            setOnClickListener {
-                val action =
-                    ChannelsFragmentDirections.actionChannelDestToAddBlacklistChannelDest("")
-                findNavController().navigate(action)
-            }
-        }
-    }
-
     private fun showPopupMenu(view: View) {
         PopupMenu(requireContext(), view).run {
             menuInflater.inflate(R.menu.channel_item_more_menu, menu)
@@ -132,7 +120,6 @@ class ChannelsFragment : Fragment() {
             ChannelsViewType.LIST -> {
                 viewDataBinding.viewtype = ChannelsViewType.LIST
                 menuItemMap[ChannelsViewType.LIST]?.isVisible = false
-
             }
 
             ChannelsViewType.GRID -> {

@@ -22,8 +22,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="@dimen/grid_item_width"
         android:layout_height="@dimen/grid_item_height"
-        android:padding="@dimen/list_item_padding"
-        android:onClick="@{() -> itemClickListener.onClick(channel)}">
+        android:padding="@dimen/list_item_padding">
 
         <ImageView
             app:layout_constraintVertical_weight="3"
@@ -33,6 +32,7 @@
             android:layout_margin="4dp"
             android:contentDescription="@string/description_channel_thumbnail"
             android:scaleType="fitCenter"
+            android:onClick="@{() -> itemClickListener.onClick(channel)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/text_view_title"
             app:layout_constraintStart_toStartOf="parent"

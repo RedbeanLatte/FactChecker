@@ -37,6 +37,16 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:key="video_category"
+        app:title="@string/title_channel"
+        app:iconSpaceReserved="false">
+        <Preference
+            app:key="excluded_videos"
+            app:title="@string/title_excluded_channels"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:key="settings"
         app:title="@string/title_settings"
         app:iconSpaceReserved="false">
@@ -44,15 +54,6 @@
             app:key="@string/saved_report_message"
             app:title="@string/report_message"
             app:iconSpaceReserved="false"/>
-        <EditTextPreference
-            app:key="@string/saved_comment_message"
-            app:title="@string/comment_message"
-            app:iconSpaceReserved="false"/>
-        <SwitchPreferenceCompat
-            app:key="@string/saved_auto_comment_enabled"
-            app:title="@string/title_auto_comment"
-            app:summary="@string/summary_auto_comment"
-            app:iconSpaceReserved="false" />
         <ListPreference
             app:key="@string/saved_timeout_value"
             app:title="@string/title_timeout_value"

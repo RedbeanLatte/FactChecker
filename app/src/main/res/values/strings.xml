@@ -7,8 +7,6 @@
     <string name="title_google_account">구글 계정</string>
     <string name="link_google_account">구글 계정 연결</string>
     <string name="title_report_all">모두 신고</string>
-    <string name="dialog_report_all_prefix">모두 신고 하시겠습니까? (상위</string>
-    <string name="dialog_report_all_postfix">건)</string>
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
 
@@ -37,7 +35,6 @@
     <string name="donate_to_developer">개발자에게 후원하기</string>
     <string name="title_video">동영상</string>
     <string name="title_progress_report">신고 중</string>
-    <string name="title_progress_report_and_input_comment">신고 및 댓글 입력 중</string>
     <string name="dialog_report_complete">건 신고 완료</string>
     <string name="dialog_no_video_for_report">신고할 동영상이 없습니다.</string>
     <string name="dialog_report_complete_zero">신고한 동영상이 없습니다.</string>
@@ -93,4 +90,7 @@
     <string name="seconds">초</string>
     <string name="reported_video_count_postfix">성공</string>
     <string name="progress_postfix">진행 중</string>
+    <string name="saved_report_succeed_at">saved_report_succeed_at</string>
+    <string name="report_succeed_at_prefix">최근 신고</string>
+    <string name="title_excluded_channels">제외한 채널</string>
 </resources>

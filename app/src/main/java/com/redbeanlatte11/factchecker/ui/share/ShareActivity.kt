@@ -34,10 +34,6 @@ class ShareActivity : AppCompatActivity() {
             viewModel.addBlacklistVideo(url)
         })
 
-        viewModel.channelUrlConfirmedEvent.observe(this, EventObserver {
-            viewModel.addBlacklistChannel(url)
-        })
-
         viewModel.blacklistAddedEvent.observe(this, EventObserver {
             showToast(getString(R.string.adding_blacklist_success))
             finish()

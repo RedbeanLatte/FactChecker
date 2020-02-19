@@ -41,9 +41,6 @@ class VideosViewModel(
     private val _tooManyFlagsEvent = MutableLiveData<Event<Int>>()
     val tooManyFlagsEvent: LiveData<Event<Int>> = _tooManyFlagsEvent
 
-    private val _signInConfirmationEvent = MutableLiveData<Event<Boolean>>()
-    val signInConfirmationEvent: LiveData<Event<Boolean>> = _signInConfirmationEvent
-
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
     private var reportJob: Job? = null

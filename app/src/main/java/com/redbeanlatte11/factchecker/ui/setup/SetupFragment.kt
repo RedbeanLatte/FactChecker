@@ -39,8 +39,6 @@ class SetupFragment : Fragment() {
     private fun setupEventObserver() {
         viewModel.setupParamsSavedEvent.observe(this, EventObserver { setupParams ->
             PreferenceUtils.saveReportMessage(requireContext(), setupParams.reportMessage)
-            PreferenceUtils.saveCommentMessage(requireContext(), setupParams.commentMessage)
-            PreferenceUtils.saveAutoCommentEnabled(requireContext(), setupParams.autoCommentEnabled)
         })
     }
 
@@ -59,8 +57,6 @@ class SetupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.setReportMessage(PreferenceUtils.loadReportMessage(requireContext()))
-        viewModel.setCommentMessage(PreferenceUtils.loadCommentMessage(requireContext()))
-        viewModel.setAutoCommentEnabled(PreferenceUtils.loadAutoCommentEnabled(requireContext()))
     }
 
     private fun setupNavigation() {

@@ -29,8 +29,7 @@
         android:paddingStart="@dimen/list_item_padding"
         android:paddingEnd="@dimen/list_item_padding"
         android:paddingTop="@dimen/list_item_padding"
-        android:paddingBottom="@dimen/list_item_padding"
-        android:onClick="@{() -> itemClickListener.onClick(channel)}">
+        android:paddingBottom="@dimen/list_item_padding">
 
         <ImageView
             app:layout_constraintHorizontal_weight="4.5"
@@ -39,6 +38,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/description_channel_thumbnail"
             android:scaleType="fitCenter"
+            android:onClick="@{() -> itemClickListener.onClick(channel)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/linear_layout_content"

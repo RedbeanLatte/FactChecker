@@ -9,16 +9,11 @@ import com.redbeanlatte11.factchecker.Event
 
 class SetupViewModel : ViewModel() {
 
-    private val _canLink = MutableLiveData<Boolean>()
+    private val _canLink = MutableLiveData<Boolean>(false)
     val canLink: LiveData<Boolean> = _canLink
 
     private var _reportMessage = MutableLiveData<String>()
     val reportMessage: LiveData<String> = _reportMessage
-
-    private var _commentMessage = MutableLiveData<String>()
-    val commentMessage: LiveData<String> = _commentMessage
-
-    val autoCommentEnabled = MutableLiveData<Boolean>()
 
     private val _setupParamsSavedEvent = MutableLiveData<Event<SetupParams>>()
     val setupParamsSavedEvent: LiveData<Event<SetupParams>> = _setupParamsSavedEvent
@@ -40,36 +35,16 @@ class SetupViewModel : ViewModel() {
         }
     }
 
-    val commentMessageTextWatcher = object : TextWatcher {
-
-        override fun afterTextChanged(p0: Editable?) {}
-
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            _commentMessage.value = p0.toString()
-        }
-    }
-
     fun linkToGoogleAccount() {
-        val setupParams = SetupParams(
-            _reportMessage.value ?: "",
-            _commentMessage.value ?: "",
-            this.autoCommentEnabled.value ?: false
-        )
+        val setupParams = SetupParams(_reportMessage.value ?: "")
         _setupParamsSavedEvent.value = Event(setupParams)
         _linkToGoogleAccountEvent.value = Event(Unit)
     }
 
     fun setReportMessage(reportMessage: String) {
         _reportMessage.value = reportMessage
-    }
-
-    fun setCommentMessage(commentMessage: String) {
-        _commentMessage.value = commentMessage
-    }
-
-    fun setAutoCommentEnabled(autoCommentEnabled: Boolean) {
-        this.autoCommentEnabled.value = autoCommentEnabled
+        if (reportMessage.isNotEmpty()) {
+            _canLink.value = true
+        }
     }
 }

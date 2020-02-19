@@ -22,7 +22,7 @@ class FactCheckerDataBaseMigration {
                         thumbnails TEXT NOT NULL, 
                         localized TEXT NOT NULL,
                         country TEXT DEFAULT 'KR',
-                        viewCount BIGINT NOT NULL,
+                        viewCount INTEGER NOT NULL,
                         commentCount INTEGER NOT NULL,
                         subscriberCount INTEGER NOT NULL,
                         hiddenSubscriberCount INTEGER NOT NULL,

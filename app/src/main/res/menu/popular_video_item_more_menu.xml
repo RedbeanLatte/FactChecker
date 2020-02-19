@@ -4,9 +4,4 @@
     <item
         android:id="@+id/add_video_to_blacklist"
         android:title="@string/title_add_blacklist_video" />
-
-    <item
-        android:id="@+id/add_channel_to_blacklist"
-        android:title="@string/title_add_blacklist_channel" />
-
 </menu>

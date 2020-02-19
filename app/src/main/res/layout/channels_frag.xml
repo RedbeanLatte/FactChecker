@@ -48,8 +48,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="@{viewtype == ChannelsViewType.LIST ? View.VISIBLE : View.GONE}"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:channelItems="@{viewmodel.items}" />
+                        app:channelItems="@{viewmodel.items}"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/channels_grid"
@@ -81,23 +81,12 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="@dimen/list_item_padding"
-                        android:textSize="16sp"
-                        android:text="@string/title_no_channels" />
+                        android:text="@string/title_no_channels"
+                        android:textSize="16sp" />
                 </LinearLayout>
             </RelativeLayout>
 
         </com.redbeanlatte11.factchecker.ui.ScrollChildSwipeRefreshLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_blacklist_channel_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
-            android:visibility="gone"
-            android:src="@drawable/ic_add"
-            app:fabSize="normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

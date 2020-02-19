@@ -40,15 +40,9 @@ class ReportProgressDialogFragment(
             reportedVideoCountPostfix =
                 requireActivity().getString(R.string.reported_video_count_postfix)
 
-            val title = if (PreferenceUtils.loadAutoCommentEnabled(requireContext())) {
-                R.string.title_progress_report_and_input_comment
-            } else {
-                R.string.title_progress_report
-            }
-
             builder
                 .setView(view)
-                .setTitle(title)
+                .setTitle(R.string.title_progress_report)
                 .setNegativeButton(R.string.cancel) { _, _ ->
                     onCancelled()
                 }
