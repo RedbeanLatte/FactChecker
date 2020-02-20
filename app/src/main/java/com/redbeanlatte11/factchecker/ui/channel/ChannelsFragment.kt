@@ -40,7 +40,8 @@ class ChannelsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.loadChannels(false)
+        viewModel.setWatchedChannelOnly(true)
+        viewModel.loadChannels(true)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,6 +51,7 @@ class ChannelsFragment : Fragment() {
         setupSnackbar()
         setupListAdapter()
         setupRefreshLayout(viewDataBinding.refreshLayout, viewDataBinding.channelsList)
+        setupFab()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -86,17 +88,28 @@ class ChannelsFragment : Fragment() {
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.viewmodel
         if (viewModel != null) {
-            val itemClickListener = ChannelItemClickListener.invoke {
-                requireContext().watchYoutubeChannel(it)
+            val itemClickListener = ChannelItemClickListener.invoke { channel ->
+                requireContext().watchYoutubeChannel(channel)
             }
             val moreClickListener = View.OnClickListener {
                 showPopupMenu(it)
             }
+
             viewDataBinding.channelsList.adapter = ChannelsAdapter(itemClickListener, moreClickListener)
             viewDataBinding.channelsGrid.adapter = ChannelsGridAdapter(itemClickListener)
             viewDataBinding.channelsGrid.layoutManager = GridLayoutManager(requireContext(), DEFAULT_GRID_LAYOUT_SPAN_COUNT)
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
+        }
+    }
+
+    private fun setupFab() {
+        viewDataBinding.editChannelsFab.run {
+            visibility = View.VISIBLE
+            setOnClickListener {
+                val action = ChannelsFragmentDirections.actionChannelsDestToEditChannelsDest()
+                findNavController().navigate(action)
+            }
         }
     }
 

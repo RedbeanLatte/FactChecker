@@ -8,11 +8,17 @@ import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.data.source.ChannelsDataSource
 import com.redbeanlatte11.factchecker.domain.GetChannelsUseCase
+import com.redbeanlatte11.factchecker.domain.GetWatchedChannelsUseCase
+import com.redbeanlatte11.factchecker.domain.UnwatchChannelUseCase
+import com.redbeanlatte11.factchecker.domain.WatchChannelUseCase
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ChannelsViewModel(
-    private val getChannelsUseCase: GetChannelsUseCase
+    private val getChannelsUseCase: GetChannelsUseCase,
+    private val getWatchedChannelsUseCase: GetWatchedChannelsUseCase,
+    private val watchChannelUseCase: WatchChannelUseCase,
+    private val unwatchChannelUseCase: UnwatchChannelUseCase
 ) : ViewModel() {
 
     private val _items = MutableLiveData<List<Channel>>().apply { value = emptyList() }
@@ -31,14 +37,29 @@ class ChannelsViewModel(
         it.isEmpty()
     }
 
+    private var isWatchedChannelOnly: Boolean = false
+
+    fun setWatchedChannelOnly(watchedChannelOnly: Boolean) {
+        isWatchedChannelOnly = watchedChannelOnly
+    }
+
     /**
      * @param forceUpdate   Pass in true to refresh the data in the [ChannelsDataSource]
      */
     fun loadChannels(forceUpdate: Boolean) {
+        loadChannels(forceUpdate, isWatchedChannelOnly)
+    }
+
+    private fun loadChannels(forceUpdate: Boolean, watchedChannelOnly: Boolean) {
         _dataLoading.value = true
 
         viewModelScope.launch {
-            val channelsResult = getChannelsUseCase(forceUpdate)
+            val channelsResult = if (watchedChannelOnly) {
+                getWatchedChannelsUseCase(forceUpdate)
+            } else {
+                getChannelsUseCase(forceUpdate)
+            }
+
             if (channelsResult is Success) {
                 isDataLoadingError.value = false
                 _items.value = channelsResult.data
@@ -55,6 +76,18 @@ class ChannelsViewModel(
 
     fun refresh() {
         loadChannels(true)
+    }
+
+    fun watchChannel(channel: Channel) {
+        viewModelScope.launch {
+            watchChannelUseCase(channel)
+        }
+    }
+
+    fun unwatchChannel(channel: Channel) {
+        viewModelScope.launch {
+            unwatchChannelUseCase(channel)
+        }
     }
 
     private fun showSnackbarMessage(message: Int) {

@@ -39,17 +39,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/channel_dest"
+        android:id="@+id/channels_dest"
         android:name="com.redbeanlatte11.factchecker.ui.channel.ChannelsFragment"
         android:label="@string/title_channel"
         tools:layout="@layout/channels_frag" >
         <action
-            android:id="@+id/action_channel_dest_to_add_blacklist_channel_dest"
-            app:destination="@id/add_blacklist_channel_dest" />
-        <argument
-            android:name="userMessage"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:id="@+id/action_channels_dest_to_edit_channels_dest"
+            app:destination="@id/edit_channels_dest" />
     </fragment>
 
     <fragment
@@ -60,9 +56,6 @@
         <action
             android:id="@+id/action_popular_dest_to_add_video_blacklist_dest"
             app:destination="@id/add_blacklist_video_dest" />
-        <action
-            android:id="@+id/action_popular_dest_to_add_blacklist_channel_dest"
-            app:destination="@id/add_blacklist_channel_dest" />
     </fragment>
 
     <fragment
@@ -107,11 +100,8 @@
         android:label="@string/donate_to_developer" />
 
     <fragment
-        android:id="@+id/add_blacklist_channel_dest"
-        android:name="com.redbeanlatte11.factchecker.ui.channel.AddBlacklistChannelFragment"
-        android:label="@string/title_add_blacklist_channel" >
-        <argument
-            android:name="channelUrl"
-            app:argType="string" />
-    </fragment>
+        android:id="@+id/edit_channels_dest"
+        android:name="com.redbeanlatte11.factchecker.ui.channel.EditChannelsFragment"
+        android:label="@string/title_edit_channels" />
+
 </navigation>

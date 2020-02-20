@@ -17,38 +17,63 @@
             name="itemClickListener"
             type="com.redbeanlatte11.factchecker.ui.channel.ChannelItemClickListener" />
 
+        <variable
+            name="itemCheckedListener"
+            type="com.redbeanlatte11.factchecker.ui.channel.ChannelItemCheckedListener" />
+
+        <variable
+            name="isEditing"
+            type="Boolean" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="@dimen/grid_item_width"
-        android:layout_height="@dimen/grid_item_height"
-        android:padding="@dimen/list_item_padding">
+        android:layout_height="@dimen/grid_item_height">
 
-        <ImageView
+        <FrameLayout
+            android:id="@+id/thumbnail_container_layout"
             app:layout_constraintVertical_weight="3"
-            android:id="@+id/image_view_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="4dp"
-            android:contentDescription="@string/description_channel_thumbnail"
-            android:scaleType="fitCenter"
-            android:onClick="@{() -> itemClickListener.onClick(channel)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/text_view_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:imageUrlWithCircleCrop="@{channel.snippet.thumbnailUrl}" />
+            app:layout_constraintEnd_toEndOf="parent">
 
+            <ImageView
+                android:id="@+id/image_view_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/list_item_padding"
+                android:contentDescription="@string/description_channel_thumbnail"
+                android:scaleType="fitCenter"
+                android:onClick="@{() -> itemClickListener.onClick(channel)}"
+                android:alpha="@{channel.watched ? 1.0f : 0.3f}"
+                app:imageUrlWithCircleCrop="@{channel.snippet.thumbnailUrl}" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{isEditing ? View.VISIBLE : View.GONE}"
+                android:checked="@{channel.watched}"
+                app:onCheckedChanged="@{(buttonView, isChecked) -> itemCheckedListener.onCheckedChanged(channel, isChecked)}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        </FrameLayout>
 
         <TextView
             app:layout_constraintVertical_weight="2"
             android:id="@+id/text_view_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:padding="@dimen/list_item_padding"
             style="@style/GridItemTitleFont"
             android:text="@{channel.snippet.title}"
             tools:text="title"
-            app:layout_constraintTop_toBottomOf="@id/image_view_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/thumbnail_container_layout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

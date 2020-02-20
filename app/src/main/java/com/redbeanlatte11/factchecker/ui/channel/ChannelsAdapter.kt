@@ -51,6 +51,7 @@ class ChannelsAdapter(
         ) {
             binding.channel = item
             binding.itemClickListener = itemClickListener
+
             binding.moreClickListener = moreClickListener
             binding.executePendingBindings()
         }
@@ -88,6 +89,18 @@ interface ChannelItemClickListener {
         inline operator fun invoke(crossinline op: (Channel) -> Unit) =
             object : ChannelItemClickListener {
                 override fun onClick(channel: Channel) = op(channel)
+            }
+    }
+}
+
+interface ChannelItemCheckedListener {
+
+    fun onCheckedChanged(channel: Channel, isChecked: Boolean)
+
+    companion object {
+        inline operator fun invoke(crossinline op: (Channel, Boolean) -> Unit) =
+            object : ChannelItemCheckedListener {
+                override fun onCheckedChanged(channel: Channel, isChecked: Boolean) = op(channel, isChecked)
             }
     }
 }

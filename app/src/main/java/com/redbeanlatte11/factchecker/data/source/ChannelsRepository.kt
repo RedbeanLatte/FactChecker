@@ -10,4 +10,8 @@ interface ChannelsRepository {
     suspend fun getChannel(channelId: String, forceUpdate: Boolean = false): Result<Channel>
 
     suspend fun addBlacklistChannel(url: String, description: String): Result<Channel>
+
+    suspend fun unwatchChannel(channel: Channel)
+
+    suspend fun watchChannel(channel: Channel)
 }

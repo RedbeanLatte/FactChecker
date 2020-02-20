@@ -35,6 +35,14 @@ class ChannelsLocalDataSource(
         }
     }
 
+    suspend fun watchChannel(channel: Channel) {
+        channelsDao.updateWatched(channel.id, true)
+    }
+
+    suspend fun unwatchChannel(channel: Channel) {
+        channelsDao.updateWatched(channel.id, false)
+    }
+
     suspend fun saveChannel(channel: Channel) = withContext(ioDispatcher) {
         channelsDao.insertChannel(channel)
     }

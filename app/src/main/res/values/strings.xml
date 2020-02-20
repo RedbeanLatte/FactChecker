@@ -93,4 +93,7 @@
     <string name="saved_report_succeed_at">saved_report_succeed_at</string>
     <string name="report_succeed_at_prefix">최근 신고</string>
     <string name="title_excluded_channels">제외한 채널</string>
+    <string name="description_channel_checked">선택된 채널</string>
+    <string name="title_edit_channels">채널 편집</string>
+    <string name="title_complete_edit_channels">채널 편집 완료</string>
 </resources>

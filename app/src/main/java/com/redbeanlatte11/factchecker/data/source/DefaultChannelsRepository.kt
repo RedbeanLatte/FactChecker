@@ -7,9 +7,7 @@ import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.data.source.local.ChannelsLocalDataSource
 import com.redbeanlatte11.factchecker.data.source.remote.ChannelsRemoteDataSource
 import com.redbeanlatte11.factchecker.util.YoutubeUrlUtils
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
@@ -82,12 +80,31 @@ class DefaultChannelsRepository(
         )
     }
 
+    override suspend fun watchChannel(channel: Channel) {
+        cacheAndPerform(channel) {
+            it.watched = true
+            coroutineScope {
+                launch { channelsLocalDataSource.watchChannel(it) }
+            }
+        }
+    }
+
+    override suspend fun unwatchChannel(channel: Channel) {
+        cacheAndPerform(channel) {
+            it.watched = false
+            coroutineScope {
+                launch { channelsLocalDataSource.unwatchChannel(it) }
+            }
+        }
+    }
+
     private suspend fun fetchChannelsFromRemoteOrLocal(forceUpdate: Boolean): Result<List<Channel>> {
         // Remote first
         when (val remoteChannels = channelsRemoteDataSource.getChannels()) {
             is Error -> Timber.w("Remote data source fetch failed")
             is Success -> {
-                refreshLocalDataSource(remoteChannels.data)
+                val newChannels = combineLocalDataWithRemoteData(remoteChannels.data)
+                refreshLocalDataSource(newChannels)
                 return remoteChannels
             }
             else -> throw IllegalStateException()
@@ -102,6 +119,23 @@ class DefaultChannelsRepository(
         val localChannels = channelsLocalDataSource.getChannels()
         if (localChannels is Success) return localChannels
         return Error(Exception("Error fetching from remote and local"))
+    }
+
+    private suspend fun combineLocalDataWithRemoteData(remoteChannels: List<Channel>): List<Channel> {
+        val localChannels = channelsLocalDataSource.getChannels()
+        if (localChannels is Success) {
+            val newChannelsMap = remoteChannels.associateBy { it.id }
+
+            localChannels.data.forEach { localVideo ->
+                val newChannel = newChannelsMap[localVideo.id]
+                if (newChannel != null) {
+                    newChannel.watched = localVideo.watched
+                }
+            }
+            return newChannelsMap.values.toList()
+        }
+
+        return remoteChannels
     }
 
     private fun refreshCache(channels: List<Channel>) {
@@ -145,7 +179,8 @@ class DefaultChannelsRepository(
         when (val remoteChannel = channelsRemoteDataSource.getChannel(channelId)) {
             is Error -> Timber.w("Remote data source fetch failed")
             is Success -> {
-                refreshLocalDataSource(remoteChannel.data)
+                val newChannel = combineLocalDataWithRemoteData(remoteChannel.data)
+                refreshLocalDataSource(newChannel)
                 return remoteChannel
             }
             else -> throw IllegalStateException()
@@ -160,5 +195,16 @@ class DefaultChannelsRepository(
         val localChannel = channelsLocalDataSource.getChannel(channelId)
         if (localChannel is Success) return localChannel
         return Error(Exception("Error fetching from remote and local"))
+    }
+
+    private suspend fun combineLocalDataWithRemoteData(remoteChannel: Channel): Channel {
+        val localChannel = channelsLocalDataSource.getChannel(remoteChannel.id)
+        if (localChannel is Success) {
+            return remoteChannel.copy(
+                watched = localChannel.data.watched
+            )
+        }
+
+        return remoteChannel
     }
 }

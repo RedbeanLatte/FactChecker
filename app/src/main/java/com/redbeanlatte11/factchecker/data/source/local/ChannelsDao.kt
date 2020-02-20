@@ -28,4 +28,7 @@ interface ChannelsDao {
         OR localized LIKE '%' || :query || '%'
         """)
     suspend fun searchChannels(query: String): List<Channel>
+
+    @Query("UPDATE channels SET watched = :watched WHERE id = :channelId")
+    suspend fun updateWatched(channelId: String, watched: Boolean)
 }

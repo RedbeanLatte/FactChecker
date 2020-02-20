@@ -37,7 +37,12 @@ val viewModelModule = module {
     }
 
     viewModel {
-        ChannelsViewModel(GetChannelsUseCase(get()))
+        ChannelsViewModel(
+            GetChannelsUseCase(get()),
+            GetWatchedChannelsUseCase(get()),
+            WatchChannelUseCase(get()),
+            UnwatchChannelUseCase(get())
+        )
     }
 
     viewModel {
@@ -54,7 +59,9 @@ val viewModelModule = module {
     viewModel {
         ShareViewModel(
             AddBlacklistVideoUseCase(get(named("blacklist_videos_repository"))),
-            GetVideoUseCase(get(named("blacklist_videos_repository")))
+            AddBlacklistChannelUseCase(get()),
+            GetVideoUseCase(get(named("blacklist_videos_repository"))),
+            GetChannelUseCase(get())
         )
     }
 }

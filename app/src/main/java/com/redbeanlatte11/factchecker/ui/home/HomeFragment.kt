@@ -91,10 +91,12 @@ class HomeFragment : Fragment() {
                 viewModel.cancelReport()
             }
 
-            progressDialogFragment?.show(
-                activity?.supportFragmentManager!!,
-                "MessageDialogFragment"
-            )
+            if (activity?.supportFragmentManager != null) {
+                progressDialogFragment?.show(
+                    activity?.supportFragmentManager!!,
+                    "MessageDialogFragment"
+                )
+            }
         })
 
         viewModel.reportOnNextEvent.observe(this, EventObserver { (video, reportedVideoCount) ->
@@ -271,10 +273,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun showMessageDialog(message: String) {
-        MessageDialogFragment(message).show(
-            activity?.supportFragmentManager!!,
-            "MessageDialogFragment"
-        )
+        if (activity?.supportFragmentManager != null) {
+            MessageDialogFragment(message).show(
+                activity?.supportFragmentManager!!,
+                "MessageDialogFragment"
+            )
+        }
     }
 
     companion object {

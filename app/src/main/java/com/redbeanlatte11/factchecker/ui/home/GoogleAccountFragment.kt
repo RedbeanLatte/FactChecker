@@ -85,7 +85,7 @@ class GoogleAccountFragment : Fragment() {
             } else if (args.entryPointName == SetupFragment::class.java.simpleName) {
                 clearPreparingSetup()
                 changeStartDestination(R.id.home_dest)
-                findNavController().navigateUp()
+                findNavController().navigate(R.id.edit_channels_dest)
             }
         })
 
