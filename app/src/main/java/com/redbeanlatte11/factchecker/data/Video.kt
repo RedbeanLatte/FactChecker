@@ -35,11 +35,7 @@ data class Video(
 
     companion object {
 
-        fun getComparator(sortType: SortType): Comparator<Video> =
-            when(sortType) {
-                SortType.PUBLISHED_AT -> PublishedAtComparator
-                SortType.CREATED_AT -> CreatedAtComparator
-            }
+        fun getComparator(): Comparator<Video> = PublishedAtComparator
 
         object PublishedAtComparator : Comparator<Video> {
 

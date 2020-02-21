@@ -1,5 +1,6 @@
 package com.redbeanlatte11.factchecker.data.source
 
+import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Error
 import com.redbeanlatte11.factchecker.data.Result.Success
@@ -22,7 +23,9 @@ class DefaultVideosRepository(
 
     override suspend fun getVideos(
         forceUpdate: Boolean,
-        sortType: Video.SortType
+        offset: Int,
+        limit: Int,
+        watchedChannels: List<Channel>
     ): Result<List<Video>> {
 
         return withContext(ioDispatcher) {
@@ -31,21 +34,19 @@ class DefaultVideosRepository(
                 cachedVideos?.let { cachedVideos ->
                     return@withContext Success(
                         cachedVideos.values.sortedWith(
-                            Video.getComparator(
-                                sortType
-                            )
+                            Video.getComparator()
                         )
                     )
                 }
             }
 
-            val newVideos = fetchVideosFromRemoteOrLocal(forceUpdate)
+            val newVideos = fetchVideosFromRemoteOrLocal(forceUpdate, offset, limit, watchedChannels)
 
             // Refresh the cache with the new videos
             (newVideos as? Success)?.let { refreshCache(it.data) }
 
             cachedVideos?.let { videos ->
-                return@withContext Success(videos.values.sortedWith(Video.getComparator(sortType)))
+                return@withContext Success(videos.values.sortedWith(Video.getComparator()))
             }
 
             (newVideos as? Success)?.let {
@@ -58,9 +59,14 @@ class DefaultVideosRepository(
         }
     }
 
-    private suspend fun fetchVideosFromRemoteOrLocal(forceUpdate: Boolean): Result<List<Video>> {
+    private suspend fun fetchVideosFromRemoteOrLocal(
+        forceUpdate: Boolean,
+        offset: Int,
+        limit: Int,
+        watchedChannels: List<Channel>
+    ): Result<List<Video>> {
         // Remote first
-        when (val remoteVideos = videosRemoteDataSource.getVideos()) {
+        when (val remoteVideos = videosRemoteDataSource.getVideos(offset, limit, watchedChannels)) {
             is Error -> Timber.w("Remote data source fetch failed")
             is Success -> {
                 val newVideos = combineLocalDataWithRemoteData(remoteVideos.data)

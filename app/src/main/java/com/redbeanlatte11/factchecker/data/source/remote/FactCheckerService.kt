@@ -11,7 +11,11 @@ import retrofit2.http.*
 interface FactCheckerService {
 
     @GET("videos")
-    suspend fun getVideos(): List<Video>
+    suspend fun getVideos(
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+        @Query("watchedChannels") watchedChannels: List<Channel>
+    ): List<Video>
 
     @GET("popularvideos")
     suspend fun getPopularVideos(): List<Video>

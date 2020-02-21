@@ -1,5 +1,6 @@
 package com.redbeanlatte11.factchecker.data.source.remote
 
+import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Result.Error
@@ -15,7 +16,11 @@ class FakePopularVideosRemoteDataSource(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : VideosRemoteDataSource() {
 
-    override suspend fun getVideos(): Result<List<Video>> = withContext(ioDispatcher) {
+    override suspend fun getVideos(
+        offset: Int,
+        limit: Int,
+        watchedChannels: List<Channel>
+    ): Result<List<Video>> = withContext(ioDispatcher) {
         return@withContext try {
             Success(jsonParser.getPopularVideos())
         } catch (e: Exception) {

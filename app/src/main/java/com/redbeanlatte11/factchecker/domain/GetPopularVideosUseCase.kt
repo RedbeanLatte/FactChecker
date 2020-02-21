@@ -13,7 +13,7 @@ class GetPopularVideosUseCase(
         currentCategoryId: String = "25" // News & Politics
     ): Result<List<Video>> {
 
-        val videosResult = videosRepository.getVideos(forceUpdate, Video.SortType.CREATED_AT)
+        val videosResult = videosRepository.getVideos(forceUpdate)
 
         // Filter videos
         if (videosResult is Success) {
@@ -26,7 +26,7 @@ class GetPopularVideosUseCase(
                     videosToShow.add(video)
                 }
             }
-            videosToShow.reverse()
+            videosToShow.sortBy { it.createdAtDateTime }
             return Success(videosToShow)
         }
         return videosResult

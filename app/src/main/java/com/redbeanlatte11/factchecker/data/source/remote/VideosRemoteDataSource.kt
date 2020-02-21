@@ -1,5 +1,6 @@
 package com.redbeanlatte11.factchecker.data.source.remote
 
+import com.redbeanlatte11.factchecker.data.Channel
 import com.redbeanlatte11.factchecker.data.Result
 import com.redbeanlatte11.factchecker.data.Result.Success
 import com.redbeanlatte11.factchecker.data.Result.Error
@@ -8,7 +9,6 @@ import com.redbeanlatte11.factchecker.data.source.VideosDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.lang.Exception
 
 open class VideosRemoteDataSource(
@@ -19,9 +19,13 @@ open class VideosRemoteDataSource(
         FactCheckerService.create()
     }
 
-    override suspend fun getVideos(): Result<List<Video>> = withContext(ioDispatcher) {
+    override suspend fun getVideos(
+        offset: Int,
+        limit: Int,
+        watchedChannels: List<Channel>
+    ): Result<List<Video>> = withContext(ioDispatcher) {
         return@withContext try {
-            Success(factCheckerService.getVideos())
+            Success(factCheckerService.getVideos(offset, limit, watchedChannels))
         } catch (e: Exception) {
             Error(e)
         }
