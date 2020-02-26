@@ -40,7 +40,7 @@ interface FactCheckerService {
 
     companion object {
 
-        private const val BASE_URL = "http://13.124.99.48:4500/"
+        private const val BASE_URL = "http://13.209.28.236:4500/"
 
         fun create(): FactCheckerService {
             val gson = GsonBuilder()
